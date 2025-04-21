@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
+using System.Text;
 using System.Text.Json;
 
 namespace GameService
@@ -18,6 +20,13 @@ namespace GameService
 
     public class Mathod
     {
+        public static void BufferClear()
+        {
+            //덮어쓰기
+            Console.SetCursorPosition(0, 0);
+            Console.Write(new StringBuilder().ToString());
+        }
+
         //해당 게임에 유용하게 사용될 메서드 종류
         public static bool CheckInput(out int _value)
         {

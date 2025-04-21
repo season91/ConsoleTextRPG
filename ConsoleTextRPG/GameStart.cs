@@ -1,4 +1,6 @@
-﻿using GameService;
+﻿using GameCharacter;
+using GameService;
+using StartScene;
 
 public static class GameStart
 {
@@ -16,16 +18,12 @@ public static class GameStart
     static void Main()
     {
         var gameData = new GameData();
+        var player = new Warrior();
         int input = 0;
 
         while (true)
-        {         
-            if(Mathod.CheckInput(out input))
-            {
-                //숫자을 입력 했을 경우에만
-                //var test = Mathod.LoadAllText("Test");
-                Mathod.PrintTextFile("Test");
-            }
+        {
+            StartScenes.ShowStartScene(player);
         }
     }
 }
