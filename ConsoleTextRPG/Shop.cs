@@ -1,4 +1,5 @@
-﻿using GameLogic;
+﻿using System.Numerics;
+using GameLogic;
 using GameService;
 
 namespace Shop
@@ -11,10 +12,12 @@ namespace Shop
 
             while (true)
             {
+                Console.Clear();
                 Mathod.ChangeFontColor(ColorCode.Yellow);
                 Console.WriteLine("상점");
+                Mathod.ChangeFontColor(ColorCode.None);
                 Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
-                Console.WriteLine("]n[보유 골드]");
+                Console.WriteLine("\n[보유 골드]");
                 Console.WriteLine($"{_player.gold} G");
                 Console.WriteLine("\n[아이템 목록]");
 
@@ -33,7 +36,7 @@ namespace Shop
                 for (int i = 0; i < gameItem.Length; i++)
                 {
                     var item = gameItem[i];
-                    var isBuy = item.IsSameItem(_player, item) ? "구매 완료\n" : $"{item.gold} G\n";
+                    var isBuy = item.IsSameItem(_player, item) ? "구매 완료\n" : $"{item.gold} G";
                     Console.WriteLine($"- {item.name} | {item.Ability()} | {item.itemInfo} | {isBuy}");
                 }
 
@@ -66,6 +69,78 @@ namespace Shop
                     }
                 }
             }
+        }
+
+        // 아이템 구매 메뉴로 이동
+        public void ShopBuyItem(Job _player, Item[] gameItem)
+        {
+            int input = 0;
+            while (true)
+            {
+                Console.Clear();
+                Mathod.ChangeFontColor(ColorCode.Yellow);
+                Console.WriteLine("상점");
+                Mathod.ChangeFontColor(ColorCode.None);
+                Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
+                Console.WriteLine("\n[보유 골드]");
+                Console.WriteLine($"{_player.gold} G");
+                Console.WriteLine("\n[아이템 목록]");
+
+                for (int i = 0; i < gameItem.Length; i++)
+                {
+                    var item = gameItem[i];
+                    var isBuy = item.IsSameItem(_player, item) ? "구매 완료\n" : $"{item.gold} G";
+                    Console.WriteLine($"- {i+1}. {item.name} | {item.Ability()} | {item.itemInfo} | {isBuy}");
+                }
+
+                Console.WriteLine("\n1. 아이템 구매");
+                Console.WriteLine("2. 아이템 판매");
+                Console.WriteLine("0. 나가기");
+                Console.WriteLine("\n원하시는 행동을 입력해주세요.");
+                Console.Write(">>");
+
+                if (Mathod.CheckInput(out input))
+                {
+                    if (input == 0)
+                    {
+                        break;
+                    }
+
+                    else if (input > 0 && input <= gameItem.Length)
+                    {
+                        TryShopBuyItem(_player, gameItem[input-1]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("잘못된 입력입니다.");
+                        Thread.Sleep(1000);
+                    }
+                }
+            }
+        }
+
+        // 아이템 구매 시도
+        public void TryShopBuyItem(Job _player, Item item)
+        {
+            int price = item.gold;
+
+            if (_player.item.Contains(item))
+            {
+                Console.WriteLine("이미 구매한 아이템입니다.");
+
+            }
+            else if (_player.gold >= price)
+            {
+                _player.gold -= price;
+                _player.item.Add(item);
+                Console.WriteLine($"구매를 완료했습니다! 남은 Gold : {_player.gold} G");
+            }
+            else
+            {
+                Console.WriteLine("Gold가 부족합니다.");
+            }
+
+            Thread.Sleep(1000);
         }
     }
 }
