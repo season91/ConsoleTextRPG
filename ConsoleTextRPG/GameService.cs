@@ -58,7 +58,8 @@ namespace GameService
         public static string[] LoadAllText(string _textFileName)
         {
             //프로젝트/bin/Debug/net8.0/Text파일 안에 txt파일 가져오기
-            var file = Path.Combine("Text", $"{_textFileName}.txt");
+            string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\.."));
+            string file = Path.Combine(projectRoot, "Text", $"{_textFileName}.txt");
 
             //파일 존재 유무
             if (!File.Exists(file))
