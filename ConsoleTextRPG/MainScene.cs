@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using GameLogic;
+using Status;
 
 
 namespace MainScene
@@ -28,27 +29,27 @@ namespace MainScene
 
                 if (int.TryParse(input, out inputNumber))
                 {
-                    //switch (inputNumber)
-                    //{
-                    //    case 1:
-                    //        Status.Show();
-                    //        break;
-                    //    case 2:
-                    //        Inventory.Show();
-                    //        break;
-                    //    case 3:
-                    //        Shop.Show();
-                    //        break;
-                    //    case 4:
-                    //        Player.Recovery();
-                    //        break;
-                    //    case 5:
-                    //        Dungeon.Show();
-                    //        break;
-                    //    default:
-                    //        Console.WriteLine("1~5 사이의 숫자를 입력해주세요.");
-                    //        break;
-                    //}
+                    switch (inputNumber)
+                    {
+                        case 1:
+                            StatusScene.ShowStatus(_player);
+                            break;
+                        //case 2:
+                        //    Inventory.Show();
+                        //    break;
+                        //case 3:
+                        //    Shop.Show();
+                        //    break;
+                        //case 4:
+                        //    Player.Recovery();
+                        //    break;
+                        //case 5:
+                        //    Dungeon.Show();
+                        //    break;
+                        //default:
+                        //    Console.WriteLine("1~5 사이의 숫자를 입력해주세요.");
+                        //   break;
+                    }
                 }
                 else
                 {
