@@ -22,6 +22,32 @@ namespace GameService
 
     public class Mathod
     {
+        public static Job JobToClass(int _jobIndex)
+        {
+            //직업 추가
+            Job[] isJob =
+            {
+                new Warrior(),
+                new Wizard(),
+            };
+
+            return isJob[_jobIndex];
+        }
+
+        public static int JobToIndex(string _chad)
+        {
+            //해당 이름에 맞는 직업 인덱스 반환
+            var selectJobText = LoadAllText("SelectJobText");
+
+            for (int i = 0; i < selectJobText.Length; i++)
+            {
+                if (selectJobText[i].Contains(_chad)) return i;
+            }
+
+            Console.WriteLine($"{_chad}라는 단어는 SelectJobText파일 안에 없음");
+            return default;
+        }
+
         public static void BufferClear()
         {
             //덮어쓰기
@@ -60,8 +86,8 @@ namespace GameService
         public static string[] LoadAllText(string _textFileName)
         {
             //프로젝트/bin/폴더를 거슬러 올라가 프로젝트 파일 안에 Text라는 폴더를 찾음
-            string projectRoot = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\.."));
-            string file = Path.Combine(projectRoot, "Text", $"{_textFileName}.txt");
+            string projectPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\.."));
+            string file = Path.Combine(projectPath, "Text", $"{_textFileName}.txt");
 
             //파일 존재 유무
             if (!File.Exists(file))
@@ -95,32 +121,6 @@ namespace GameService
             {
                 Console.WriteLine(text[i]);
             }
-        }
-
-        public static Job JobToClass(int _jobIndex)
-        {
-            //직업 추가
-            Job[] isJob =
-            {
-                new Warrior(),
-                new Wizard(),
-            };
-
-            return isJob[_jobIndex];
-        }
-
-        public static int JobToIndex(string _chad)
-        {
-            //해당 이름에 맞는 직업 인덱스 반환
-            var selectJobText = LoadAllText("SelectJobText");
-
-            for (int i = 0; i < selectJobText.Length; i++)
-            {
-                if (selectJobText[i].Contains(_chad)) return i;
-            }
-
-            Console.WriteLine($"{_chad}라는 단어는 SelectJobText파일 안에 없음");
-            return default;
         }
     }
 
@@ -198,7 +198,6 @@ namespace GameService
         public Data<float> floating { get; set; } = new Data<float>();
         public Data<bool> boolen { get; set; } = new Data<bool>();
         public Data<string> stringMap { get; set; } = new Data<string>();
-        public Data<string> text { get; set; } = new Data<string>();
         public Vector32 vector { get; set; } = new Vector32();
 
         public void Save()
@@ -224,7 +223,7 @@ namespace GameService
                     integer = loadData.integer;
                     floating = loadData.floating;
                     boolen = loadData.boolen;
-                    text = loadData.text;
+                    stringMap = loadData.stringMap;
                     vector = loadData.vector;
                 }
             }

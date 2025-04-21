@@ -1,5 +1,4 @@
-﻿using GameCharacter;
-using GameLogic;
+﻿using GameLogic;
 using GameService;
 
 namespace StartScene
