@@ -1,15 +1,18 @@
-﻿namespace GamePlay
+﻿namespace GameLogic
 {
     public class Item
     {
         public string name { get; private init; }
-        public string itemInfo { get; private init; }
+        public string itemInfo { get; private init; } //해당 아이템 설명 글
         public int atk { get; private init; }
         public int def { get; private init; }
         public int health { get; private init; }
-        public int gold { get; private init; }
-        public bool equipped { get; private set; }
+        public int gold { get; private init; } //해당 아이템 판매 가격 or 구매 가격
+        public bool equipped { get; private set; } //해당 아이템 장착 여부
 
+
+        //선언 방법 예시 : new Itme("검", "날카로운 검이다.", 100, "공격력", 10);
+        //재료일 경우 : new Itme("재료", "쓸모없는 재료.", 5);
         public Item(string _name, string _itemInfo, int _gold = 0, string _ability = "", int _value = 0)
         {
             name = _name;
@@ -45,6 +48,7 @@
 
         public string Ability()
         {
+            //상점에 표시될 해당 아이템 효과 메서드
             if (atk != 0) return $"공격력 {(atk < 0 ? "-" : "+")} {atk}";
             else if (def != 0) return $"방어력 {(def < 0 ? "-" : "+")} {def}";
             else if (health != 0) return $"체력 {(health < 0 ? "-" : "+")} {health}";
@@ -57,6 +61,7 @@
 
     public abstract class Job
     {
+        //캐릭터 직업 추상 클래스
         private int fieldLevel;
         public int level
         {

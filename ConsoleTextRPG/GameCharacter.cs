@@ -1,4 +1,4 @@
-﻿using GamePlay;
+﻿using GameLogic;
 
 namespace GameCharacter
 {

@@ -5,7 +5,7 @@ namespace GameService
 {
     public enum ColorCode
     {
-        //해당 프로젝트에서만 사용할 컬러 코드 (추가해도 됨)
+        //해당 프로젝트에서만 사용할 컬러 코드 (ConsoleColor를 보고 추가해도 됨)
         None = 0,
         White = 15,
         Green = 10,
@@ -18,13 +18,15 @@ namespace GameService
 
     public class Mathod
     {
+        //해당 게임에 유용하게 사용될 메서드 종류
         public static bool CheckInput(out int _value)
         {
-            //글자를 입력했는지 검사
             string input = Console.ReadLine();
 
+            //숫자를 입력했는지 검사
             if (int.TryParse(input, out _value)) return true;
 
+            //숫자를 입력 안했을 경우
             Console.WriteLine("숫자를 입력하세요.");
             Thread.Sleep(1000);
             return false;
@@ -47,7 +49,7 @@ namespace GameService
 
     public struct Vector
     {
-        //커스텀 벡터 구조체
+        //저장을 위한 커스텀 벡터 구조체
         public float x { get; set; }
         public float y { get; set; }
         public float z { get; set; }
@@ -72,7 +74,7 @@ namespace GameService
 
     public class Vector32
     {
-        //벡터 전용 저장 전용 클래스
+        //벡터 저장 전용 클래스
         public Dictionary<string, Vector> data { get; set; } = new Dictionary<string, Vector>();
 
         public void Add(string _dataName, Vector3 _data)
@@ -90,7 +92,7 @@ namespace GameService
 
     public class Data<T>
     {
-        //기본 타입 데이터 저장 제네릭 클래스
+        //기본 데이터 타입 저장 전용 클래스
         public Dictionary<string, T> data { get; set; } = new Dictionary<string, T>();
 
         public void Add(string _dataName, T _data)
@@ -117,6 +119,7 @@ namespace GameService
 
         public void Save()
         {
+            //최종 적으로 게임 데이터를 저장할 경우에만 호출
             var jsonFile = new JsonSerializerOptions { WriteIndented = true };
             string toJson = JsonSerializer.Serialize(this, jsonFile);
 
