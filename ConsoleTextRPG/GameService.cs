@@ -37,6 +37,7 @@ namespace GameService
 
             //숫자를 입력 안했을 경우
             Console.WriteLine("숫자를 입력하세요.");
+            Thread.Sleep(1000);
             return false;
         }
 

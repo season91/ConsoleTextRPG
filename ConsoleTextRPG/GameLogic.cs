@@ -59,7 +59,7 @@
         public void EquippedItem(bool _equipped) => equipped = _equipped;
     }
 
-    public abstract class Job
+    public class Job
     {
         //캐릭터 직업 추상 클래스
         private int fieldLevel;

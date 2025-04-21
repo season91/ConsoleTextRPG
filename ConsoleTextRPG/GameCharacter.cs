@@ -13,7 +13,6 @@ namespace GameCharacter
             health = 100;
             gold = 1500;
         }
-
     }
 
     public class Wizard : Job
