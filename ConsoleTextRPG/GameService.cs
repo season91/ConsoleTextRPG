@@ -28,22 +28,60 @@ namespace GameService
 
             //숫자를 입력 안했을 경우
             Console.WriteLine("숫자를 입력하세요.");
-            Thread.Sleep(1000);
             return false;
         }
 
         public static void ChangeFontColor(ColorCode _color)
         {
             //글 색 변경
-            if(_color == ColorCode.None) Console.ResetColor();
+            if (_color == ColorCode.None) Console.ResetColor();
             else Console.ForegroundColor = (ConsoleColor)_color;
         }
 
-        public static void ChaneBackGroundColor(ColorCode _color)
+        public static void ChaneScreenColor(ColorCode _color)
         {
             //배경 색 변경
-            if(_color == ColorCode.None) Console.BackgroundColor = ConsoleColor.Black;
+            if (_color == ColorCode.None) Console.BackgroundColor = ConsoleColor.Black;
             else Console.BackgroundColor = (ConsoleColor)_color;
+        }
+
+        public static string[] LoadAllText(string _textFileName)
+        {
+            //프로젝트/bin/Debug/net8.0/Text파일 안에 txt파일 가져오기
+            var file = Path.Combine("Text", $"{_textFileName}.txt");
+
+            //파일 존재 유무
+            if (!File.Exists(file))
+            {
+                Console.WriteLine($"Text폴더에 {file}라는 파일은 존재하지 않음");
+                return default;
+            }
+
+            //\n 기준으로 분리
+            var reader = new StreamReader(file);
+            var data = reader.ReadToEnd();
+            var text = data.Split('\n'); //,StringSplitOptions.RemoveEmptyEntries);
+
+            return text;
+        }
+
+        public static void PrintTextFile(string _textFileName)
+        {
+            //해당 텍스트 파일 그대로 출력
+            var text = LoadAllText(_textFileName);
+
+            //로드가 안됐을 경우
+            if(text == null)
+            {
+                Console.WriteLine($"{_textFileName}을 불러올 수 없음");
+                return;
+            }
+
+            //텍스트 파일 내용 모두 출력
+            for (int i = 0; i < text.Length; i++)
+            {
+                Console.WriteLine(text[i]);
+            }
         }
     }
 
@@ -83,9 +121,15 @@ namespace GameService
             else data.Add(_dataName, new Vector(_data.X, _data.Y, _data.Z));
         }
 
-        public Vector3 GetData(string _dataName)
+        public Vector3 GetVector3(string _dataName)
         {
             if (data.ContainsKey(_dataName)) return data[_dataName].ToVector3();
+            else return default;
+        }
+
+        public Vector2 GetVector2(string _dataName)
+        {
+            if (data.ContainsKey(_dataName)) return data[_dataName].ToVector2();
             else return default;
         }
     }
