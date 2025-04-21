@@ -6,7 +6,7 @@ namespace StartScene
 {
     public class StartScenes
     {
-        public static Job SelectJob()
+        public static Job SelectJobScene()
         {
             //직업 추가
             Job[] isJob =
@@ -21,6 +21,8 @@ namespace StartScene
 
             while (true)
             {
+                Console.Clear();
+
                 for (int i = 0; i < text.Length; i++)
                 {
                     Console.WriteLine(text[i]);
@@ -45,12 +47,6 @@ namespace StartScene
                         break;
                     }
                 }
-
-                else
-                {
-                    Thread.Sleep(1000);
-                    Console.Clear();
-                }
             }
 
             Console.WriteLine($"\n{selectJobText[input]}");
@@ -60,7 +56,7 @@ namespace StartScene
             return isJob[input];
         }
 
-        public static string ShowStartScene()
+        public static string SetNameScene()
         {
             int valueInput = 0;
             string nameInput = "";
@@ -82,6 +78,7 @@ namespace StartScene
 
                 Console.WriteLine("\n1. 저장");
                 Console.WriteLine("2. 취소");
+                Console.Write(">>");
 
                 if (Mathod.CheckInput(out valueInput))
                 {
@@ -101,14 +98,15 @@ namespace StartScene
                     else
                     {
                         Console.WriteLine("잘못된 입력입니다.");
+                        Thread.Sleep(1000);
                     }
                 }
             }
         }
 
-        public static void StartGame(Job _player)
+        public static void ShowStartText(string _playerName)
         {
-            Console.WriteLine($"환영합니다, {_player.name}님!");
+            Console.WriteLine($"환영합니다, {_playerName}님!");
             Console.WriteLine("아무 키나 눌러 스파르타 마을로 이동합니다...");
             Console.ReadKey();
             Console.Clear();

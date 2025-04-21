@@ -21,11 +21,11 @@ public static class GameStart
         var gameData = new GameData();
         int input = 0;
 
-        var nickName = StartScenes.ShowStartScene();
-        var player = StartScenes.SelectJob();
+        var nickName = StartScenes.SetNameScene();
+        var player = StartScenes.SelectJobScene();
 
         player.SetName(nickName);
-        StartScenes.StartGame(player);
+        StartScenes.ShowStartText(nickName);
 
         while (true)
         {
