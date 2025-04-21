@@ -1,5 +1,6 @@
 ﻿using GameCharacter;
 using GameService;
+using MainScene;
 using StartScene;
 
 public static class GameStart
@@ -24,6 +25,7 @@ public static class GameStart
         while (true)
         {
             StartScenes.ShowStartScene(player);
+            MainScenes.ShowMainScene(player);
         }
     }
 }
