@@ -36,7 +36,7 @@ namespace Shop
                 for (int i = 0; i < gameItem.Length; i++)
                 {
                     var item = gameItem[i];
-                    var isBuy = item.IsSameItem(_player, item) ? "구매 완료\n" : $"{item.gold} G";
+                    var isBuy = item.IsSameItem(_player, item) ? "구매 완료" : $"{item.gold} G";
                     Console.WriteLine($"- {item.name} | {item.Ability()} | {item.itemInfo} | {isBuy}");
                 }
 
@@ -56,6 +56,7 @@ namespace Shop
                     else if (input == 1)
                     {
                         // 구매
+                        ShopBuyItem(_player, gameItem);
                     }
                     else if (input == 2)
                     {
@@ -72,7 +73,7 @@ namespace Shop
         }
 
         // 아이템 구매 메뉴로 이동
-        public void ShopBuyItem(Job _player, Item[] gameItem)
+        public static void ShopBuyItem(Job _player, Item[] gameItem)
         {
             int input = 0;
             while (true)
@@ -89,7 +90,7 @@ namespace Shop
                 for (int i = 0; i < gameItem.Length; i++)
                 {
                     var item = gameItem[i];
-                    var isBuy = item.IsSameItem(_player, item) ? "구매 완료\n" : $"{item.gold} G";
+                    var isBuy = item.IsSameItem(_player, item) ? "구매 완료" : $"{item.gold} G";
                     Console.WriteLine($"- {i+1}. {item.name} | {item.Ability()} | {item.itemInfo} | {isBuy}");
                 }
 
@@ -120,7 +121,7 @@ namespace Shop
         }
 
         // 아이템 구매 시도
-        public void TryShopBuyItem(Job _player, Item item)
+        public static void TryShopBuyItem(Job _player, Item item)
         {
             int price = item.gold;
 
