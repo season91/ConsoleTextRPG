@@ -16,6 +16,7 @@ namespace GameService
         Yellow = 14,
         Magenta = 13,
         Cyan = 11,
+        DarkGray = 8,
     }
 
     public class Mathod
