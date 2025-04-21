@@ -2,7 +2,6 @@
 using GameService;
 using MainScene;
 using StartScene;
-using GameQuest;
 
 public static class GameStart
 {
