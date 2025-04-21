@@ -12,10 +12,12 @@ namespace StartScene
             Job[] isJob =
             {
                 new Warrior(),
+                new Wizard(),
             };
 
             var input = 0;
             var text = Mathod.LoadAllText("JobSelectionwindow");
+            var selectJobText = Mathod.LoadAllText("SelectJobText");
 
             while (true)
             {
@@ -29,7 +31,7 @@ namespace StartScene
                 //키 입력 검사
                 if (Mathod.CheckInput(out input))
                 {
-                    if (isJob.Length > input || input < 0)
+                    if (input < 1 || isJob.Length < input)
                     {
                         Console.WriteLine("잘못된 입력입니다.");
                         Thread.Sleep(1000);
@@ -39,10 +41,21 @@ namespace StartScene
 
                     else
                     {
+                        input--;
                         break;
                     }
                 }
+
+                else
+                {
+                    Thread.Sleep(1000);
+                    Console.Clear();
+                }
             }
+
+            Console.WriteLine($"\n{selectJobText[input]}");
+            Thread.Sleep(1500);
+            Console.Clear();
 
             return isJob[input];
         }
@@ -63,10 +76,11 @@ namespace StartScene
                 if (string.IsNullOrEmpty(nameInput))
                 {
                     Console.WriteLine("최소 한 글자 이상 입력하셔야 합니다.");
+                    Thread.Sleep(1000);
                     continue;
                 }
 
-                Console.WriteLine("1. 저장");
+                Console.WriteLine("\n1. 저장");
                 Console.WriteLine("2. 취소");
 
                 if (Mathod.CheckInput(out valueInput))
@@ -74,6 +88,7 @@ namespace StartScene
                     //저장시
                     if (valueInput == 1)
                     {
+                        Console.Clear();
                         return nameInput;
                     }
 
@@ -93,7 +108,7 @@ namespace StartScene
 
         public static void StartGame(Job _player)
         {
-            Console.WriteLine($"\n환영합니다, {_player.name}님!");
+            Console.WriteLine($"환영합니다, {_player.name}님!");
             Console.WriteLine("아무 키나 눌러 스파르타 마을로 이동합니다...");
             Console.ReadKey();
             Console.Clear();
