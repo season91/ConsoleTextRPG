@@ -1,11 +1,53 @@
-﻿using GameLogic;
+﻿using GameCharacter;
+using GameLogic;
 using GameService;
 
 namespace StartScene
 {
     public class StartScenes
     {
-        public static void ShowStartScene(Job _player)
+        public static Job SelectJob()
+        {
+            //직업 추가
+            Job[] isJob =
+            {
+                new Warrior(),
+            };
+
+            var input = 0;
+            var text = Mathod.LoadAllText("JobSelectionwindow");
+
+            while (true)
+            {
+                for (int i = 0; i < text.Length; i++)
+                {
+                    Console.WriteLine(text[i]);
+                }
+
+                Console.Write(">>");
+
+                //키 입력 검사
+                if (Mathod.CheckInput(out input))
+                {
+                    if (isJob.Length > input || input < 0)
+                    {
+                        Console.WriteLine("잘못된 입력입니다.");
+                        Thread.Sleep(1000);
+                        Console.Clear();
+                        continue;
+                    }
+
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return isJob[input];
+        }
+
+        public static string ShowStartScene()
         {
             int valueInput = 0;
             string nameInput = "";
@@ -32,8 +74,7 @@ namespace StartScene
                     //저장시
                     if (valueInput == 1)
                     {
-                        _player.SetName(nameInput);
-                        break;
+                        return nameInput;
                     }
 
                     //취소시 다시 루프
@@ -48,7 +89,10 @@ namespace StartScene
                     }
                 }
             }
+        }
 
+        public static void StartGame(Job _player)
+        {
             Console.WriteLine($"\n환영합니다, {_player.name}님!");
             Console.WriteLine("아무 키나 눌러 스파르타 마을로 이동합니다...");
             Console.ReadKey();

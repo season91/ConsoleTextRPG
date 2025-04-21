@@ -16,15 +16,21 @@ public static class GameStart
     //해당 GameStart.cs는 Main에 동작하게 구현하는거 제외하고는 메서드를 만들거나 클래스를 만드시면 안됩니다~ (다른 분들을 위해)
     #endregion
 
+
+
     static void Main()
     {
         var gameData = new GameData();
-        var player = new Warrior();
         int input = 0;
+
+        var nickName = StartScenes.ShowStartScene();
+        var player = StartScenes.SelectJob();
+
+        player.SetName(nickName);
+        StartScenes.StartGame(player);
 
         while (true)
         {
-            StartScenes.ShowStartScene(player);
             MainScenes.ShowMainScene(player);
         }
     }
