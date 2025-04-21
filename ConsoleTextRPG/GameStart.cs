@@ -1,10 +1,7 @@
 ﻿using GameCharacter;
 using GameService;
-<<<<<<< Updated upstream
 using MainScene;
 using StartScene;
-=======
->>>>>>> Stashed changes
 
 public static class GameStart
 {
@@ -24,7 +21,6 @@ public static class GameStart
         var gameData = new GameData();
         int input = 0;
 
-<<<<<<< Updated upstream
         var nickName = StartScenes.ShowStartScene();
         var player = StartScenes.SelectJob();
 
@@ -34,17 +30,6 @@ public static class GameStart
         while (true)
         {
             MainScenes.ShowMainScene(player);
-=======
-        string[] arry;
-        while (true)
-        {
-            //StartScenes.ShowStartScene(player);
-            if (Mathod.CheckInput(out input))
-            {
-                Mathod.ChaneScreenColor(ColorCode.Red);
-                Mathod.PrintTextFile("Test");
-            }
->>>>>>> Stashed changes
         }
     }
 }
