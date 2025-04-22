@@ -20,64 +20,19 @@ public static class GameStart
 
     static void Main()
     {
-        Test();
-        //var gameData = new GameData();
-        //int input = 0;
+        var gameData = new GameData();
+        int input = 0;
 
-        //var nickName = StartScenes.SetNameScene();
-        //var player = StartScenes.SelectJobScene();
+        var nickName = StartScenes.SetNameScene();
+        var player = StartScenes.SelectJobScene();
 
-        ////GameManager.SpawnPlayer(nickName, isJob);
-        //player.SetName(nickName);
-        //StartScenes.ShowStartText(nickName);
+        //GameManager.SpawnPlayer(nickName, isJob);
+        player.SetName(nickName);
+        StartScenes.ShowStartText(nickName);
 
-        //while (true)
-        //{
-        //    MainScenes.ShowMainScene(player);
-        //}
-    }
-
-    static void Test()
-    {
-        var questText = Mathod.LoadAllText($"Quest({1})");
-        var textLength = questText.Length - 2;
-
-        if (questText == null)
+        while (true)
         {
-            Console.WriteLine($"{1}번은 없는 퀘스트");
-            return;
+            MainScenes.ShowMainScene(player);
         }
-
-        var name = questText[0];
-        var info = new string[questText.Length];
-
-        for (int i = 0; i < textLength; i++)
-        {
-            info[i] = questText[i];
-        }
-
-        //조건 갯수 만큼 초기화
-        var conditionText = questText[textLength].Split('/');
-        var conditionLength = conditionText.Length == 0 ? 1 : conditionText.Length;
-
-        var condition = new string[conditionLength];
-        var clearCount = new int[conditionLength];
-        var conditionCount = new int[conditionLength];
-
-        for (int i = 0; i < conditionLength; i++)
-        {
-            var countText = conditionText[i].Split(',');
-            condition[i] = countText[0];
-
-            if (!int.TryParse(countText[1], out conditionCount[i]))
-            {
-                Console.WriteLine($"{countText[1]}는 숫자가 아님");
-                break;
-            }
-        }
-
-        //textLength++;
-
-        var a = 1;
     }
 }
