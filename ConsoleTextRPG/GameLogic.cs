@@ -111,6 +111,10 @@ namespace GameLogic
             GameManager.data.integer.Add($"{name}def", def);
             GameManager.data.integer.Add($"{name}gold", gold);
             GameManager.data.integer.Add($"{name}level", level);
+            GameManager.data.integer.Add($"{name}bonusAtk", bonusAtk);
+            GameManager.data.integer.Add($"{name}bonusDef", bonusDef);
+
+            GameManager.ItemPooling = item;
         }
 
         public void LoadData()
@@ -122,6 +126,10 @@ namespace GameLogic
             def = GameManager.data.integer.GetData($"{name}def");
             gold = GameManager.data.integer.GetData($"{name}gold");
             level = GameManager.data.integer.GetData($"{name}level");
+            bonusAtk = GameManager.data.integer.GetData($"{name}bonusAtk");
+            bonusDef = GameManager.data.integer.GetData($"{name}bonusDef");
+
+            item = GameManager.ItemPooling;
         }
     }
 }

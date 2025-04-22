@@ -69,7 +69,7 @@ namespace Inventory
                 for (int i = 0; i < _player.item.Count; i++)
                 {
                     var item = _player.item[i];
-                    Console.WriteLine($"- {i + 1}. {(item.equipped ? "[E] " : "")} {item.name} | {item.Ability()} | {item.itemInfo}");
+                    Console.WriteLine($"- {i + 1}. {(item.equipped ? "[E] " : "")}{item.name} | {item.Ability()} | {item.itemInfo}");
                 }
 
                 Console.WriteLine("0. 나가기");
@@ -84,14 +84,7 @@ namespace Inventory
                     }
                     else if (input >= 1 && input <= _player.item.Count)
                     {
-                        // 
-                        if(_player.item[input - 1].atk > 0)
-                        {
-
-                        }
-
-                        _player.item[input-1].EquippedItem(!_player.item[input-1].equipped);
-                        break;
+                        TryEquipItem(_player, input-1);
                     }
                     else
                     {
@@ -101,5 +94,58 @@ namespace Inventory
                 }
             }
         }
+
+        public static void TryEquipItem(Job _player, int tryEquipIndex)
+        {
+            if(_player.item[tryEquipIndex].atk > 0)
+            {
+                // 장착된 무기가 있는지
+                var equippedAtkItem = (from x in _player.item.Select((item, index) => new { item, index })
+                                       where x.item.equipped && x.item.atk > 0 && x.item.def == 0
+                                       select (x.index, x.item)).FirstOrDefault();
+
+                // 기존 장착 해제 후 장착
+                if(equippedAtkItem.item != null)
+                {
+                    _player.atk -= _player.item[equippedAtkItem.index].atk;
+                    _player.bonusAtk -= _player.item[equippedAtkItem.index].atk;
+
+                    _player.item[equippedAtkItem.index].EquippedItem(!_player.item[equippedAtkItem.index].equipped);
+
+                    Console.WriteLine("기존 무기 장착 해제했습니다.");
+                }
+
+                _player.atk += _player.item[tryEquipIndex].atk;
+                _player.bonusAtk += _player.item[tryEquipIndex].atk;
+
+                _player.item[tryEquipIndex].EquippedItem(!_player.item[tryEquipIndex].equipped);
+            }
+            else if (_player.item[tryEquipIndex].def > 0)
+            {
+                // 장착된 방어구가 있는지
+                var equippedDefItem = (from x in _player.item.Select((item, index) => new { item, index })
+                                       where x.item.equipped && x.item.def > 0 && x.item.atk == 0
+                                       select (x.index, x.item)).FirstOrDefault();
+
+                // 기존 장착 해제 후 장착
+                if (equippedDefItem.item != null)
+                { 
+                    _player.def -= _player.item[equippedDefItem.index].def;
+                    _player.bonusDef -= _player.item[equippedDefItem.index].def;
+
+                    _player.item[equippedDefItem.index].EquippedItem(!_player.item[equippedDefItem.index].equipped);
+
+                    Console.WriteLine("기존 방어구 장착 해제했습니다.");
+                }
+
+                _player.def += _player.item[equippedDefItem.index].def;
+                _player.bonusDef += _player.item[equippedDefItem.index].def;
+
+                _player.item[tryEquipIndex].EquippedItem(!_player.item[tryEquipIndex].equipped);
+            }
+
+            Thread.Sleep(2000);
+        }
+
     }
 }
