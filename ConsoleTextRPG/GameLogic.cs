@@ -97,6 +97,8 @@ namespace GameLogic
         public int def;
         public int health;
         public int gold;
+        public int bonusAtk;
+        public int bonusDef;
 
         public void SetName(string _name) => name = _name;
 
