@@ -26,8 +26,8 @@ namespace Manager
 
         public static void SpawnPlayer(string _playerName, Job _playerJob)
         {
-            player.SetName(_playerName);
             player = _playerJob;
+            player.SetName(_playerName);
         }
     }
 }
