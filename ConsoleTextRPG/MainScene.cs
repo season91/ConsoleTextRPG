@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Numerics;
 using GameLogic;
+using Status;
+using Inventory;
 using Shop;
 
 
@@ -32,10 +34,10 @@ namespace MainScene
                     switch (inputNumber)
                     {
                         case 1:
-                            //Status.Show();
+                            StatusScene.ShowStatus(_player);
                             break;
                         case 2:
-                            //Inventory.Show();
+                            Inventorys.Show(_player);
                             break;
                         case 3:
                             Shops.Show(_player);
