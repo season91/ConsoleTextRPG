@@ -6,8 +6,7 @@ using System.Linq;
 
 namespace BattleSystem
 {
-    public enum Monsters { Minion, VoidInsect, CannonMinion }
-
+    public enum Monsters { 미니언, 공허충, 대포미니언 }
     public class Monster
     {
         public Monsters MonsterType { get; set; }
@@ -23,9 +22,9 @@ namespace BattleSystem
             // switch 식으로 타입별 기본 스탯 정의
             (monMaxHp, monAtk, monLevel) = type switch
             {
-                Monsters.Minion => (15, 5, 2),
-                Monsters.VoidInsect => (15, 9, 3),
-                Monsters.CannonMinion => (25, 8, 5),
+                Monsters.미니언 => (15, 5, 2),
+                Monsters.공허충 => (15, 9, 3),
+                Monsters.대포미니언 => (25, 8, 5),
 
             };
             monHP = monMaxHp;
@@ -57,10 +56,44 @@ namespace BattleSystem
                 if (!monsters.Any(m => m.IsAlive)) break;
                 EnemyTurn(player, monsters);
             }
+            Console.Clear();
+            if (player.health > 0)
+            {
+                Console.WriteLine("[전투 결과]\n");
+                Console.WriteLine("전투에서 승리했습니다!");
+                Console.WriteLine($"던전에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
 
-            Mathod.BufferClear();
-            Console.WriteLine(player.health > 0 ? " 승리! " : " 패배...");
-            Console.ReadKey();
+                Console.WriteLine("[캐릭터 정보]");
+                //레벨업 시 레벨 증가 출력
+                //체력 변화량 출력
+                //경험치 변화량 출력
+                Console.WriteLine("\n[획득 아이템]");
+                //획득 아이템 출력
+
+                Console.WriteLine("1. 다음층으로");
+                Console.WriteLine("0. 던전 나가기");
+                Console.Write("\n>> ");
+                if (!Mathod.CheckInput(out int sel))
+                    return;
+                if (sel == 1)
+                {
+                    // 다음 층으로 이동
+                    Console.WriteLine("다음 층으로 이동합니다...");
+                    // Dungeon.NextFloor();
+                }
+                else if (sel == 0)
+                {
+                    // 던전 나가기 로직
+                    Console.WriteLine("던전을 나갑니다...");
+                    // Dungeon.Exit();
+                }
+            }
+            else
+            {
+                Console.WriteLine("전투에서 패배했습니다.");
+                Console.WriteLine("게임 오버입니다.");
+                Console.ReadKey();
+            }
         }
         public static Monster[] SpawnMonsters()
         {
@@ -79,7 +112,7 @@ namespace BattleSystem
             while (true)
             {
                 RenderStatus(player, monsters);
-                Console.Write("공격할 몬스터 번호(0: 차례 넘기기) > ");
+                Console.Write("\n\n공격할 몬스터 번호(0: 차례 넘기기) > ");
                 if (!Mathod.CheckInput(out int sel)) 
                     continue;
                 if (sel == 0) 
@@ -99,7 +132,7 @@ namespace BattleSystem
         }
         public static void EnemyTurn(Job player, Monster[] monsters)
         {
-            Mathod.BufferClear();
+            Console.Clear();
             Console.WriteLine("적 턴");
             Console.WriteLine($"플레이어 체력: {player.health}\n");
             for (int i = 0; i < monsters.Length; i++)
@@ -113,34 +146,27 @@ namespace BattleSystem
                     Console.WriteLine($"→ {m.monAtk} 데미지!");
                     player.health -= m.monAtk;
                     Console.WriteLine($"남은 체력: {player.health}");
-
+                    
                     Console.WriteLine("계속하시려면 아무 키나 누르세요.");
                     Console.ReadKey();
 
                     if (player.health <= 0)
-                    {
-                        Console.WriteLine("플레이어가 사망했습니다.");
-                        Console.WriteLine("전투가 종료됩니다.");
-                        Console.WriteLine("게임 오버");
-                        Console.WriteLine("다시 시작하려면 아무 키나 누르세요.");
-                        Console.ReadKey();
                         return; // 플레이어가 사망하면 전투 종료
-                    }
                 }
             }
         }
         public static void RenderStatus(Job player, Monster[] monsters)
         {
-            Mathod.BufferClear();
-            Console.WriteLine("플레이어 상태");
+            Console.Clear();
+            Console.WriteLine("플레이어 턴\n");
             Console.WriteLine($"체력: {player.health}");
-            Console.WriteLine($"공격력: {player.atk}");
+            Console.WriteLine($"공격력: {player.atk}\n\n");
             for (int i = 0; i < monsters.Length; i++)
             {
                 var m = monsters[i];
                 if (m.IsAlive)
                 {
-                    Console.WriteLine($"몬스터 {i + 1} ({m.MonsterType})");
+                    Console.WriteLine($"{i + 1} ({m.MonsterType})");
                     Console.WriteLine($"체력: {m.monHP}/{m.monMaxHp}");
                     Console.WriteLine($"공격력: {m.monAtk}");
                 }
@@ -150,5 +176,10 @@ namespace BattleSystem
                 }
             }
         }
+    }
+    public class Dungeon
+    {
+        public int Floor { get; private set; } = 1;
+
     }
 }

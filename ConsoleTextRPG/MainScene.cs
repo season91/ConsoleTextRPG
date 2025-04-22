@@ -31,7 +31,7 @@ namespace MainScene
                     //switch (inputNumber)
                     //{
                     //    case 1:
-                    //        Status.Show();
+                    //        BattleSystem.BattleSystem.Start(_player);
                     //        break;
                     //    case 2:
                     //        Inventory.Show();
