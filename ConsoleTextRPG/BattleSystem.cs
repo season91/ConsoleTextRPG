@@ -161,19 +161,20 @@ namespace BattleSystem
                 else if (sel == 2) // 스킬
                 {
                     Console.WriteLine("사용할 스킬을 선택하세요.");
-                    Console.WriteLine("1. 스킬1");
-                    Console.WriteLine("2. 스킬2");// 스킬 구현 후 스킬 리스트 가져와야함
+                    Console.WriteLine("1. 알파 스트라이크");
+                    Console.WriteLine("2. 더블 스트라이크");// 스킬 구현 후 스킬 리스트 가져와야함
+                    Console.WriteLine("0. 취소");
                     Console.Write(">> ");
                     if (!Mathod.CheckInput(out int skill))
                         continue;
-                    if (skill == 1)//스킬 구현 필요
-                    { 
-                        if (Attack(player.atk,player, monsters))//스킬 로직 추가 필요
+                    if (skill == 1)
+                    {
+                        Skill.AlphaStrike(player.atk, player, monsters);
                             break;
                     }
                     else if (skill == 2)
                     {
-                        if (Attack(player.atk, player, monsters))//스킬 로직 추가 필요
+                        Skill.DoubleStrike(player.atk, player, monsters);
                             break;
                     }
                     else
@@ -268,6 +269,34 @@ namespace BattleSystem
             Thread.Sleep(1000);
             return true;
         }
+        private static class Skill//스킬 소모량 추가 필요
+        {
+            public static void AlphaStrike(int damage, Job player, Monster[] monsters)
+            {
+                Attack(player.atk, player, monsters);
+            }
+            public static void DoubleStrike(int damage, Job player, Monster[] monsters)
+            {
+                //공격력 * 1.5로 2명의 적을 랜덤으로 공격
+                var Rdtarget = GameManager.rd;
+                int targetDamage = (int)(damage * 1.5);
+
+                for (int i = 0; i <2; i++)
+                {
+                    int targetindex;
+                        do
+                    {
+                        targetindex = Rdtarget.Next(0, monsters.Length);
+                    }
+                        while (!monsters[targetindex].IsAlive);
+                    var target = monsters[targetindex];
+                    int dmg = target.TakeDamage(targetDamage, player);
+                    Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
+                    Thread.Sleep(1000);
+                }
+            }
+        }
+
     }
     public static class Dungeon
     {
