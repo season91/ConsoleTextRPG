@@ -11,9 +11,9 @@ namespace GameQuest
         public string[] info { get; init; } //퀘스트 정보
         //public int[] itemID { get; init; } //보상을 줄 아이템 ID
         public string[] condition { get; private set; } //퀘스트 조건
-        public int totalClear { get; set; } //토탈 클리어 횟수
+        public int totalClear { get; private set; } //토탈 클리어 횟수
         public int[] count { get; private set; } //해당 조건 클리어 횟수
-        public int[] maxCount { get; set; } //해당 조건 클리어 조건 횟수
+        public int[] maxCount { get; private set; } //해당 조건 클리어 조건 횟수
 
         public Quest(int _questNumber)
         {
@@ -59,8 +59,6 @@ namespace GameQuest
 
         public void CheckCondition(string _objectName)
         {
-            if (!acceptance || totalClear >= maxCount.Length) return;
-
             for (int i = 0; i < condition.Length; i++)
             {
                 if (condition[i].Contains(_objectName))
@@ -74,7 +72,7 @@ namespace GameQuest
 
         public bool CheckClear()
         {
-            if (totalClear > maxCount.Length) return true;
+            if (totalClear >= maxCount.Length) return true;
             else return false;
         }
 
@@ -116,7 +114,10 @@ namespace GameQuest
             //event로 해야하지만 일단 그냥..
             for (int i = 0; i < data.Length; i++)
             {
-                data[i].CheckCondition(_objectName);
+                if (data[i].acceptance && data[i].totalClear < data[i].maxCount.Length)
+                {
+                    data[i].CheckCondition(_objectName);
+                }
             }
         }
 
@@ -131,7 +132,7 @@ namespace GameQuest
         public void Load()
         {
             //현재 퀘스트 텍스트 갯수
-            var questCount = 1;
+            var questCount = 3;
 
             data = new Quest[questCount];
 
@@ -166,18 +167,26 @@ namespace GameQuest
                     Mathod.ChangeFontColor(ColorCode.None);
 
                     //퀘스트 이름
-                    Console.WriteLine($"{quest[i].info[0]}");
+                    var text = $"{quest[i].info[0]}{(quest[i].acceptance ? " -진행중-" : "")}";
+                    Console.WriteLine(text.Replace("\r", ""));
                 }
+
+                Console.WriteLine("\n0. 나가기");
 
                 Console.WriteLine("\n원하시는 퀘스트를 선택해주세요.");
                 Console.Write(">>");
 
                 if (Mathod.CheckInput(out input))
                 {
-                    if (input < 1 || questLength < input)
+                    if (input < 0 || questLength < input)
                     {
                         Console.WriteLine("잘못된 입력입니다.");
                         Thread.Sleep(1000);
+                    }
+
+                    else if (input == 0)
+                    {
+                        break;
                     }
 
                     else
@@ -190,6 +199,7 @@ namespace GameQuest
 
         private static void ShowInfo(int _input)
         {
+            var length = GameManager.quest.data.Length;
             var quest = GameManager.quest.data[_input];
             var questScreen = quest.info;
             var isClear = quest.CheckClear();
@@ -206,31 +216,61 @@ namespace GameQuest
                     Console.WriteLine(questScreen[i]);
                 }
 
-                //수락시
+                //퀘스트 상태인가?
                 if (quest.acceptance)
                 {
-                    Console.WriteLine("");
-                    Console.WriteLine("");
+                    //완료 했는가? (완료 X => 출력 안함)
+                    if (isClear) Console.WriteLine("1. 보상받기");
                 }
 
-                //거절시
-                else
-                {
-                    Console.WriteLine("");
-                    Console.WriteLine("");
-                }
+                //아닐 경우
+                else Console.WriteLine("1. 수락하기");
 
-                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.WriteLine($"{(quest.acceptance ? 0 : 2)}. 돌아가기");
+
+                Console.WriteLine("\n원하시는 행동을 입력해주세요.");
                 Console.Write(">>");
 
                 if (Mathod.CheckInput(out _input))
                 {
+                    if (_input == 1)
+                    {
+                        if (!quest.acceptance)
+                        {
+                            quest.acceptance = true;
+                        }
 
+                        else
+                        {
+                            if (isClear)
+                            {
+                                Reward();
+                                break;
+                            }
+
+                            else
+                            {
+                                Console.WriteLine("잘못된 입력입니다.");
+                                Thread.Sleep(1000);
+                            }
+                        }
+                    }
+
+                    else if ((quest.acceptance && _input == 0) || (!quest.acceptance && _input == 2))
+                    {
+                        break;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("잘못된 입력입니다.");
+                        Thread.Sleep(1000);
+                    }
                 }
             }
         }
 
-        public static void Reward()
+        private static void Reward()
         {
 
         }
