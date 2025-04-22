@@ -44,7 +44,7 @@ namespace Shop
                     else if (input == 1)
                     {
                         // 구매
-                        ShopBuyItem(_player, gameItem);
+                        ShopBuyItem(_player);
                     }
                     else if (input == 2)
                     {
@@ -61,9 +61,10 @@ namespace Shop
         }
 
         // 아이템 구매 메뉴
-        public static void ShopBuyItem(Job _player, Item[] gameItem)
+        public static void ShopBuyItem(Job _player)
         {
             int input = 0;
+            Item[] gameItem = GameManager.ItemPooling;
             while (true)
             {
                 Console.Clear();
