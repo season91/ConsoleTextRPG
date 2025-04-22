@@ -215,8 +215,8 @@ namespace BattleSystem
                 {
                     Mathod.ChangeFontColor(ColorCode.Red);
                     Console.WriteLine($"\n{m.MonsterType}의 공격");
-                    Console.WriteLine($"→ {m.monAtk} 데미지!");
-                    player.health -= m.monAtk;
+                    Console.WriteLine($"→ {m.monAtk-player.def/2} 데미지!");
+                    player.health -= m.monAtk-player.def/2;//방어력의 절반만큼 데미지 감소
                     Mathod.ChangeFontColor(ColorCode.Green);
                     Console.WriteLine($"남은 체력: {player.health}");
                     Console.WriteLine("");
@@ -305,6 +305,7 @@ namespace BattleSystem
             {
                 //공격력 * 2로 공격
                 Attack(player.atk*2, player, monsters);
+                player.Mp -= 10; //스킬 사용 시 MP 소모
             }
             public static void DoubleStrike(int damage, Job player, Monster[] monsters)
             {
@@ -312,14 +313,14 @@ namespace BattleSystem
                 var Rdtarget = GameManager.rd;
                 int targetDamage = (int)(damage * 1.5);
 
-                for (int i = 0; i <2; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     int targetindex;
-                        do
+                    do
                     {
                         targetindex = Rdtarget.Next(0, monsters.Length);
                     }
-                        while (!monsters[targetindex].IsAlive);
+                    while (!monsters[targetindex].IsAlive);
                     var target = monsters[targetindex];
                     int dmg = target.TakeDamage(targetDamage, player);
                     Mathod.ChangeFontColor(ColorCode.Red);
@@ -327,6 +328,7 @@ namespace BattleSystem
                     Mathod.ChangeFontColor(ColorCode.None);
                     Thread.Sleep(1000);
                 }
+                player.Mp -= 15; //스킬 사용 시 MP 소모
             }
         }
 
