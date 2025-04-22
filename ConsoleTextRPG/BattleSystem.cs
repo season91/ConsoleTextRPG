@@ -3,29 +3,46 @@ using GameCharacter;
 using GameLogic;
 using GameService;
 using System.Linq;
+using Manager;
 
 namespace BattleSystem
 {
-    public enum Monsters { 미니언, 공허충, 대포미니언 }
+    public enum Monsters 
+    {
+        고블린=1101,
+        홉고블린=1102,
+        오크=1103,
+        하이오크=1104,
+        해츨링=1105,
+        와이번=1106, 
+        워울프=1107, 
+        만티코어=1108,
+        드래곤=1109,
+    }
     public class Monster
     {
         public Monsters MonsterType { get; set; }
+        public int ID => (int)MonsterType;
+        public string Name => MonsterType.ToString();
         public int monMaxHp { get; set; }
         public int monHP { get; private set; }
         public int monAtk { get; set; }
-        public int monLevel { get; set; }
-        public bool IsAlive => monHP > 0; // IsAlive 불리언을 통해 생존 여부 확인
-
+        public bool IsAlive => monHP > 0;
         public Monster(Monsters type)
         {
             MonsterType = type;
             // switch 식으로 타입별 기본 스탯 정의
-            (monMaxHp, monAtk, monLevel) = type switch
+            (monMaxHp, monAtk) = type switch
             {
-                Monsters.미니언 => (15, 5, 2),
-                Monsters.공허충 => (15, 9, 3),
-                Monsters.대포미니언 => (25, 8, 5),
-
+                Monsters.고블린 => (15, 5),
+                Monsters.홉고블린 => (20, 7),
+                Monsters.오크 => (20, 8),
+                Monsters.하이오크 => (25, 10),
+                Monsters.해츨링 => (50, 20),
+                Monsters.와이번 => (30, 13),
+                Monsters.워울프 => (17, 17),
+                Monsters.만티코어 => (25, 20),
+                Monsters.드래곤 => (100, 40),
             };
             monHP = monMaxHp;
         }
@@ -46,8 +63,9 @@ namespace BattleSystem
         private static readonly Random _rand = new Random();
 
         // 전투 진입점
-        public static void Start(Job player)
+        public static void Start()
         {
+            var player = GameManager.player;
             var monsters = SpawnMonsters();
 
             while (player.health > 0 && monsters.Any(m => m.IsAlive))
@@ -177,9 +195,9 @@ namespace BattleSystem
             }
         }
     }
-    public class Dungeon
+    public static class Dungeon
     {
-        public int Floor { get; private set; } = 1;
-
+        public static int Floor { get; private set; } = 1;
+        public static void NextFloor() => Floor++;
     }
 }
