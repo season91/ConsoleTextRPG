@@ -9,15 +9,15 @@ namespace BattleSystem
 {
     public enum Monsters 
     {
-        고블린=1101,
-        홉고블린=1102,
-        오크=1103,
-        하이오크=1104,
-        해츨링=1105,
-        와이번=1106, 
-        워울프=1107, 
-        만티코어=1108,
-        드래곤=1109,
+        고블린=    1101,
+        홉고블린=  1102,
+        오크=      1103,
+        하이오크=  1104,
+        해츨링=    1105,
+        와이번=    1106, 
+        워울프=    1107, 
+        만티코어=  1108,
+        드래곤=    1109,
     }
     public class Monster
     {
@@ -69,8 +69,10 @@ namespace BattleSystem
 
             while (player.health > 0 && monsters.Any(m => m.IsAlive))
             {
-                PlayerTurn(player, monsters);
-                if (!monsters.Any(m => m.IsAlive)) break;
+                if (!PlayerTurn(player, monsters))
+                    return;
+                if (!monsters.Any(m => m.IsAlive))
+                    break;
                 EnemyTurn(player, monsters);
             }
             Console.Clear();
@@ -99,11 +101,13 @@ namespace BattleSystem
                 if (sel == 1)
                 {
                     Dungeon.NextFloor();
-                    Console.WriteLine("다음 층으로 이동합니다...");
+
                 }
                 else if (sel == 0)
                 {
                     Console.WriteLine("던전을 나갑니다...");
+                    Thread.Sleep(1000);
+                    Console.Clear();
                 }
             }
             else
@@ -141,68 +145,67 @@ namespace BattleSystem
             }
             return monsters;
         }
-        private static void PlayerTurn(Job player, Monster[] monsters)
+        private static bool PlayerTurn(Job player, Monster[] monsters)
         {
             while (true)
             {
                 RenderStatus(player, monsters);
-                Console.Write("\n\n1. 공격 ");
+                Console.WriteLine("\n\n1. 공격 ");
                 Console.WriteLine("2. 스킬 ");
                 Console.WriteLine("0. 던전 나가기");
                 Console.WriteLine("\n 원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
                 if (!Mathod.CheckInput(out int sel)) 
                     continue;
+
+                Console.Clear();
                 if (sel == 1) // 공격 
                 {
                     if (Attack(player.atk, player, monsters))
-                        break;
+                        return true;
                 }
                 else if (sel == 2) // 스킬
                 {
+                    Console.Clear();
                     Console.WriteLine("사용할 스킬을 선택하세요.");
                     Console.WriteLine("1. 알파 스트라이크");
                     Console.WriteLine("2. 더블 스트라이크");// 스킬 구현 후 스킬 리스트 가져와야함
                     Console.WriteLine("0. 취소");
                     Console.Write(">> ");
                     if (!Mathod.CheckInput(out int skill))
-                        continue;
+                        return true;
                     if (skill == 1)
                     {
                         Skill.AlphaStrike(player.atk, player, monsters);
-                            break;
+                        break;
                     }
                     else if (skill == 2)
                     {
                         Skill.DoubleStrike(player.atk, player, monsters);
-                            break;
+                        break;
                     }
                     else
                     {
                         Console.WriteLine("잘못된 입력입니다.");
                         continue;
                     }
-
                 }
                 else if (sel == 0)
-                    break;
-
-
-                // 몬스터 종류별 죽인 횟수 카운트
-                //if (target.monHP == 0)
-                //{
-                // 
-                //}
-
-                Console.ReadKey();
-                break;  // 한 번 공격 후 적 차례
+                Console.WriteLine("체력이 1/5 감소합니다.");
+                Console.WriteLine("던전을 나갑니다...");
+                player.health -= player.health / 5;
+                Thread.Sleep(1000);
+                return false;
             }
+            return true;
         }
         private static void EnemyTurn(Job player, Monster[] monsters)
         {
             Console.Clear();
             Console.WriteLine("적 턴");
+            Mathod.ChangeFontColor(ColorCode.Green);
             Console.WriteLine($"플레이어 체력: {player.health}\n");
+            Mathod.ChangeFontColor(ColorCode.None);
             for (int i = 0; i < monsters.Length; i++)
             {
                 var m = monsters[i];
@@ -210,70 +213,98 @@ namespace BattleSystem
                     continue; //죽은 몬스터는 건너뛰기
                 else
                 {
-                    Console.WriteLine($"몬스터 {i + 1} {m.MonsterType}의 공격");
+                    Mathod.ChangeFontColor(ColorCode.Red);
+                    Console.WriteLine($"\n{m.MonsterType}의 공격");
                     Console.WriteLine($"→ {m.monAtk} 데미지!");
                     player.health -= m.monAtk;
+                    Mathod.ChangeFontColor(ColorCode.Green);
                     Console.WriteLine($"남은 체력: {player.health}");
-                    
-                    Console.WriteLine("계속하시려면 아무 키나 누르세요.");
-                    Console.ReadKey();
-
+                    Console.WriteLine("");
+                    Thread.Sleep(1000);
+                    Mathod.ChangeFontColor(ColorCode.None);
                     if (player.health <= 0)
                         return; // 플레이어가 사망하면 전투 종료
+
                 }
             }
+            Console.WriteLine("적 턴 종료");
+            Console.WriteLine("아무키나 눌러서 계속 진행하세요.");
+            Console.ReadKey();
         }
         public static void RenderStatus(Job player, Monster[] monsters)
         {
             Console.Clear();
+            Mathod.ChangeFontColor(ColorCode.Green);
             Console.WriteLine("플레이어 턴\n");
             Console.WriteLine($"체력: {player.health}");
             Console.WriteLine($"공격력: {player.atk}\n\n");
+            Mathod.ChangeFontColor(ColorCode.None);
             for (int i = 0; i < monsters.Length; i++)
             {
+                Mathod.ChangeFontColor(ColorCode.Red);
                 var m = monsters[i];
                 if (m.IsAlive)
                 {
                     Console.WriteLine($"{i + 1} ({m.MonsterType})");
                     Console.WriteLine($"체력: {m.monHP}/{m.monMaxHp}");
-                    Console.WriteLine($"공격력: {m.monAtk}");
+                    Console.WriteLine($"공격력: {m.monAtk}\n");
                 }
                 else
                 {
-                    Console.WriteLine($"몬스터 {i + 1} ({m.MonsterType}) 사망");
+                    Mathod.ChangeFontColor(ColorCode.DarkGray);
+                    Console.WriteLine($"{i + 1} ({m.MonsterType})\n사망\n");
+                    Mathod.ChangeFontColor(ColorCode.None);
                 }
+                Mathod.ChangeFontColor(ColorCode.None);
             }
         }
         private static bool Attack(int damage, Job player, Monster[] monsters)
         {
-            Console.WriteLine("공격할 몬스터를 선택하세요.");
-            for (int i = 0; i < monsters.Length; i++)
+            int sel;
+            while (true)
             {
-                var m = monsters[i];
-                string status = m.IsAlive ? $"{m.monHP}/{m.monMaxHp}": "사망";
-                Console.WriteLine($"{i + 1}. {m.Name} ({status})");
-            }
-            Console.Write(">> ");
-            if (!Mathod.CheckInput(out int sel)
-                || sel < 1
-                || sel > monsters.Length
-                || !monsters[sel - 1].IsAlive)
-            {
-                Console.WriteLine("잘못된 입력입니다.");
-                return false;
-            }
+                Console.WriteLine("공격할 몬스터를 선택하세요.");
+                for (int i = 0; i < monsters.Length; i++)
+                {
+                    var m = monsters[i];
+                    if (m.IsAlive)
+                        Mathod.ChangeFontColor(ColorCode.Red);
+                    else
+                        Mathod.ChangeFontColor(ColorCode.DarkGray);
 
+                    string status = m.IsAlive ? $"{m.monHP}/{m.monMaxHp}" : "사망";
+                    Console.WriteLine($"{i + 1}. {m.Name} ({status})");
+
+                    Mathod.ChangeFontColor(ColorCode.None);
+                }
+                Console.Write(">> ");
+                if (!Mathod.CheckInput(out sel))
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                    continue;
+                }
+                if (sel < 1 || sel > monsters.Length || !monsters[sel - 1].IsAlive)
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                    continue;
+                }
+                break;
+            }
             var target = monsters[sel - 1];
             int dmg = target.TakeDamage(damage, player);
-            Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
+            Mathod.ChangeFontColor(ColorCode.Green);
+            Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지!\n (남은 HP {target.monHP}/{target.monMaxHp})\n\n");
+            Mathod.ChangeFontColor(ColorCode.None);
             Thread.Sleep(1000);
             return true;
         }
+        
         private static class Skill//스킬 소모량 추가 필요
         {
             public static void AlphaStrike(int damage, Job player, Monster[] monsters)
             {
-                Attack(player.atk, player, monsters);
+                //공격력 * 2로 공격
+                Attack(player.atk*2, player, monsters);
             }
             public static void DoubleStrike(int damage, Job player, Monster[] monsters)
             {
@@ -291,7 +322,9 @@ namespace BattleSystem
                         while (!monsters[targetindex].IsAlive);
                     var target = monsters[targetindex];
                     int dmg = target.TakeDamage(targetDamage, player);
+                    Mathod.ChangeFontColor(ColorCode.Red);
                     Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
+                    Mathod.ChangeFontColor(ColorCode.None);
                     Thread.Sleep(1000);
                 }
             }
@@ -301,6 +334,22 @@ namespace BattleSystem
     public static class Dungeon
     {
         public static int Floor { get; private set; } = 1;
-        public static void NextFloor() => Floor++;
+        public static void NextFloor()
+        {
+            Floor++;
+            if (Floor > 10)
+            {
+                Console.WriteLine("던전 클리어!");
+                Console.WriteLine("축하합니다!");
+                Console.ReadKey();
+            }
+            else
+            {
+                Console.WriteLine($"던전 {Floor}층으로 이동합니다...");
+                Thread.Sleep(1000);
+                Console.Clear();
+                BattleSystem.Start();
+            }
+        }
     }
 }
