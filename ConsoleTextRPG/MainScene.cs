@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using GameLogic;
+using Inventory;
 using Shop;
 
 
@@ -35,7 +36,7 @@ namespace MainScene
                             //Status.Show();
                             break;
                         case 2:
-                            //Inventory.Show();
+                            Inventorys.Show(_player);
                             break;
                         case 3:
                             Shops.Show(_player);
