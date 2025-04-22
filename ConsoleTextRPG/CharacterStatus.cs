@@ -19,8 +19,8 @@ namespace Status
                     Console.WriteLine("캐릭터의 정보가 표시됩니다.\n");
                     Console.WriteLine($"Lv. {player.level}");
                     Console.WriteLine($"{player.name}({player.chad})");
-                    Console.WriteLine($"공격력 : {player.atk}");
-                    Console.WriteLine($"방어력 : {player.def}");
+                    Console.WriteLine($"공격력 : {player.atk}" + (player.bonusAtk > 0 ? $" (+{player.bonusAtk})" : ""));
+                    Console.WriteLine($"방어력 : {player.def}" + (player.bonusDef > 0 ? $" (+{player.bonusDef})" : ""));
                     Console.WriteLine($"체  력 : {player.health}");
                     Console.WriteLine($"Gold : {player.gold} G");
                     Console.WriteLine("0. 나가기");
