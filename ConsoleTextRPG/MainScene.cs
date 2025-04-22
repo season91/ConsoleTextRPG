@@ -37,10 +37,10 @@ namespace MainScene
                             StatusScene.ShowStatus(_player);
                             break;
                         case 2:
-                            Inventorys.Show(_player);
+                            Inventorys.Show();
                             break;
                         case 3:
-                            Shops.Show(_player);
+                            Shops.Show();
                             break;
                         case 4:
                             //Player.Recovery();

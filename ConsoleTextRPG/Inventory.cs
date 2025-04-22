@@ -1,12 +1,14 @@
 ﻿using GameLogic;
 using GameService;
+using Manager;
 
 namespace Inventory
 {
     public class Inventorys
     {
-        public static void Show(Job _player)
+        public static void Show()
         {
+            var _player = GameManager.player;
             int input = 0;
             while (true)
             {
@@ -42,7 +44,7 @@ namespace Inventory
                     }
                     else if (input == 1 && _player.item.Count > 0)
                     {
-                        EquippedItemManage(_player);
+                        EquippedItemManage();
                     }
 
                     else
@@ -53,8 +55,9 @@ namespace Inventory
                 }
             }
         }
-        public static void EquippedItemManage(Job _player)
+        public static void EquippedItemManage()
         {
+            var _player = GameManager.player;
             int input = 0;
             while (true)
             {
@@ -83,7 +86,7 @@ namespace Inventory
                     }
                     else if (input >= 1 && input <= _player.item.Count)
                     {
-                        TryEquipItem(_player, input-1);
+                        TryEquipItem(input-1);
                     }
                     else
                     {
@@ -94,9 +97,10 @@ namespace Inventory
             }
         }
 
-        public static void TryEquipItem(Job _player, int tryEquipIndex)
+        public static void TryEquipItem( int tryEquipIndex)
         {
-            if(_player.item[tryEquipIndex].atk > 0)
+            var _player = GameManager.player;
+            if (_player.item[tryEquipIndex].atk > 0)
             {
                 // 장착된 무기가 있는지
                 var equippedAtkItem = (from x in _player.item.Select((item, index) => new { item, index })

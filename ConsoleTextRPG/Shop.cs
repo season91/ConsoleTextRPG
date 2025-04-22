@@ -6,8 +6,9 @@ namespace Shop
 {
     public class Shops
     {
-        public static void Show(Job _player)
+        public static void Show()
         {
+            var _player = GameManager.player;
             int input = 0;
             Item[] gameItem = GameManager.ItemPooling;
             while (true)
@@ -44,12 +45,12 @@ namespace Shop
                     else if (input == 1)
                     {
                         // 구매
-                        ShopBuyItem(_player);
+                        ShopBuyItem();
                     }
                     else if (input == 2)
                     {
                         // 판매
-                        ShopSaleItem(_player);
+                        ShopSaleItem();
                     }
                     else
                     {
@@ -61,8 +62,9 @@ namespace Shop
         }
 
         // 아이템 구매 메뉴
-        public static void ShopBuyItem(Job _player)
+        public static void ShopBuyItem()
         {
+            var _player = GameManager.player;
             int input = 0;
             Item[] gameItem = GameManager.ItemPooling;
             while (true)
@@ -96,7 +98,7 @@ namespace Shop
 
                     else if (input > 0 && input <= gameItem.Length)
                     {
-                        TryShopBuyItem(_player, gameItem[input-1]);
+                        TryShopBuyItem(gameItem[input-1]);
                     }
                     else
                     {
@@ -108,10 +110,10 @@ namespace Shop
         }
 
         // 아이템 구매 시도
-        public static void TryShopBuyItem(Job _player, Item item)
+        public static void TryShopBuyItem(Item item)
         {
             int price = item.gold;
-
+            var _player = GameManager.player;
             if (_player.item.Contains(item))
             {
                 Console.WriteLine("이미 구매한 아이템입니다.");
@@ -134,8 +136,9 @@ namespace Shop
 
 
         // 아이템 판매 메뉴
-        public static void ShopSaleItem(Job _player)
+        public static void ShopSaleItem()
         {
+            var _player = GameManager.player;
             int input = 0;
             while (true)
             {
@@ -167,7 +170,7 @@ namespace Shop
 
                     else if (input > 0 && input <= _player.item.Count)
                     {
-                        TryShopSaleItem(_player, _player.item[input - 1]);
+                        TryShopSaleItem(_player.item[input - 1]);
                     }
                     else
                     {
@@ -179,8 +182,9 @@ namespace Shop
         }
 
         // 아이템 판매 시도
-        public static void TryShopSaleItem(Job _player, Item _playerItem)
+        public static void TryShopSaleItem(Item _playerItem)
         {
+            var _player = GameManager.player;
             int price = (int) (_playerItem.gold * 0.85);
             
             // 장착 중이라면 장착 해제
