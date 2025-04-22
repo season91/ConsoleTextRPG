@@ -45,7 +45,7 @@ namespace MainScene
                             //Player.Recovery();
                             break;
                         case 5:
-                            //Dungeon.Show();
+                            BattleSystem.BattleSystem.Start(_player);
                             break;
                         default:
                             Console.WriteLine("1~5 사이의 숫자를 입력해주세요.");
