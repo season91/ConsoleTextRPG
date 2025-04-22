@@ -28,9 +28,9 @@ public static class GameStart
         
         CsvData.ItemTable(); // ItemPooling에 들어가짐
         GameManager.SpawnPlayer(nickName, player);
-        
-        StartScenes.ShowStartText(nickName);
-        
+
+        //StartScenes.ShowStartText(nickName);
+        QuestScene.ShowList();
         while (true)
         {
             MainScenes.ShowMainScene(player);

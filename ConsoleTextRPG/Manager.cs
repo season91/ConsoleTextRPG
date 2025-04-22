@@ -22,13 +22,14 @@ namespace Manager
 
             player = Mathod.JobToClass(jobID);
             player.LoadData();
-            quest.Load();
+            quest.Load(true);
         }
 
         public static void SpawnPlayer(string _playerName, Job _playerJob)
         {
             player = _playerJob;
             player.SetName(_playerName);
+            quest.Load(false);
         }
     }
 }
