@@ -34,7 +34,7 @@ namespace MainScene
                     switch (inputNumber)
                     {
                         case 1:
-                            StatusScene.ShowStatus(_player);
+                            StatusScene.ShowStatus();
                             break;
                         case 2:
                             Inventorys.Show();
