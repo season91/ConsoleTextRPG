@@ -21,16 +21,16 @@ public static class GameStart
 
     static void Main()
     {
-        var gameData = new GameData();
         int input = 0;
 
         var nickName = StartScenes.SetNameScene();
         var player = StartScenes.SelectJobScene();
-
-        //GameManager.SpawnPlayer(nickName, isJob);
-        player.SetName(nickName);
+        
+        CsvData.ItemTable(); // ItemPooling에 들어가짐
+        GameManager.SpawnPlayer(nickName, player);
+        
         StartScenes.ShowStartText(nickName);
-
+        
         while (true)
         {
             MainScenes.ShowMainScene(player);

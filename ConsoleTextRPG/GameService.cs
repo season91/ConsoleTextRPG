@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using GameCharacter;
 using GameLogic;
-using GameQuest;
+using Manager;
 
 namespace GameService
 {
@@ -227,6 +227,47 @@ namespace GameService
                     stringMap = loadData.stringMap;
                     vector = loadData.vector;
                 }
+            }
+        }
+    }
+
+    public class CsvData
+    {
+        // 상점 아이템 데이터 테이블
+        public static void ItemTable()
+        {
+            string projectPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\.."));
+            string file = Path.Combine(projectPath, "Csv", "itemTable.csv");
+
+            if (!File.Exists(file))
+            {
+                Console.WriteLine($"Csv 폴더에 {file}라는 파일은 존재하지 않음.");
+            }
+
+            string[] lines = File.ReadAllLines(file);
+            GameManager.ItemPooling = new Item[lines.Length-1];
+
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var parts = lines[i].Split(",");
+
+                string name = parts[1];
+                int type = int.Parse(parts[3]);
+                int atk = int.Parse(parts[4]);
+                int def = int.Parse(parts[5]);
+                string itemInfo = parts[6];
+                int gold = int.Parse(parts[7]);
+
+                var item = new Item
+                (
+                    name,
+                    itemInfo,
+                    gold,
+                    type == 0 ? "공격력" : "방어력",
+                    type == 0 ? atk : def
+                );
+
+                GameManager.ItemPooling[i-1] = item;
             }
         }
     }

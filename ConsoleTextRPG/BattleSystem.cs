@@ -47,12 +47,13 @@ namespace BattleSystem
             monHP = monMaxHp;
         }
 
-        public int TakeDamage(int playerAtk)
+        public int TakeDamage(int playerAtk, Job job)
         {
+            double damageMultiplier = job is Wizard ? 0.1 : 1.0;
             Random random = new Random();
             // 0.9 ~ 1.1 사이의 랜덤 배율 생성
             double variation = random.NextDouble() * 0.2 + 0.9;
-            int dmg = (int)Math.Round(playerAtk * variation);
+            int dmg = (int)Math.Round(playerAtk * variation * damageMultiplier);
             monHP = Math.Max(monHP - dmg, 0); // HP가 0보다 작아지지 않도록 조정
             return dmg;
         }
@@ -60,8 +61,6 @@ namespace BattleSystem
 
     public static class BattleSystem
     {
-        private static readonly Random _rand = new Random();
-
         // 전투 진입점
         public static void Start()
         {
@@ -83,14 +82,14 @@ namespace BattleSystem
 
                 Console.WriteLine("[전투 보상]");
                 //레벨업 시 레벨 증가 출력
-                //int xpGain = monsters.Sum(m => m.monAtk);
+                int xpGain = monsters.Sum(m => m.monAtk);
                 //player.exp += xpGain;
-                //Console.WriteLine($"획득 경험치: {xpGain}");
+                Console.WriteLine($"획득 경험치: {xpGain}");
                 //Console.WriteLine("\n[획득 아이템]");
                 //획득 아이템 출력
-                //int goldGain = monsters.Sum(m => m.monGold);
-                //player.gold += goldGain;
-                //Console.WriteLine($"획득 골드: {goldGain}");
+                int goldGain = monsters.Sum(m => m.monGold);
+                player.gold += goldGain;
+                Console.WriteLine($"획득 골드: {goldGain}");
 
                 Console.WriteLine("1. 다음층으로");
                 Console.WriteLine("0. 던전 나가기");
@@ -115,13 +114,13 @@ namespace BattleSystem
                 Console.ReadKey();
             }
         }
-        public static Monster[] SpawnMonsters(int Floor)
+        private static Monster[] SpawnMonsters(int Floor)
         {
             int monsterCount;
             if (Floor == 5 || Floor == 10)
                 monsterCount = 1; // 보스 몬스터
             else
-                monsterCount = _rand.Next(1, 5);
+                monsterCount = GameManager.rd.Next(1, 5);
 
             Monsters[] types;
             if (Floor >= 1 && Floor <= 4)
@@ -138,31 +137,58 @@ namespace BattleSystem
                 var monsters = new Monster[monsterCount];
             for (int i = 0; i < monsterCount; i++)
             {
-                monsters[i] = new Monster(types[_rand.Next(types.Length)]);
+                monsters[i] = new Monster(types[GameManager.rd.Next(types.Length)]);
             }
             return monsters;
         }
-        public static void PlayerTurn(Job player, Monster[] monsters)
+        private static void PlayerTurn(Job player, Monster[] monsters)
         {
             while (true)
             {
                 RenderStatus(player, monsters);
-                Console.Write("\n\n공격할 몬스터 번호(0: 차례 넘기기) > ");
+                Console.Write("\n\n1. 공격 ");
+                Console.WriteLine("2. 스킬 ");
+                Console.WriteLine("0. 던전 나가기");
+                Console.WriteLine("\n 원하시는 행동을 입력해주세요.");
+                Console.Write(">> ");
                 if (!Mathod.CheckInput(out int sel)) 
                     continue;
-                if (sel == 0) 
-                    break;
-                if (sel < 1 || sel > monsters.Length || !monsters[sel - 1].IsAlive)
+                if (sel == 1) // 공격 
                 {
-                    Console.WriteLine("잘못된 입력입니다."); 
-                    continue;
+                    if (Attack(player.atk, player, monsters))
+                        break;
                 }
+                else if (sel == 2) // 스킬
+                {
+                    Console.WriteLine("사용할 스킬을 선택하세요.");
+                    Console.WriteLine("1. 알파 스트라이크");
+                    Console.WriteLine("2. 더블 스트라이크");// 스킬 구현 후 스킬 리스트 가져와야함
+                    Console.WriteLine("0. 취소");
+                    Console.Write(">> ");
+                    if (!Mathod.CheckInput(out int skill))
+                        continue;
+                    if (skill == 1)
+                    {
+                        Skill.AlphaStrike(player.atk, player, monsters);
+                            break;
+                    }
+                    else if (skill == 2)
+                    {
+                        Skill.DoubleStrike(player.atk, player, monsters);
+                            break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("잘못된 입력입니다.");
+                        continue;
+                    }
 
-                var target = monsters[sel - 1];
-                int dmg = target.TakeDamage(player.atk);
-                Console.WriteLine($"→ 몬스터 {sel}번에 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
+                }
+                else if (sel == 0)
+                    break;
 
-                // 몬스터 죽인 횟수 카운트
+
+                // 몬스터 종류별 죽인 횟수 카운트
                 //if (target.monHP == 0)
                 //{
                 // 
@@ -172,7 +198,7 @@ namespace BattleSystem
                 break;  // 한 번 공격 후 적 차례
             }
         }
-        public static void EnemyTurn(Job player, Monster[] monsters)
+        private static void EnemyTurn(Job player, Monster[] monsters)
         {
             Console.Clear();
             Console.WriteLine("적 턴");
@@ -218,6 +244,59 @@ namespace BattleSystem
                 }
             }
         }
+        private static bool Attack(int damage, Job player, Monster[] monsters)
+        {
+            Console.WriteLine("공격할 몬스터를 선택하세요.");
+            for (int i = 0; i < monsters.Length; i++)
+            {
+                var m = monsters[i];
+                string status = m.IsAlive ? $"{m.monHP}/{m.monMaxHp}": "사망";
+                Console.WriteLine($"{i + 1}. {m.Name} ({status})");
+            }
+            Console.Write(">> ");
+            if (!Mathod.CheckInput(out int sel)
+                || sel < 1
+                || sel > monsters.Length
+                || !monsters[sel - 1].IsAlive)
+            {
+                Console.WriteLine("잘못된 입력입니다.");
+                return false;
+            }
+
+            var target = monsters[sel - 1];
+            int dmg = target.TakeDamage(damage, player);
+            Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
+            Thread.Sleep(1000);
+            return true;
+        }
+        private static class Skill//스킬 소모량 추가 필요
+        {
+            public static void AlphaStrike(int damage, Job player, Monster[] monsters)
+            {
+                Attack(player.atk, player, monsters);
+            }
+            public static void DoubleStrike(int damage, Job player, Monster[] monsters)
+            {
+                //공격력 * 1.5로 2명의 적을 랜덤으로 공격
+                var Rdtarget = GameManager.rd;
+                int targetDamage = (int)(damage * 1.5);
+
+                for (int i = 0; i <2; i++)
+                {
+                    int targetindex;
+                        do
+                    {
+                        targetindex = Rdtarget.Next(0, monsters.Length);
+                    }
+                        while (!monsters[targetindex].IsAlive);
+                    var target = monsters[targetindex];
+                    int dmg = target.TakeDamage(targetDamage, player);
+                    Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
+                    Thread.Sleep(1000);
+                }
+            }
+        }
+
     }
     public static class Dungeon
     {
