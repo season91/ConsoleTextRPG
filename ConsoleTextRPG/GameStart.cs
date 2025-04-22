@@ -4,6 +4,7 @@ using MainScene;
 using StartScene;
 using Manager;
 using System.Xml.Linq;
+using GameQuest;
 
 public static class GameStart
 {

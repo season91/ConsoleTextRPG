@@ -1,4 +1,8 @@
-﻿using Manager;
+using GameService;
+using System.Numerics;
+using Manager;
+using System.Reflection.Emit;
+
 
 namespace GameLogic
 {
@@ -73,7 +77,7 @@ namespace GameLogic
             }
             return result;
         }
-
+      
         public void SaveData()
         {
             GameManager.data.stringMap.Add($"{name}name", name);
@@ -84,6 +88,7 @@ namespace GameLogic
             GameManager.data.integer.Add($"{name}gold", gold);
             GameManager.data.boolen.Add($"{name}equipped", equipped);
         }
+
     }
 
     public class Job
