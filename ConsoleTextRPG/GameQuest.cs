@@ -167,8 +167,14 @@ namespace GameQuest
                     Mathod.ChangeFontColor(ColorCode.None);
 
                     //퀘스트 이름
-                    var text = $"{quest[i].info[0]}{(quest[i].acceptance ? " -진행중-" : "")}";
-                    Console.WriteLine(text.Replace("\r", ""));
+                    var text = quest[i].info[0];
+                    Console.Write(text.Replace("\r", ""));
+
+                    var questProgress = quest[i].acceptance ? " -진행중-" : "";
+
+                    Mathod.ChangeFontColor(ColorCode.Blue);
+                    Console.WriteLine($"{questProgress}");
+                    Mathod.ChangeFontColor(ColorCode.None);
                 }
 
                 Console.WriteLine("\n0. 나가기");
