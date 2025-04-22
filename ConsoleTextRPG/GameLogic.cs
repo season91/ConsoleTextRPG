@@ -57,6 +57,21 @@
         }
 
         public void EquippedItem(bool _equipped) => equipped = _equipped;
+
+        public bool IsSameItem(Job _player, Item _item)
+        {
+            bool result = false;
+
+            foreach(Item playerItem in _player.item)
+            {
+                if (playerItem.name == _item.name)
+                {
+                    result = true;
+                }
+            }
+            return result;
+        }
+
     }
 
     public class Job
