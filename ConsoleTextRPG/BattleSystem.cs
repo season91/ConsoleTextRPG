@@ -27,6 +27,7 @@ namespace BattleSystem
         public int monMaxHp { get; set; }
         public int monHP { get; private set; }
         public int monAtk { get; set; }
+        public int monGold { get; set; }
         public bool IsAlive => monHP > 0;
         public Monster(Monsters type)
         {
@@ -78,14 +79,18 @@ namespace BattleSystem
             {
                 Console.WriteLine("[전투 결과]\n");
                 Console.WriteLine("전투에서 승리했습니다!");
-                Console.WriteLine($"던전에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
+                Console.WriteLine($"{Dungeon.Floor}층 던전에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
 
-                Console.WriteLine("[캐릭터 정보]");
+                Console.WriteLine("[전투 보상]");
                 //레벨업 시 레벨 증가 출력
-                //체력 변화량 출력
-                //경험치 변화량 출력
-                Console.WriteLine("\n[획득 아이템]");
+                //int xpGain = monsters.Sum(m => m.monAtk);
+                //player.exp += xpGain;
+                //Console.WriteLine($"획득 경험치: {xpGain}");
+                //Console.WriteLine("\n[획득 아이템]");
                 //획득 아이템 출력
+                //int goldGain = monsters.Sum(m => m.monGold);
+                //player.gold += goldGain;
+                //Console.WriteLine($"획득 골드: {goldGain}");
 
                 Console.WriteLine("1. 다음층으로");
                 Console.WriteLine("0. 던전 나가기");
@@ -99,9 +104,7 @@ namespace BattleSystem
                 }
                 else if (sel == 0)
                 {
-                    // 던전 나가기 로직
                     Console.WriteLine("던전을 나갑니다...");
-                    // Dungeon.Exit();
                 }
             }
             else
@@ -114,13 +117,28 @@ namespace BattleSystem
         }
         public static Monster[] SpawnMonsters(int Floor)
         {
-            int monsterCount = _rand.Next(1, 5); // 1~4마리 랜덤 생성
-            Monsters[] monsterTypes = (Monsters[])Enum.GetValues(typeof(Monsters));
-            Monster[] monsters = new Monster[monsterCount];
+            int monsterCount;
+            if (Floor == 5 || Floor == 10)
+                monsterCount = 1; // 보스 몬스터
+            else
+                monsterCount = _rand.Next(1, 5);
+
+            Monsters[] types;
+            if (Floor >= 1 && Floor <= 4)
+                types = new[] { Monsters.고블린, Monsters.홉고블린, Monsters.오크, Monsters.하이오크 };
+            else if (Floor == 5)
+                types = new[] { Monsters.해츨링 };
+            else if (Floor >= 6 && Floor <= 9)
+                types = new[] { Monsters.와이번, Monsters.워울프, Monsters.만티코어 };
+            else if (Floor == 10)
+                types = new[] { Monsters.드래곤 };
+            else
+                types = new[] { Monsters.고블린 };
+
+                var monsters = new Monster[monsterCount];
             for (int i = 0; i < monsterCount; i++)
             {
-                Monsters randomType = monsterTypes[_rand.Next(monsterTypes.Length)];
-                monsters[i] = new Monster(randomType);
+                monsters[i] = new Monster(types[_rand.Next(types.Length)]);
             }
             return monsters;
         }
@@ -143,8 +161,15 @@ namespace BattleSystem
                 var target = monsters[sel - 1];
                 int dmg = target.TakeDamage(player.atk);
                 Console.WriteLine($"→ 몬스터 {sel}번에 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
+
+                // 몬스터 죽인 횟수 카운트
+                //if (target.monHP == 0)
+                //{
+                // 
+                //}
+
                 Console.ReadKey();
-                break;  // 한 번 공격 후 적 차례로
+                break;  // 한 번 공격 후 적 차례
             }
         }
         public static void EnemyTurn(Job player, Monster[] monsters)
