@@ -31,7 +31,6 @@ namespace BattleSystem
         public Monster(Monsters type)
         {
             MonsterType = type;
-            // switch 식으로 타입별 기본 스탯 정의
             (monMaxHp, monAtk) = type switch
             {
                 Monsters.고블린 => (15, 5),
@@ -66,7 +65,7 @@ namespace BattleSystem
         public static void Start()
         {
             var player = GameManager.player;
-            var monsters = SpawnMonsters();
+            var monsters = SpawnMonsters(Dungeon.Floor);
 
             while (player.health > 0 && monsters.Any(m => m.IsAlive))
             {
@@ -95,9 +94,8 @@ namespace BattleSystem
                     return;
                 if (sel == 1)
                 {
-                    // 다음 층으로 이동
+                    Dungeon.NextFloor();
                     Console.WriteLine("다음 층으로 이동합니다...");
-                    // Dungeon.NextFloor();
                 }
                 else if (sel == 0)
                 {
@@ -108,12 +106,13 @@ namespace BattleSystem
             }
             else
             {
+                Console.WriteLine("[전투 결과]\n");
                 Console.WriteLine("전투에서 패배했습니다.");
-                Console.WriteLine("게임 오버입니다.");
+                Console.WriteLine("게임 오버");
                 Console.ReadKey();
             }
         }
-        public static Monster[] SpawnMonsters()
+        public static Monster[] SpawnMonsters(int Floor)
         {
             int monsterCount = _rand.Next(1, 5); // 1~4마리 랜덤 생성
             Monsters[] monsterTypes = (Monsters[])Enum.GetValues(typeof(Monsters));
