@@ -1,5 +1,4 @@
-﻿using GameCharacter;
-using GameLogic;
+﻿using GameLogic;
 using GameService;
 
 namespace StartScene
@@ -8,13 +7,6 @@ namespace StartScene
     {
         public static Job SelectJobScene()
         {
-            //직업 추가
-            Job[] isJob =
-            {
-                new Warrior(),
-                new Wizard(),
-            };
-
             var input = 0;
             var text = Mathod.LoadAllText("JobSelectionwindow");
             var selectJobText = Mathod.LoadAllText("SelectJobText");
@@ -33,7 +25,7 @@ namespace StartScene
                 //키 입력 검사
                 if (Mathod.CheckInput(out input))
                 {
-                    if (input < 1 || isJob.Length < input)
+                    if (input < 1 || selectJobText.Length < input)
                     {
                         Console.WriteLine("잘못된 입력입니다.");
                         Thread.Sleep(1000);
@@ -53,7 +45,7 @@ namespace StartScene
             Thread.Sleep(1500);
             Console.Clear();
 
-            return isJob[input];
+            return Mathod.JobToClass(input);
         }
 
         public static string SetNameScene()
