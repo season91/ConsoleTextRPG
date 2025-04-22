@@ -1,4 +1,8 @@
-﻿namespace GameLogic
+﻿using GameService;
+using System.Numerics;
+using Manager;
+
+namespace GameLogic
 {
     public class Item
     {
@@ -57,11 +61,26 @@
         }
 
         public void EquippedItem(bool _equipped) => equipped = _equipped;
+
+        public bool IsSameItem(Job _player, Item _item)
+        {
+            bool result = false;
+
+            foreach(Item playerItem in _player.item)
+            {
+                if (playerItem.name == _item.name)
+                {
+                    result = true;
+                }
+            }
+            return result;
+        }
+
     }
 
-    public abstract class Job
+    public class Job
     {
-        //캐릭터 직업 추상 클래스
+        //캐릭터 직업 클래스
         private int fieldLevel;
         public int level
         {
@@ -80,5 +99,27 @@
         public int gold;
 
         public void SetName(string _name) => name = _name;
+
+        public void SaveData()
+        {
+            GameManager.data.stringMap.Add("PlayerName", name);
+
+            GameManager.data.integer.Add($"{name}hp", health);
+            GameManager.data.integer.Add($"{name}atk", atk);
+            GameManager.data.integer.Add($"{name}def", def);
+            GameManager.data.integer.Add($"{name}gold", gold);
+            GameManager.data.integer.Add($"{name}level", level);
+        }
+
+        public void LoadData()
+        {
+            name = GameManager.data.stringMap.GetData("PlayerName");
+
+            health = GameManager.data.integer.GetData($"{name}hp");
+            atk = GameManager.data.integer.GetData($"{name}atk");
+            def = GameManager.data.integer.GetData($"{name}def");
+            gold = GameManager.data.integer.GetData($"{name}gold");
+            level = GameManager.data.integer.GetData($"{name}level");
+        }
     }
 }

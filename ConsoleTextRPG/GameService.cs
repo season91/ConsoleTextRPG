@@ -2,6 +2,8 @@
 using System.Numerics;
 using System.Text;
 using System.Text.Json;
+using GameCharacter;
+using GameLogic;
 
 namespace GameService
 {
@@ -21,6 +23,32 @@ namespace GameService
 
     public class Mathod
     {
+        public static Job JobToClass(int _jobIndex)
+        {
+            //직업 추가
+            Job[] isJob =
+            {
+                new Warrior(),
+                new Wizard(),
+            };
+
+            return isJob[_jobIndex];
+        }
+
+        public static int JobToIndex(string _chad)
+        {
+            //해당 이름에 맞는 직업 인덱스 반환
+            var selectJobText = LoadAllText("SelectJobText");
+
+            for (int i = 0; i < selectJobText.Length; i++)
+            {
+                if (selectJobText[i].Contains(_chad)) return i;
+            }
+
+            Console.WriteLine($"{_chad}라는 단어는 SelectJobText파일 안에 없음");
+            return default;
+        }
+
         public static void BufferClear()
         {
             //덮어쓰기
@@ -28,7 +56,6 @@ namespace GameService
             Console.Write(new StringBuilder().ToString());
         }
 
-        //해당 게임에 유용하게 사용될 메서드 종류
         public static bool CheckInput(out int _value)
         {
             string input = Console.ReadLine();
@@ -38,6 +65,7 @@ namespace GameService
 
             //숫자를 입력 안했을 경우
             Console.WriteLine("숫자를 입력하세요.");
+            Thread.Sleep(1000);
             return false;
         }
 
@@ -57,8 +85,9 @@ namespace GameService
 
         public static string[] LoadAllText(string _textFileName)
         {
-            //프로젝트/bin/Debug/net8.0/Text파일 안에 txt파일 가져오기
-            var file = Path.Combine("Text", $"{_textFileName}.txt");
+            //프로젝트/bin/폴더를 거슬러 올라가 프로젝트 파일 안에 Text라는 폴더를 찾음
+            string projectPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, @"..\..\.."));
+            string file = Path.Combine(projectPath, "Text", $"{_textFileName}.txt");
 
             //파일 존재 유무
             if (!File.Exists(file))
@@ -168,22 +197,22 @@ namespace GameService
         public Data<int> integer { get; set; } = new Data<int>();
         public Data<float> floating { get; set; } = new Data<float>();
         public Data<bool> boolen { get; set; } = new Data<bool>();
-        public Data<string> text { get; set; } = new Data<string>();
+        public Data<string> stringMap { get; set; } = new Data<string>();
         public Vector32 vector { get; set; } = new Vector32();
 
         public void Save()
         {
-            //최종 적으로 게임 데이터를 저장할 경우에만 호출
+            //최종적으로 게임 데이터를 저장할 경우에만 호출
             var jsonFile = new JsonSerializerOptions { WriteIndented = true };
             string toJson = JsonSerializer.Serialize(this, jsonFile);
 
             File.WriteAllText("SaveFile.json", toJson);
         }
 
-        public void Load(bool _isLoad)
+        public void Load()
         {
             //이어하기 여부
-            if (_isLoad && File.Exists("SaveFile.json"))
+            if (File.Exists("SaveFile.json"))
             {
                 var loadFile = File.ReadAllText("SaveFile.json");
 
@@ -194,7 +223,7 @@ namespace GameService
                     integer = loadData.integer;
                     floating = loadData.floating;
                     boolen = loadData.boolen;
-                    text = loadData.text;
+                    stringMap = loadData.stringMap;
                     vector = loadData.vector;
                 }
             }
