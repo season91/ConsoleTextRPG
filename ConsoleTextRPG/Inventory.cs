@@ -137,8 +137,8 @@ namespace Inventory
                     Console.WriteLine("기존 방어구 장착 해제했습니다.");
                 }
 
-                _player.def += _player.item[equippedDefItem.index].def;
-                _player.bonusDef += _player.item[equippedDefItem.index].def;
+                _player.def += _player.item[tryEquipIndex].def;
+                _player.bonusDef += _player.item[tryEquipIndex].def;
 
                 _player.item[tryEquipIndex].EquippedItem(!_player.item[tryEquipIndex].equipped);
             }
