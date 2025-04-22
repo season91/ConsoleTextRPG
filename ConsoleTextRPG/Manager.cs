@@ -6,6 +6,8 @@ namespace Manager
 {
     public static class GameManager
     {
+        public static readonly Random rd = new Random();
+
         public static Item[] ItemPooling { get; set; }
         public static Job player { get; private set; }
         public static QuestManager quest { get; private set; } = new QuestManager();
