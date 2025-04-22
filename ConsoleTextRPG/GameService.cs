@@ -250,21 +250,34 @@ namespace GameService
             for (int i = 1; i < lines.Length; i++)
             {
                 var parts = lines[i].Split(",");
-
                 string name = parts[1];
-                int type = int.Parse(parts[3]);
-                int atk = int.Parse(parts[4]);
-                int def = int.Parse(parts[5]);
-                string itemInfo = parts[6];
-                int gold = int.Parse(parts[7]);
+                string type = parts[3];
+                int power = int.Parse(parts[4]);
+                string itemInfo = parts[5];
+                int gold = int.Parse(parts[6]);
+
+                string ability = "";
+
+                switch (type)
+                {
+                    case "0":
+                        ability = "공격력";
+                        break;
+                    case "1":
+                        ability = "방어력";
+                        break;
+                    case "2":
+                        ability = "포션";
+                        break;
+                }
 
                 var item = new Item
                 (
                     name,
                     itemInfo,
                     gold,
-                    type == 0 ? "공격력" : "방어력",
-                    type == 0 ? atk : def
+                    ability,
+                    power
                 );
 
                 GameManager.ItemPooling[i-1] = item;
