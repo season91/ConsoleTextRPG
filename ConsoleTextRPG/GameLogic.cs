@@ -1,6 +1,4 @@
-﻿using GameService;
-using System.Numerics;
-using Manager;
+﻿using Manager;
 
 namespace GameLogic
 {
@@ -76,6 +74,16 @@ namespace GameLogic
             return result;
         }
 
+        public void SaveData()
+        {
+            GameManager.data.stringMap.Add($"{name}name", name);
+            GameManager.data.stringMap.Add($"{name}itemInfo", itemInfo);
+            GameManager.data.integer.Add($"{name}atk", atk);
+            GameManager.data.integer.Add($"{name}def", def);
+            GameManager.data.integer.Add($"{name}health", health);
+            GameManager.data.integer.Add($"{name}gold", gold);
+            GameManager.data.boolen.Add($"{name}equipped", equipped);
+        }
     }
 
     public class Job
@@ -113,8 +121,12 @@ namespace GameLogic
             GameManager.data.integer.Add($"{name}level", level);
             GameManager.data.integer.Add($"{name}bonusAtk", bonusAtk);
             GameManager.data.integer.Add($"{name}bonusDef", bonusDef);
-
-            GameManager.ItemPooling = item;
+            
+            // 캐릭터 인벤토리 아이템
+            foreach(var playerItem in item)
+            {
+                playerItem.SaveData();
+            }
         }
 
         public void LoadData()
@@ -128,8 +140,6 @@ namespace GameLogic
             level = GameManager.data.integer.GetData($"{name}level");
             bonusAtk = GameManager.data.integer.GetData($"{name}bonusAtk");
             bonusDef = GameManager.data.integer.GetData($"{name}bonusDef");
-
-            item = GameManager.ItemPooling;
         }
     }
 }
