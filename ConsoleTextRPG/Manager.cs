@@ -6,7 +6,7 @@ namespace Manager
 {
     public static class GameManager
     {
-        public static List<Item> ItemPooling { get; set; }
+        public static Item[] ItemPooling { get; set; }
         public static Job player { get; private set; }
         public static QuestManager quest { get; private set; } = new QuestManager();
         public static GameData data { get; private set; } = new GameData();
