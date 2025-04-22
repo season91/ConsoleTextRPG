@@ -1,5 +1,4 @@
-﻿using GameLogic;
-using GameService;
+﻿using GameService;
 using Manager;
 
 namespace GameQuest
@@ -33,8 +32,6 @@ namespace GameQuest
             {
                 info[i] = questText[i];
             }
-
-
         }
     }
 
@@ -49,7 +46,7 @@ namespace GameQuest
 
             data = new Quest[questCount];
 
-            for(int i =0;i< questCount;i++)
+            for (int i = 0; i < questCount; i++)
             {
                 data[i] = new Quest(i);
             }
@@ -73,7 +70,7 @@ namespace GameQuest
         public static void ShowQuestListScene()
         {
             var input = 0;
-            var questScreen = Mathod.LoadAllText("QuestList");
+            var questLength = GameManager.quest.data.Length;
 
             while (true)
             {
@@ -82,17 +79,32 @@ namespace GameQuest
                 Console.WriteLine("Quest!!\n");
                 Mathod.ChangeFontColor(ColorCode.None);
 
-                for (int i = 0; i < questScreen.Length; i++)
+                for (int i = 0; i < questLength; i++)
                 {
-                    Console.WriteLine(questScreen[i]);
+                    //넘버링 색
+                    Mathod.ChangeFontColor(ColorCode.Magenta);
+                    Console.Write($"{i + 1}. ");
+                    Mathod.ChangeFontColor(ColorCode.None);
+
+                    //퀘스트 이름
+                    Console.WriteLine($"{GameManager.quest.data[i].name}");
                 }
 
-                Console.WriteLine("원하시는 퀘스트를 선택해주세요.");
+                Console.WriteLine("\n원하시는 퀘스트를 선택해주세요.");
                 Console.Write(">>");
 
                 if (Mathod.CheckInput(out input))
                 {
-                    ShowQuestScreen(--input);
+                    if (input < 1 || questLength < input)
+                    {
+                        Console.WriteLine("잘못된 입력입니다.");
+                        Thread.Sleep(1000);
+                    }
+
+                    else
+                    {
+                        ShowQuestScreen(--input);
+                    }
                 }
             }
         }
@@ -123,11 +135,5 @@ namespace GameQuest
                 }
             }
         }
-    }
-
-    public class Monster
-    {
-        //test용 몬스터 클래스
-        public string name;
     }
 }
