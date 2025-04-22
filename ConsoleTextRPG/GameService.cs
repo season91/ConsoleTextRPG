@@ -55,7 +55,6 @@ namespace GameService
             Console.Write(new StringBuilder().ToString());
         }
 
-        //해당 게임에 유용하게 사용될 메서드 종류
         public static bool CheckInput(out int _value)
         {
             string input = Console.ReadLine();

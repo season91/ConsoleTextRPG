@@ -11,13 +11,14 @@ namespace GameQuest
         public string name { get; init; }
         public string[] info { get; init; }
         public int[] itemID { get; init; } //보상을 줄 아이템 ID
-        public int compensation { get; init; } //보상을 줄 값 (골드, 경험치 등)
-        public int clearCount { get; init; } //퀘스트 완료 조건 카운트
-        public int conditionCount { get; set; } //퀘스트 완료 조건 카운트
+        public string[] condition { get; private set; }
+        public int[] clearCount { get; private set; } //퀘스트 완료 조건 카운트
+        public int[] conditionCount { get; set; } //퀘스트 완료 조건 카운트
 
         public Quest(int _questNumber)
         {
             var questText = Mathod.LoadAllText($"Quest({_questNumber})");
+            var textLength = questText.Length - 2;
 
             if (questText == null)
             {
@@ -28,9 +29,30 @@ namespace GameQuest
             name = questText[0];
             info = new string[questText.Length];
 
-            for (int i = 0; i < questText.Length; i++)
+            for (int i = 0; i < textLength; i++)
             {
                 info[i] = questText[i];
+            }
+
+            //조건 갯수 만큼 초기화
+            textLength++;
+            var conditionText = questText[textLength].Split('/');
+            var conditionLength = conditionText.Length == 0 ? 1 : conditionText.Length;
+
+            condition = new string[conditionLength];
+            clearCount  = new int[conditionLength];
+            conditionCount = new int[conditionLength];
+
+            for (int i = 0; i < conditionLength; i++)
+            {
+                var countText = conditionText[i].Split(',');
+                condition[i] = countText[0];
+
+                if (!int.TryParse(countText[1], out conditionCount[i]))
+                {
+                    Console.WriteLine($"{countText[1]}는 숫자가 아님");
+                    break;
+                }
             }
         }
     }
@@ -58,8 +80,8 @@ namespace GameQuest
             {
                 if (data[i].acceptance)
                 {
-                    GameManager.data.boolen.Add(data[i].name, data[i].acceptance);
-                    GameManager.data.integer.Add(data[i].name, data[i].conditionCount);
+                    //GameManager.data.boolen.Add(data[i].name, data[i].acceptance);
+                    //GameManager.data.integer.Add(data[i].name, data[i].conditionCount);
                 }
             }
         }
