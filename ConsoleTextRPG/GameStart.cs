@@ -4,6 +4,7 @@ using MainScene;
 using StartScene;
 using Manager;
 using System.Xml.Linq;
+using GameQuest;
 
 public static class GameStart
 {
@@ -23,16 +24,19 @@ public static class GameStart
         var gameData = new GameData();
         int input = 0;
 
-        var nickName = StartScenes.SetNameScene();
-        var player = StartScenes.SelectJobScene();
+        GameManager.quest.Load();
+        QuestScene.ShowList();
 
-        //GameManager.SpawnPlayer(nickName, isJob);
-        player.SetName(nickName);
-        StartScenes.ShowStartText(nickName);
+        //var nickName = StartScenes.SetNameScene();
+        //var player = StartScenes.SelectJobScene();
 
-        while (true)
-        {
-            MainScenes.ShowMainScene(player);
-        }
+        ////GameManager.SpawnPlayer(nickName, isJob);
+        //player.SetName(nickName);
+        //StartScenes.ShowStartText(nickName);
+
+        //while (true)
+        //{
+        //    MainScenes.ShowMainScene(player);
+        //}
     }
 }

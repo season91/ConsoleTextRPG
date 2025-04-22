@@ -20,6 +20,7 @@ namespace Manager
 
             player = Mathod.JobToClass(jobID);
             player.LoadData();
+            quest.Load();
         }
 
         public static void SpawnPlayer(string _playerName, Job _playerJob)

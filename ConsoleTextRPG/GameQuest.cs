@@ -26,7 +26,7 @@ namespace GameQuest
                 return;
             }
 
-            info = new string[questText.Length];
+            info = new string[textLength];
 
             for (int i = 0; i < textLength; i++)
             {
@@ -34,13 +34,15 @@ namespace GameQuest
             }
 
             //조건 갯수 만큼 초기화
-            textLength++;
             var conditionText = questText[textLength].Split('/');
             var conditionLength = conditionText.Length == 0 ? 1 : conditionText.Length;
 
             condition = new string[conditionLength];
             count = new int[conditionLength];
             maxCount = new int[conditionLength];
+
+            //보상
+            textLength++;
 
             for (int i = 0; i < conditionLength; i++)
             {
@@ -57,7 +59,7 @@ namespace GameQuest
 
         public void CheckCondition(string _objectName)
         {
-            if (!acceptance) return;
+            if (!acceptance || totalClear >= maxCount.Length) return;
 
             for (int i = 0; i < condition.Length; i++)
             {
@@ -78,6 +80,8 @@ namespace GameQuest
 
         public void Save(int _index)
         {
+            if (!acceptance) return;
+
             GameManager.data.boolen.Add($"Quest{_index}accep", acceptance);
             GameManager.data.integer.Add($"Quest{_index}clear", totalClear);
 
@@ -109,6 +113,7 @@ namespace GameQuest
 
         public void CheckCondition(string _objectName)
         {
+            //event로 해야하지만 일단 그냥..
             for (int i = 0; i < data.Length; i++)
             {
                 data[i].CheckCondition(_objectName);
@@ -132,8 +137,8 @@ namespace GameQuest
 
             for (int i = 0; i < questCount; i++)
             {
-                data[i] = new Quest(i);
-                data[i].Load(i);
+                data[i] = new Quest(i + 1);
+                data[i].Load(i + 1);
             }
         }
     }
@@ -143,7 +148,8 @@ namespace GameQuest
         public static void ShowList()
         {
             var input = 0;
-            var questLength = GameManager.quest.data.Length;
+            var quest = GameManager.quest.data;
+            var questLength = quest.Length;
 
             while (true)
             {
@@ -160,7 +166,7 @@ namespace GameQuest
                     Mathod.ChangeFontColor(ColorCode.None);
 
                     //퀘스트 이름
-                    Console.WriteLine($"{GameManager.quest.data[i].info[0]}");
+                    Console.WriteLine($"{quest[i].info[0]}");
                 }
 
                 Console.WriteLine("\n원하시는 퀘스트를 선택해주세요.");
