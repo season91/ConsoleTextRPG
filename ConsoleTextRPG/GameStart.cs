@@ -19,12 +19,16 @@ public static class GameStart
     static void Main()
     {
         var gameData = new GameData();
-        var player = new Warrior();
         int input = 0;
+
+        var nickName = StartScenes.SetNameScene();
+        var player = StartScenes.SelectJobScene();
+
+        player.SetName(nickName);
+        StartScenes.ShowStartText(nickName);
 
         while (true)
         {
-            StartScenes.ShowStartScene(player);
             MainScenes.ShowMainScene(player);
         }
     }

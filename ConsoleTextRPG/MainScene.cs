@@ -2,6 +2,7 @@
 using System.Numerics;
 using GameLogic;
 using Status;
+using Shop;
 
 
 namespace MainScene
@@ -34,21 +35,21 @@ namespace MainScene
                         case 1:
                             StatusScene.ShowStatus(_player);
                             break;
-                        //case 2:
-                        //    Inventory.Show();
-                        //    break;
-                        //case 3:
-                        //    Shop.Show();
-                        //    break;
-                        //case 4:
-                        //    Player.Recovery();
-                        //    break;
-                        //case 5:
-                        //    Dungeon.Show();
-                        //    break;
-                        //default:
-                        //    Console.WriteLine("1~5 사이의 숫자를 입력해주세요.");
-                        //   break;
+                        case 2:
+                            //Inventory.Show();
+                            break;
+                        case 3:
+                            Shops.Show(_player);
+                            break;
+                        case 4:
+                            //Player.Recovery();
+                            break;
+                        case 5:
+                            //Dungeon.Show();
+                            break;
+                        default:
+                            Console.WriteLine("1~5 사이의 숫자를 입력해주세요.");
+                            break;
                     }
                 }
                 else
