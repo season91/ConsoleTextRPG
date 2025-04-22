@@ -27,9 +27,10 @@ public static class GameStart
         var player = StartScenes.SelectJobScene();
 
         //GameManager.SpawnPlayer(nickName, isJob);
+        
         player.SetName(nickName);
         StartScenes.ShowStartText(nickName);
-
+        CsvData.ItemTable(); // ItemPooling에 들어가짐
         while (true)
         {
             MainScenes.ShowMainScene(player);

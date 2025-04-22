@@ -1,5 +1,6 @@
 ﻿using GameLogic;
 using GameService;
+using Manager;
 
 namespace Shop
 {
@@ -8,7 +9,7 @@ namespace Shop
         public static void Show(Job _player)
         {
             int input = 0;
-
+            Item[] gameItem = GameManager.ItemPooling;
             while (true)
             {
                 Console.Clear();
@@ -19,15 +20,6 @@ namespace Shop
                 Console.WriteLine("\n[보유 골드]");
                 Console.WriteLine($"{_player.gold} G");
                 Console.WriteLine("\n[아이템 목록]");
-
-                Item[] gameItem = {
-                    new Item("수련자 갑옷", "수련에 도움을 주는 갑옷입니다.", 1000, "방어력", 5),
-                    new Item("무쇠갑옷", "무쇠로 만들어져 튼튼한 갑옷입니다.", 1500, "방어력", 9),
-                    new Item("스파르타의 갑옷", "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 3500, "방어력", 15),
-                    new Item("낡은 검", "쉽게 볼 수 있는 낡은 검 입니다.", 600, "공격력", 2),
-                    new Item("청동 도끼", "어디선가 사용됐던거 같은 도끼입니다.", 1500, "공격력", 5),
-                    new Item("스파르타의 창", "쉽게 볼 수 있는 낡은 검 입니다.", 3500, "공격력", 7)
-                };
 
                 for (int i = 0; i < gameItem.Length; i++)
                 {
