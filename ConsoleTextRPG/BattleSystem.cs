@@ -102,7 +102,6 @@ namespace BattleSystem
                 if (sel == 1)
                 {
                     Dungeon.NextFloor();
-
                 }
                 else if (sel == 0)
                 {
@@ -137,7 +136,7 @@ namespace BattleSystem
             else if (Floor == 10)
                 types = new[] { Monsters.드래곤 };
             else
-                types = new[] { Monsters.고블린 };
+                types = new[] { Monsters.고블린, Monsters.홉고블린, Monsters.오크, Monsters.하이오크, Monsters.해츨링, Monsters.와이번, Monsters.워울프, Monsters.만티코어, Monsters.드래곤 };
 
                 var monsters = new Monster[monsterCount];
             for (int i = 0; i < monsterCount; i++)
@@ -389,10 +388,11 @@ namespace BattleSystem
         public static void NextFloor()
         {
             Floor++;
-            if (Floor > 10)
+            if (Floor == 10)
             {
                 Console.WriteLine("던전 클리어!");
                 Console.WriteLine("축하합니다!");
+                Console.WriteLine("무한모드로 진입합니다.");
                 Console.ReadKey();
             }
             else
