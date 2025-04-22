@@ -24,19 +24,16 @@ public static class GameStart
         var gameData = new GameData();
         int input = 0;
 
-        GameManager.quest.Load();
-        QuestScene.ShowList();
+        var nickName = StartScenes.SetNameScene();
+        var player = StartScenes.SelectJobScene();
 
-        //var nickName = StartScenes.SetNameScene();
-        //var player = StartScenes.SelectJobScene();
+        //GameManager.SpawnPlayer(nickName, isJob);
+        player.SetName(nickName);
+        StartScenes.ShowStartText(nickName);
 
-        ////GameManager.SpawnPlayer(nickName, isJob);
-        //player.SetName(nickName);
-        //StartScenes.ShowStartText(nickName);
-
-        //while (true)
-        //{
-        //    MainScenes.ShowMainScene(player);
-        //}
+        while (true)
+        {
+            MainScenes.ShowMainScene(player);
+        }
     }
 }
