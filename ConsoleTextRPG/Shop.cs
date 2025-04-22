@@ -82,7 +82,7 @@ namespace Shop
                 {
                     var item = gameItem[i];
                     var isBuy = item.IsSameItem(_player, item) ? "구매 완료" : $"{item.gold} G";
-                    Console.WriteLine($"- {i+1}. {item.name} | {item.Ability()} | {item.itemInfo} | {isBuy}");
+                    Console.WriteLine($"- {i + 1}. {item.name} | {item.Ability()} | {item.itemInfo} | {isBuy}");
                 }
 
                 Console.WriteLine("0. 나가기");
@@ -98,7 +98,7 @@ namespace Shop
 
                     else if (input > 0 && input <= gameItem.Length)
                     {
-                        TryShopBuyItem(gameItem[input-1]);
+                        TryShopBuyItem(gameItem[input - 1]);
                     }
                     else
                     {
@@ -185,8 +185,8 @@ namespace Shop
         public static void TryShopSaleItem(Item _playerItem)
         {
             var _player = GameManager.player;
-            int price = (int) (_playerItem.gold * 0.85);
-            
+            int price = (int)(_playerItem.gold * 0.85);
+
             // 장착 중이라면 장착 해제
             if (_playerItem.equipped)
             {

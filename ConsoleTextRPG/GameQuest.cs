@@ -308,7 +308,7 @@ namespace GameQuest
                             if (isClear)
                             {
                                 if (!Reward(quest))
-                                { 
+                                {
                                     Mathod.ChangeFontColor(ColorCode.Red);
                                     Console.WriteLine("\n동일한 아이템을 이미 소지 중입니다.");
                                     Mathod.ChangeFontColor(ColorCode.None);
@@ -353,11 +353,23 @@ namespace GameQuest
                         GameManager.player.item.Add(item);
                     }
 
-                    else break;
+                    else
+                    {
+                        Mathod.ChangeFontColor(ColorCode.Red);
+                        Console.WriteLine("이미 소지 중인 아이템입니다.");
+                        Mathod.ChangeFontColor(ColorCode.None);
+                        Thread.Sleep(1000);
+                        return false;
+                    }
+                }
+
+                if (_quest.itemName[i] == "골드")
+                {
+                    GameManager.player.gold += _quest.rewardCount[i];
                 }
             }
 
-            return false;
+            return true;
         }
     }
 }

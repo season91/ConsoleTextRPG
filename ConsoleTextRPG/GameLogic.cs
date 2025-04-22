@@ -1,7 +1,5 @@
 using GameService;
-using System.Numerics;
 using Manager;
-using System.Reflection.Emit;
 
 
 namespace GameLogic
@@ -67,7 +65,7 @@ namespace GameLogic
         {
             bool result = false;
 
-            foreach(Item playerItem in _player.item)
+            foreach (Item playerItem in _player.item)
             {
                 if (playerItem.name == _item.name)
                 {
@@ -76,7 +74,7 @@ namespace GameLogic
             }
             return result;
         }
-      
+
         public void SaveData()
         {
             GameManager.data.stringMap.Add($"{name}name", name);
@@ -127,8 +125,10 @@ namespace GameLogic
 
         public void SaveData()
         {
-            GameManager.data.stringMap.Add("PlayerName", name);
+            var tempChad = Mathod.ConvertJobLenguage(chad, false); 
+            GameManager.data.stringMap.Add("Chad", tempChad);
 
+            GameManager.data.stringMap.Add("PlayerName", name);
             GameManager.data.integer.Add($"{name}hp", health);
             GameManager.data.integer.Add($"{name}atk", atk);
             GameManager.data.integer.Add($"{name}def", def);
@@ -136,9 +136,9 @@ namespace GameLogic
             GameManager.data.integer.Add($"{name}level", level);
             GameManager.data.integer.Add($"{name}bonusAtk", bonusAtk);
             GameManager.data.integer.Add($"{name}bonusDef", bonusDef);
-            
+
             // 캐릭터 인벤토리 아이템
-            foreach(var playerItem in item)
+            foreach (var playerItem in item)
             {
                 playerItem.SaveData();
             }
@@ -146,8 +146,10 @@ namespace GameLogic
 
         public void LoadData()
         {
-            name = GameManager.data.stringMap.GetData("PlayerName");
+            var tempChad = GameManager.data.stringMap.GetData("Chad");
+            chad = Mathod.ConvertJobLenguage(tempChad, true);
 
+            name = GameManager.data.stringMap.GetData("PlayerName");
             health = GameManager.data.integer.GetData($"{name}hp");
             atk = GameManager.data.integer.GetData($"{name}atk");
             def = GameManager.data.integer.GetData($"{name}def");

@@ -1,23 +1,21 @@
-﻿using System;
-using GameCharacter;
+﻿using GameCharacter;
 using GameLogic;
 using GameService;
-using System.Linq;
 using Manager;
 
 namespace BattleSystem
 {
-    public enum Monsters 
+    public enum Monsters
     {
-        고블린=1101,
-        홉고블린=1102,
-        오크=1103,
-        하이오크=1104,
-        해츨링=1105,
-        와이번=1106, 
-        워울프=1107, 
-        만티코어=1108,
-        드래곤=1109,
+        고블린 = 1101,
+        홉고블린 = 1102,
+        오크 = 1103,
+        하이오크 = 1104,
+        해츨링 = 1105,
+        와이번 = 1106,
+        워울프 = 1107,
+        만티코어 = 1108,
+        드래곤 = 1109,
     }
     public class Monster
     {
@@ -59,7 +57,7 @@ namespace BattleSystem
         }
     }
 
-    public static class BattleSystem
+    public static class BattleSystems
     {
         // 전투 진입점
         public static void Start()
@@ -134,7 +132,7 @@ namespace BattleSystem
             else
                 types = new[] { Monsters.고블린 };
 
-                var monsters = new Monster[monsterCount];
+            var monsters = new Monster[monsterCount];
             for (int i = 0; i < monsterCount; i++)
             {
                 monsters[i] = new Monster(types[GameManager.rd.Next(types.Length)]);
@@ -151,7 +149,7 @@ namespace BattleSystem
                 Console.WriteLine("0. 던전 나가기");
                 Console.WriteLine("\n 원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
-                if (!Mathod.CheckInput(out int sel)) 
+                if (!Mathod.CheckInput(out int sel))
                     continue;
                 if (sel == 1) // 공격 
                 {
@@ -170,12 +168,12 @@ namespace BattleSystem
                     if (skill == 1)
                     {
                         Skill.AlphaStrike(player.atk, player, monsters);
-                            break;
+                        break;
                     }
                     else if (skill == 2)
                     {
                         Skill.DoubleStrike(player.atk, player, monsters);
-                            break;
+                        break;
                     }
                     else
                     {
@@ -206,7 +204,7 @@ namespace BattleSystem
             for (int i = 0; i < monsters.Length; i++)
             {
                 var m = monsters[i];
-                if (!m.IsAlive) 
+                if (!m.IsAlive)
                     continue; //죽은 몬스터는 건너뛰기
                 else
                 {
@@ -214,7 +212,7 @@ namespace BattleSystem
                     Console.WriteLine($"→ {m.monAtk} 데미지!");
                     player.health -= m.monAtk;
                     Console.WriteLine($"남은 체력: {player.health}");
-                    
+
                     Console.WriteLine("계속하시려면 아무 키나 누르세요.");
                     Console.ReadKey();
 
@@ -250,7 +248,7 @@ namespace BattleSystem
             for (int i = 0; i < monsters.Length; i++)
             {
                 var m = monsters[i];
-                string status = m.IsAlive ? $"{m.monHP}/{m.monMaxHp}": "사망";
+                string status = m.IsAlive ? $"{m.monHP}/{m.monMaxHp}" : "사망";
                 Console.WriteLine($"{i + 1}. {m.Name} ({status})");
             }
             Console.Write(">> ");
@@ -281,14 +279,14 @@ namespace BattleSystem
                 var Rdtarget = GameManager.rd;
                 int targetDamage = (int)(damage * 1.5);
 
-                for (int i = 0; i <2; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     int targetindex;
-                        do
+                    do
                     {
                         targetindex = Rdtarget.Next(0, monsters.Length);
                     }
-                        while (!monsters[targetindex].IsAlive);
+                    while (!monsters[targetindex].IsAlive);
                     var target = monsters[targetindex];
                     int dmg = target.TakeDamage(targetDamage, player);
                     Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");

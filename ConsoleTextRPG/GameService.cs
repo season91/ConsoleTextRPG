@@ -36,6 +36,25 @@ namespace GameService
             return isJob[_jobIndex];
         }
 
+        public static string ConvertJobLenguage(string _chad, bool _isKorean)
+        {
+            var selectJobText = LoadAllText("SelectJobText");
+
+            for (int i = 0; i < selectJobText.Length; i++)
+            {
+                if (selectJobText[i].Contains(_chad)) 
+                {
+                    var text = selectJobText[i];
+                    var splitText = text.Split('{', '/', '}');
+
+                    return splitText[_isKorean ? 2 : 1];
+                }
+            }
+
+            Console.WriteLine($"{_chad}라는 직업은 언어를 바꿀 수 없음");
+            return default;
+        }
+
         public static int JobToIndex(string _chad)
         {
             //해당 이름에 맞는 직업 인덱스 반환
@@ -65,7 +84,7 @@ namespace GameService
             if (int.TryParse(input, out _value)) return true;
 
             //숫자를 입력 안했을 경우
-            Console.WriteLine("숫자를 입력하세요.");
+            Console.WriteLine("\n숫자를 입력하세요.");
             Thread.Sleep(1000);
             return false;
         }
@@ -77,7 +96,7 @@ namespace GameService
             else Console.ForegroundColor = (ConsoleColor)_color;
         }
 
-        public static void ChaneScreenColor(ColorCode _color)
+        public static void ChanegScreenColor(ColorCode _color)
         {
             //배경 색 변경
             if (_color == ColorCode.None) Console.BackgroundColor = ConsoleColor.Black;
@@ -212,7 +231,6 @@ namespace GameService
 
         public void Load()
         {
-            //이어하기 여부
             if (File.Exists("SaveFile.json"))
             {
                 var loadFile = File.ReadAllText("SaveFile.json");
@@ -242,6 +260,7 @@ namespace GameService
             if (!File.Exists(file))
             {
                 Console.WriteLine($"Csv 폴더에 {file}라는 파일은 존재하지 않음.");
+                return;
             }
 
             string[] lines = File.ReadAllLines(file);
