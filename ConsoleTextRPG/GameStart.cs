@@ -1,7 +1,9 @@
-﻿using GameCharacter;
+﻿using GameLogic;
 using GameService;
 using MainScene;
 using StartScene;
+using Manager;
+using System.Xml.Linq;
 
 public static class GameStart
 {
@@ -24,6 +26,7 @@ public static class GameStart
         var nickName = StartScenes.SetNameScene();
         var player = StartScenes.SelectJobScene();
 
+        //GameManager.SpawnPlayer(nickName, isJob);
         player.SetName(nickName);
         StartScenes.ShowStartText(nickName);
 
