@@ -40,7 +40,7 @@ namespace GameQuest
             var conditionLength = conditionText.Length == 0 ? 1 : conditionText.Length;
 
             condition = new string[conditionLength];
-            clearCount  = new int[conditionLength];
+            clearCount = new int[conditionLength];
             conditionCount = new int[conditionLength];
 
             for (int i = 0; i < conditionLength; i++)
@@ -55,11 +55,29 @@ namespace GameQuest
                 }
             }
         }
+
+        public void CheckCondition(string _objectName)
+        {
+            if (!acceptance) return;
+
+            for (int i = 0; i < condition.Length; i++)
+            {
+                if (condition[i].Contains(_objectName)) clearCount[i]++;
+            }
+        }
     }
 
     public class QuestManager
     {
         public Quest[] data { get; private set; }
+
+        public void CheckCondition(string _objectName)
+        {
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i].CheckCondition(_objectName);
+            }
+        }
 
         public void LoadQuest()
         {
