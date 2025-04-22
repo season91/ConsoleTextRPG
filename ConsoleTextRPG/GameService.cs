@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using GameCharacter;
 using GameLogic;
+using GameQuest;
 
 namespace GameService
 {

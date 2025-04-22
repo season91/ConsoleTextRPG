@@ -1,6 +1,7 @@
 ﻿using GameService;
 using System.Numerics;
 using Manager;
+using System.Reflection.Emit;
 
 namespace GameLogic
 {
@@ -75,7 +76,6 @@ namespace GameLogic
             }
             return result;
         }
-
     }
 
     public class Job
