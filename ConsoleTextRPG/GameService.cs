@@ -267,7 +267,7 @@ namespace GameService
                         ability = "방어력";
                         break;
                     case "2":
-                        ability = "포션";
+                        ability = "체력";
                         break;
                 }
 

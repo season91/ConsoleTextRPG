@@ -44,8 +44,6 @@ namespace GameLogic
                     case "체력":
                         health = _value;
                         break;
-                    case "포션":
-                        break;
                     default:
                         Console.Write($"({_ability})라는 Ability는 존재하지 않음");
                         break;
