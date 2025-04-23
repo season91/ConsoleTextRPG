@@ -15,6 +15,7 @@ namespace GameLogic
         public int gold { get; private set; } //해당 아이템 판매 가격 or 구매 가격
         public bool equipped { get; private set; } //해당 아이템 장착 여부
         public int count { get; set; }
+        public bool isGet { get; set; }
 
 
         //선언 방법 예시 : new Itme("검", "날카로운 검이다.", 100, "공격력", 10);
@@ -87,24 +88,18 @@ namespace GameLogic
 
         public void SaveData()
         {
-            GameManager.data.stringMap.Add($"{name}name", name);
-            GameManager.data.stringMap.Add($"{name}itemInfo", itemInfo);
-            GameManager.data.integer.Add($"{name}atk", atk);
-            GameManager.data.integer.Add($"{name}def", def);
-            GameManager.data.integer.Add($"{name}hp", health);
-            GameManager.data.integer.Add($"{name}gold", gold);
-            GameManager.data.boolen.Add($"{name}equipped", equipped);
+            GameManager.data.boolen.Add($"{itemId}Get", isGet);
+
         }
 
         public void LoadData()
         {
-            name = GameManager.data.stringMap.GetData($"{name}name");
-            itemInfo = GameManager.data.stringMap.GetData($"{name}itemInfo");
-            atk = GameManager.data.integer.GetData($"{name}atk");
-            def = GameManager.data.integer.GetData($"{name}def");
-            health = GameManager.data.integer.GetData($"{name}hp");
-            gold = GameManager.data.integer.GetData($"{name}gold");
-            equipped = GameManager.data.boolen.GetData($"{name}equipped");
+            isGet = GameManager.data.boolen.GetData($"{itemId}Get");
+
+            if (isGet)
+            {
+                GameManager.player.item.Add(this);
+            }
         }
 
     }
@@ -171,7 +166,7 @@ namespace GameLogic
             bonusDef = GameManager.data.integer.GetData($"{name}bonusDef");
 
             // 캐릭터 인벤토리 아이템
-            foreach (var playerItem in item)
+            foreach (var playerItem in GameManager.ItemPooling)
             {
                 playerItem.LoadData();
             }
