@@ -32,6 +32,13 @@ namespace Manager
             player = _playerJob;
             player.SetName(_playerName);
             quest.Load(false);
+            
+            Item potionItem = (from item in ItemPooling
+                            where item.itemId == (int)ItemCode.Potion
+                            select item).First();
+
+            potionItem.count = 3;
+            player.item.Add(potionItem);
         }
         
         public static int DungeonFloor { get; set; } = 1;

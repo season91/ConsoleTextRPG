@@ -21,9 +21,7 @@ namespace StartScene
             while (true)
             {
                 Console.Clear();
-                Mathod.ChangeFontColor(ColorCode.Yellow);
-                Console.WriteLine("직업을 선택해주세요 !\n");
-                Mathod.ChangeFontColor(ColorCode.None);
+                Mathod.FontColorOnce("직업을 선택해주세요 !\n\n", ColorCode.Yellow);
 
                 for (int i = 0; i < text.Length; i++)
                 {
@@ -80,9 +78,9 @@ namespace StartScene
                     continue;
                 }
 
-                Console.WriteLine("\n1. 저장");
-                Console.WriteLine("2. 취소");
-                Console.Write(">>");
+                Mathod.MenuFont("\n1", "저장");
+                Mathod.MenuFont("\n2", "취소");
+                Console.Write("\n>>");
 
                 if (Mathod.CheckInput(out valueInput))
                 {
@@ -111,8 +109,14 @@ namespace StartScene
         public static void ShowStartText()
         {
             Console.Clear();
-            Console.WriteLine($"환영합니다, {GameManager.player.name}님!");
-            Console.WriteLine("아무 키나 눌러 스파르타 마을로 이동합니다...");
+            Console.Write("환영합니다, ");
+
+            Mathod.FontColorOnce($"{GameManager.player.name}", ColorCode.Blue);
+            Console.WriteLine("님 !!");
+
+            Mathod.FontColorOnce("아무 키", ColorCode.DarkGray);
+            Console.WriteLine("나 눌러 스파르타 마을로 이동합니다...");
+
             Console.ReadKey();
             Console.Clear();
         }
@@ -131,19 +135,15 @@ namespace StartScene
                     Console.WriteLine($"파일을 불러오시겠습니까?\n");
                     Mathod.ChangeFontColor(ColorCode.None);
 
-                    Mathod.ChangeFontColor(ColorCode.None);
-                    Console.WriteLine("1. 네.");
-                    Mathod.ChangeFontColor(ColorCode.None);
-                    Console.WriteLine("2. 아니오.");
-                    Mathod.ChangeFontColor(ColorCode.None);
+                    Mathod.MenuFont("1", "네.\n");
+                    Mathod.MenuFont("2", "아니오.\n", ColorCode.DarkGray);
 
-                    Console.Write("\n>>");
+                    Console.Write(">>");
 
                     if (Mathod.CheckInput(out input))
                     {
                         if (input == 1)
                         {
-                            GameManager.data.Load();
                             GameManager.SpawnPlayer();
                             break;
                         }
