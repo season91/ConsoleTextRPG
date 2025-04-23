@@ -32,9 +32,9 @@ namespace Manager
             player = _playerJob;
             player.SetName(_playerName);
             quest.Load(false);
-            
+
             Item potionItem = (from item in ItemPooling
-                            where item.itemId == (int)ItemCode.Potion
+                                         where item.itemId == (int)ItemCode.Potion
                             select item).First();
 
             potionItem.count = 3;

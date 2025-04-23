@@ -106,7 +106,6 @@ namespace GameLogic
             gold = GameManager.data.integer.GetData($"{name}gold");
             equipped = GameManager.data.boolen.GetData($"{name}equipped");
         }
-
     }
 
     public class Job

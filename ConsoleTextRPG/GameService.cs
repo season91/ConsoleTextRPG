@@ -177,7 +177,7 @@ namespace GameService
 
             if (potionItem == null)
             {
-                Item addPotionItem = (from item in GameManager.ItemPooling
+                GameLogic.Item addPotionItem = (from item in GameManager.ItemPooling
                                       where item.itemId == (int)ItemCode.Potion
                                       select item).First();
 
@@ -323,7 +323,7 @@ namespace GameService
             }
 
             string[] lines = File.ReadAllLines(file);
-            GameManager.ItemPooling = new Item[lines.Length-1];
+            GameManager.ItemPooling = new GameLogic.Item[lines.Length-1];
 
             for (int i = 1; i < lines.Length; i++)
             {
