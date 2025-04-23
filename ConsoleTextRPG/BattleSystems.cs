@@ -197,8 +197,6 @@ namespace BattleSystem
                     var target = monsters[idx];
                     int dmg = player.Attack(target);
 
-                    if (GameManager.NextFloor(monsters))
-                        return false;
                     return true;
                 }
                 else if (sel == 2) // 스킬
@@ -227,9 +225,6 @@ namespace BattleSystem
                             int idx = GameManager.SelectMonster(monsters);
                             var target = monsters[idx];
                             int dmg = player.Skill1(target);
-
-                            if (GameManager.NextFloor(monsters))
-                                return false;
                             return true;
                         }
                         else if (skill == 2)
@@ -241,9 +236,6 @@ namespace BattleSystem
                                 continue;
                             }
                             player.Skill2(monsters);
-
-                            if (GameManager.NextFloor(monsters))
-                                return false;
                             return true;
                         }
                         else if (skill == 0)
