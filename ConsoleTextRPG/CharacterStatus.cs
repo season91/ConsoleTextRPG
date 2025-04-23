@@ -20,7 +20,7 @@ namespace Status
                 Console.WriteLine($"Gold : {GameManager.player.gold} G");
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine("\n원하시는 행동을 입력해주세요.");
-                Console.WriteLine(">>");
+                Console.Write(">>");
 
                 string stat_choice = Console.ReadLine();
 
