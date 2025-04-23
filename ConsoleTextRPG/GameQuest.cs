@@ -149,7 +149,7 @@ namespace GameQuest
         public void Load(bool _isLoad)
         {
             //현재 퀘스트 텍스트 갯수
-            var questCount = 3;
+            var questCount = 10;
 
             data = new Quest[questCount];
 
