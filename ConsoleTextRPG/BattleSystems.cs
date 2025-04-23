@@ -27,21 +27,23 @@ namespace BattleSystem
         public int monHP { get; private set; }
         public int monAtk { get; set; }
         public int monGold { get; set; }
+
+        public int monLevel { get; set; }
         public bool IsAlive => monHP > 0;
         public Monster(Monsters type)
         {
             MonsterType = type;
-            (monMaxHp, monAtk, monGold) = type switch
+            (monMaxHp, monAtk, monGold, monLevel) = type switch
             {
-                Monsters.고블린 => (15, 5, 75),
-                Monsters.홉고블린 => (20, 7, 140),
-                Monsters.오크 => (20, 8, 160),
-                Monsters.하이오크 => (25, 10, 250),
-                Monsters.해츨링 => (50, 20, 1000),
-                Monsters.와이번 => (30, 13, 300),
-                Monsters.워울프 => (17, 17, 350),
-                Monsters.만티코어 => (25, 20, 500),
-                Monsters.드래곤 => (100, 40, 5000),
+                Monsters.고블린 => (15, 5, 75, 2),
+                Monsters.홉고블린 => (20, 7, 140, 4),
+                Monsters.오크 => (20, 8, 160, 6),
+                Monsters.하이오크 => (25, 10, 250, 8),
+                Monsters.해츨링 => (50, 20, 1000, 30),
+                Monsters.와이번 => (30, 13, 300, 12),
+                Monsters.워울프 => (17, 17, 350, 14),
+                Monsters.만티코어 => (25, 20, 500, 16),
+                Monsters.드래곤 => (100, 40, 5000, 100),
             };
             monHP = monMaxHp;
         }
@@ -86,7 +88,7 @@ namespace BattleSystem
 
                 Console.WriteLine("[전투 보상]");
                 //레벨업 시 레벨 증가 출력
-                int xpGain = monsters.Sum(m => m.monAtk);
+                int xpGain = monsters.Sum(m => m.monLevel);
                 player.exp += xpGain;
                 Console.WriteLine($"획득 경험치: {xpGain}");
                 //Console.WriteLine("\n[획득 아이템]");

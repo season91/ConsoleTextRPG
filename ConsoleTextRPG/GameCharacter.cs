@@ -118,9 +118,9 @@ namespace GameCharacter
                 if (targetalive.Length == 0)
                     break;
                 var target = targetalive[Rdtarget.Next(0, targetalive.Length)];
-                target.TakeDamage(targetDamage, this);
+                int dmg = target.TakeDamage(targetDamage, this);
                 Mathod.ChangeFontColor(ColorCode.Red);
-                Console.WriteLine($"→ {target.Name}에게 {targetDamage} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
+                Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
                 Mathod.ChangeFontColor(ColorCode.None);
                 Thread.Sleep(1000);
             }
