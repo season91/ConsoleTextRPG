@@ -20,10 +20,13 @@ namespace SaveWindow
                 Console.WriteLine("2. 아니오");
                 Mathod.ChangeFontColor(ColorCode.None);
 
+                Console.Write("\n>>");
+
                 if (Mathod.CheckInput(out input))
                 {
                     if (input == 1)
                     {
+                        GameManager.quest.Save();
                         GameManager.player.SaveData();
                         GameManager.data.Save();
 
