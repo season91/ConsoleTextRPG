@@ -22,6 +22,11 @@ namespace GameService
         DarkGray = 8,
     }
 
+    public enum ItemCode
+    {
+        Potion = 32001
+    }
+
     public class Mathod
     {
         public static Job JobToClass(int _jobIndex)
@@ -269,11 +274,13 @@ namespace GameService
             for (int i = 1; i < lines.Length; i++)
             {
                 var parts = lines[i].Split(",");
+                string itemId = parts[0];
                 string name = parts[1];
                 string type = parts[3];
                 int power = int.Parse(parts[4]);
                 string itemInfo = parts[5];
                 int gold = int.Parse(parts[6]);
+                int count = int.Parse(parts[8]);
 
                 string ability = "";
 
@@ -292,11 +299,13 @@ namespace GameService
 
                 var item = new Item
                 (
+                    itemId,
                     name,
                     itemInfo,
                     gold,
                     ability,
-                    power
+                    power,
+                    count
                 );
 
                 GameManager.ItemPooling[i-1] = item;

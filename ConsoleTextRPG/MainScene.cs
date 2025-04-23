@@ -3,6 +3,7 @@ using GameQuest;
 using GameService;
 using Inventory;
 using Manager;
+using Recovery;
 using SaveWindow;
 using Shop;
 using StartScene;
@@ -71,9 +72,9 @@ public static class MainScenes
                         BattleSystems.Start();
                         break;
 
-                    //회복
+                    //회복아이템
                     case 5:
-
+                        RecoveryItem.Show();
                         break;
 
                     //퀘스트
