@@ -87,9 +87,11 @@ namespace BattleSystem
                 int xpGain = monsters.Sum(m => m.monAtk);
                 player.exp += xpGain;
                 Console.WriteLine($"획득 경험치: {xpGain}");
+                
                 int goldGain = monsters.Sum(m => m.monGold);
                 player.gold += goldGain;
                 Console.WriteLine($"획득 골드: {goldGain}");
+                Console.WriteLine($"현재 골드: {player.gold}");
 
                 Console.WriteLine("1. 다음층으로");
                 Console.WriteLine("0. 던전 나가기");
