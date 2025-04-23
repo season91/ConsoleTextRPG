@@ -24,7 +24,7 @@ namespace BattleSystem
         public int ID => (int)MonsterType;
         public string Name => MonsterType.ToString();
         public int monMaxHp { get; set; }
-        public int monHP { get; private set; }
+        public int monHP { get; set; }
         public int monAtk { get; set; }
         public int monGold { get; set; }
 
@@ -108,15 +108,27 @@ namespace BattleSystem
                     GameManager.DungeonFloor++;
                     if (GameManager.DungeonFloor == 10)
                     {
-                        Console.WriteLine("던전 클리어!");
-                        Console.WriteLine("축하합니다!");
-                        Console.WriteLine("무한모드로 진입합니다.");
+                        Console.WriteLine("드래곤의 땅으로 진입합니다.");
                         Console.ReadKey();
+                        Start();
+
                     }
-                    else if (GameManager.DungeonFloor > 10)
+                    else if (GameManager.DungeonFloor == 11)
                     {
-                        Console.WriteLine("무한모드입니다.");
+                        Console.WriteLine("던전 클리어!");
+                        Console.WriteLine("보스를 처치했습니다!");
+                        Console.WriteLine("무한모드로 진입합니다.");
+
                         Console.ReadKey();
+                        Start();
+                    }
+                    else if(GameManager.DungeonFloor > 11)
+                    {
+                        Console.WriteLine("[무한모드]");
+                        Console.WriteLine($"던전 {GameManager.DungeonFloor}층으로 이동합니다...");
+                        Thread.Sleep(1000);
+                        Console.Clear();
+                        Start();
                     }
                     else
                     {
@@ -172,9 +184,13 @@ namespace BattleSystem
                 if (Floor > 10)
                 {
                     monsters[i].monMaxHp = monsters[i].monMaxHp*(1 + Floor / 10);
+                    monsters[i].monHP = monsters[i].monMaxHp;
+                    monsters[i].monGold = monsters[i].monGold * (1 + Floor / 10);
+                    monsters[i].monLevel = monsters[i].monLevel + Floor / 10;
                     monsters[i].monAtk = monsters[i].monAtk * (1 + Floor / 20);
                 }
             }
+            
             return monsters;
         }
         private static bool PlayerTurn(Job player, Monster[] monsters)
@@ -285,10 +301,13 @@ namespace BattleSystem
                     continue; //죽은 몬스터는 건너뛰기
                 else
                 {
+                    int dmg = m.monAtk - player.def / 2;
+                    if (dmg < 0)
+                        dmg = 0; // 방어력으로 인해 데미지가 0 이하가 되지 않도록 조정
                     Mathod.ChangeFontColor(ColorCode.Red);
                     Console.WriteLine($"\n{m.MonsterType}의 공격");
-                    Console.WriteLine($"→ {m.monAtk - player.def / 2} 데미지!");
-                    player.health -= m.monAtk - player.def / 2;//방어력의 절반만큼 데미지 감소
+                    Console.WriteLine($"→ {dmg} 데미지!");
+                    player.health -= dmg;//방어력의 절반만큼 데미지 감소
                     Mathod.ChangeFontColor(ColorCode.Green);
                     Console.WriteLine($"남은 체력: {player.health}");
                     Console.WriteLine("");
