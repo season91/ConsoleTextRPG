@@ -1,3 +1,4 @@
+using BattleSystem;
 using GameService;
 using Manager;
 
@@ -176,5 +177,23 @@ namespace GameLogic
                 playerItem.LoadData();
             }
         }
+
+        public virtual int Skill1Cost => 0;
+        public virtual int Skill2Cost => 0;
+        public virtual string Skill1Name => "스킬1";
+        public virtual string Skill2Name => "스킬2";
+
+        public virtual int Attack(Monster target)
+        {
+            return 0;
+        }
+        public virtual int Skill1(Monster target)
+        {
+            return 0;
+        }
+        public virtual void Skill2(Monster[] target)
+        {
+        }
+
     }
 }
