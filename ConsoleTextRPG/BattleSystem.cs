@@ -33,17 +33,17 @@ namespace BattleSystem
         public Monster(Monsters type)
         {
             MonsterType = type;
-            (monMaxHp, monAtk) = type switch
+            (monMaxHp, monAtk, monGold) = type switch
             {
-                Monsters.고블린 => (15, 5),
-                Monsters.홉고블린 => (20, 7),
-                Monsters.오크 => (20, 8),
-                Monsters.하이오크 => (25, 10),
-                Monsters.해츨링 => (50, 20),
-                Monsters.와이번 => (30, 13),
-                Monsters.워울프 => (17, 17),
-                Monsters.만티코어 => (25, 20),
-                Monsters.드래곤 => (100, 40),
+                Monsters.고블린 => (15, 5, 75),
+                Monsters.홉고블린 => (20, 7, 140),
+                Monsters.오크 => (20, 8, 160),
+                Monsters.하이오크 => (25, 10, 250),
+                Monsters.해츨링 => (50, 20, 1000),
+                Monsters.와이번 => (30, 13, 300),
+                Monsters.워울프 => (17, 17, 350),
+                Monsters.만티코어 => (25, 20, 500),
+                Monsters.드래곤 => (100, 40, 5000),
             };
             monHP = monMaxHp;
         }
@@ -84,12 +84,9 @@ namespace BattleSystem
                 Console.WriteLine($"{Dungeon.Floor}층 던전에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
 
                 Console.WriteLine("[전투 보상]");
-                //레벨업 시 레벨 증가 출력
                 int xpGain = monsters.Sum(m => m.monAtk);
-                //player.exp += xpGain;
+                player.exp += xpGain;
                 Console.WriteLine($"획득 경험치: {xpGain}");
-                //Console.WriteLine("\n[획득 아이템]");
-                //획득 아이템 출력
                 int goldGain = monsters.Sum(m => m.monGold);
                 player.gold += goldGain;
                 Console.WriteLine($"획득 골드: {goldGain}");
@@ -123,10 +120,13 @@ namespace BattleSystem
             int monsterCount;
             if (Floor == 5 || Floor == 10)
                 monsterCount = 1; // 보스 몬스터
-            else
+            else if (Floor < 10)
                 monsterCount = GameManager.rd.Next(1, 5);
+            else
+                monsterCount = GameManager.rd.Next(3, 7);
 
-            Monsters[] types;
+
+                Monsters[] types;
             if (Floor >= 1 && Floor <= 4)
                 types = new[] { Monsters.고블린, Monsters.홉고블린, Monsters.오크, Monsters.하이오크 };
             else if (Floor == 5)
@@ -142,6 +142,11 @@ namespace BattleSystem
             for (int i = 0; i < monsterCount; i++)
             {
                 monsters[i] = new Monster(types[GameManager.rd.Next(types.Length)]);
+                if (Floor > 10)
+                {
+                    monsters[i].monMaxHp = monsters[i].monMaxHp*(1+Floor * 1/10);
+                    monsters[i].monAtk = monsters[i].monAtk*(1+Floor * 1/20);
+                }
             }
             return monsters;
         }
@@ -393,6 +398,11 @@ namespace BattleSystem
                 Console.WriteLine("던전 클리어!");
                 Console.WriteLine("축하합니다!");
                 Console.WriteLine("무한모드로 진입합니다.");
+                Console.ReadKey();
+            }
+            else if (Floor > 10)
+            {
+                Console.WriteLine("무한모드입니다.");
                 Console.ReadKey();
             }
             else

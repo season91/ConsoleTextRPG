@@ -108,6 +108,7 @@ namespace GameLogic
         public int bonusAtk;
         public int bonusDef;
         public int Mp;
+        public int exp;
 
         public void SetName(string _name) => name = _name;
 
@@ -122,9 +123,11 @@ namespace GameLogic
             GameManager.data.integer.Add($"{name}level", level);
             GameManager.data.integer.Add($"{name}bonusAtk", bonusAtk);
             GameManager.data.integer.Add($"{name}bonusDef", bonusDef);
-            
+            GameManager.data.integer.Add($"{name}Mp", Mp);
+            GameManager.data.integer.Add($"{name}exp", exp);
+
             // 캐릭터 인벤토리 아이템
-            foreach(var playerItem in item)
+            foreach (var playerItem in item)
             {
                 playerItem.SaveData();
             }
@@ -141,6 +144,9 @@ namespace GameLogic
             level = GameManager.data.integer.GetData($"{name}level");
             bonusAtk = GameManager.data.integer.GetData($"{name}bonusAtk");
             bonusDef = GameManager.data.integer.GetData($"{name}bonusDef");
+            Mp = GameManager.data.integer.GetData($"{name}Mp");
+            exp = GameManager.data.integer.GetData($"{name}exp");
+
         }
     }
 }

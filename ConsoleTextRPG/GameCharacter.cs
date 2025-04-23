@@ -13,6 +13,7 @@ namespace GameCharacter
             Mp = 30;
             health = 100;
             gold = 1500;
+            exp = 0;
         }
     }
 
@@ -27,6 +28,7 @@ namespace GameCharacter
             Mp = 50;
             health = 100;
             gold = 1500;
+            exp = 0;
         }
     }
 }
