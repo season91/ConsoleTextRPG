@@ -84,7 +84,7 @@ namespace GameQuest
             {
                 if (condition[i] == _objectName)
                 {
-                    if(count[i] < maxCount[i]) count[i]++;
+                    if (count[i] < maxCount[i]) count[i]++;
                     else if (count[i] == maxCount[i]) totalClear++;
                 }
             }
@@ -351,61 +351,34 @@ namespace GameQuest
 
         private static bool CheckReward(Quest _quest)
         {
-            if (_quest.itemName.Length > 1) return RewardAny(_quest);
-            else return RewardGold(_quest);
-        }
-
-        private static bool RewardGold(Quest _quest)
-        {
             var player = GameManager.player;
-            var ItemPooling = GameManager.ItemPooling[0];
 
-            //보상이 골드일 경우
-            if (_quest.itemName[0].Contains("골드"))
-            {
-                player.gold += _quest.rewardCount[0];
-            }
-
-            //아이템이 있을 경우
-            else
-            {
-                for (int i = 0; i < GameManager.ItemPooling.Length; i++)
-                {
-                    ItemPooling = GameManager.ItemPooling[i];
-
-                    if (ItemPooling.name == _quest.itemName[0])
-                    {
-                        if (player.item.Contains(GameManager.ItemPooling[i]))
-                        {
-                            return false;
-                        }
-
-                        else
-                        {
-                            player.item.Add(ItemPooling);
-                        }
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        private static bool RewardAny(Quest _quest)
-        {
             for (int i = 0; i < _quest.itemName.Length; i++)
             {
-                var item = GameManager.ItemPooling[i];
-
-                if (_quest.itemName[i] == item.name)
+                if (_quest.itemName[i].Contains("골드"))
                 {
-                    if (!GameManager.player.item.Contains(item)) GameManager.player.item.Add(item);
-                    else return false;
+                    player.gold += _quest.rewardCount[i];
                 }
 
-                else if(_quest.itemName[i] == "골드")
+                else
                 {
-                    GameManager.player.gold += _quest.rewardCount[i];
+                    for (int I = 0; I < GameManager.ItemPooling.Length; I++)
+                    {
+                        var ItemPooling = GameManager.ItemPooling[I];
+
+                        if (ItemPooling.name == _quest.itemName[i])
+                        {
+                            if (player.item.Contains(ItemPooling))
+                            {
+                                return false;
+                            }
+
+                            else
+                            {
+                                player.item.Add(ItemPooling);
+                            }
+                        }
+                    }
                 }
             }
 
