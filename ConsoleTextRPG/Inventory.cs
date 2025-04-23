@@ -57,7 +57,8 @@ namespace Inventory
         }
         public static void EquippedItemManage()
         {
-            var _player = GameManager.player;
+            List<Item> playerItem = GameManager.player.item.OfType<Item>().Where(x => x.itemId != (int)ItemCode.Potion).ToList();
+
             int input = 0;
             while (true)
             {
@@ -68,13 +69,13 @@ namespace Inventory
                 Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
                 Console.WriteLine("\n[아이템 목록]");
 
-                for (int i = 0; i < _player.item.Count; i++)
+                for (int i = 0; i < playerItem.Count; i++)
                 {
-                    var item = _player.item[i];
+                    var item = playerItem[i];
                     Console.WriteLine($"- {i + 1}. {(item.equipped ? "[E] " : "")}{item.name} | {item.Ability()} | {item.itemInfo}");
                 }
 
-                Console.WriteLine("0. 나가기");
+                Console.WriteLine("\n0. 나가기");
                 Console.WriteLine("\n원하시는 행동을 입력해주세요.");
                 Console.Write(">>");
 
@@ -84,7 +85,7 @@ namespace Inventory
                     {
                         break;
                     }
-                    else if (input >= 1 && input <= _player.item.Count)
+                    else if (input >= 1 && input <= playerItem.Count)
                     {
                         TryEquipItem(input-1);
                     }
@@ -114,8 +115,6 @@ namespace Inventory
                     _player.bonusAtk -= _player.item[equippedAtkItem.index].atk;
 
                     _player.item[equippedAtkItem.index].EquippedItem(!_player.item[equippedAtkItem.index].equipped);
-
-                    Console.WriteLine("기존 무기 장착 해제했습니다.");
                 }
 
                 _player.atk += _player.item[tryEquipIndex].atk;
@@ -137,8 +136,6 @@ namespace Inventory
                     _player.bonusDef -= _player.item[equippedDefItem.index].def;
 
                     _player.item[equippedDefItem.index].EquippedItem(!_player.item[equippedDefItem.index].equipped);
-
-                    Console.WriteLine("기존 방어구 장착 해제했습니다.");
                 }
 
                 _player.def += _player.item[tryEquipIndex].def;
@@ -146,9 +143,6 @@ namespace Inventory
 
                 _player.item[tryEquipIndex].EquippedItem(!_player.item[tryEquipIndex].equipped);
             }
-
-            Thread.Sleep(2000);
         }
-
     }
 }

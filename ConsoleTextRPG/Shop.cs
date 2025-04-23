@@ -85,7 +85,7 @@ namespace Shop
                     Console.WriteLine($"- {i + 1}. {item.name} | {item.Ability()} | {item.itemInfo} | {isBuy}");
                 }
 
-                Console.WriteLine("0. 나가기");
+                Console.WriteLine("\n0. 나가기");
                 Console.WriteLine("\n원하시는 행동을 입력해주세요.");
                 Console.Write(">>");
 
@@ -114,25 +114,41 @@ namespace Shop
         {
             int price = item.gold;
             var _player = GameManager.player;
-            if (_player.item.Contains(item))
-            {
-                Console.WriteLine("이미 구매한 아이템입니다.");
 
-            }
-            else if (_player.gold >= price)
+            if(item.itemId != (int)ItemCode.Potion)
             {
-                _player.gold -= price;
-                _player.item.Add(item);
-                Console.WriteLine($"구매를 완료했습니다! 남은 Gold : {_player.gold} G");
-            }
+                if (_player.item.Contains(item))
+                {
+                    Console.WriteLine("이미 구매한 아이템입니다.");
+
+                }
+                else if (_player.gold >= price)
+                {
+                    _player.gold -= price;
+                    _player.item.Add(item);
+                    Console.WriteLine($"구매를 완료했습니다! 남은 Gold : {_player.gold} G");
+                }
+                else
+                {
+                    Console.WriteLine("Gold가 부족합니다.");
+                }
+            } 
             else
             {
-                Console.WriteLine("Gold가 부족합니다.");
+                if (_player.gold >= price)
+                {
+                    _player.gold -= price;
+                    Mathod.PotionItemPlus();
+                    Console.WriteLine($"구매를 완료했습니다! 남은 Gold : {_player.gold} G");
+                }
+                else
+                {
+                    Console.WriteLine("Gold가 부족합니다.");
+                }
             }
 
             Thread.Sleep(1000);
         }
-
 
 
         // 아이템 판매 메뉴
@@ -157,7 +173,7 @@ namespace Shop
                     Console.WriteLine($"- {i + 1}. {playerItem.name} | {playerItem.Ability()} | {playerItem.itemInfo}");
                 }
 
-                Console.WriteLine("0. 나가기");
+                Console.WriteLine("\n0. 나가기");
                 Console.WriteLine("\n원하시는 행동을 입력해주세요.");
                 Console.Write(">>");
 
@@ -187,13 +203,21 @@ namespace Shop
             var _player = GameManager.player;
             int price = (int)(_playerItem.gold * 0.85);
 
-            // 장착 중이라면 장착 해제
-            if (_playerItem.equipped)
+            if (_playerItem.itemId != (int)ItemCode.Potion)
             {
-                _playerItem.EquippedItem(!_playerItem.equipped);
-            }
+                // 장착 중이라면 장착 해제
+                if (_playerItem.equipped)
+                {
+                    _playerItem.EquippedItem(!_playerItem.equipped);
+                }
 
-            _player.item.Remove(_playerItem);
+                _player.item.Remove(_playerItem);
+            } 
+            else
+            {
+                Mathod.PotionItemMinus();
+            }
+            
             _player.gold += price;
 
             Console.WriteLine($"판매 완료! 판매 Gold : {price} -> 남은 Gold : {_player.gold} G");

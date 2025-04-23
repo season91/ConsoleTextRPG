@@ -6,6 +6,7 @@ namespace GameLogic
 {
     public class Item
     {
+        public int itemId { get; private set; }
         public string name { get; private set; }
         public string itemInfo { get; private set; } //해당 아이템 설명 글
         public int atk { get; private set; }
@@ -13,15 +14,18 @@ namespace GameLogic
         public int health { get; private set; }
         public int gold { get; private set; } //해당 아이템 판매 가격 or 구매 가격
         public bool equipped { get; private set; } //해당 아이템 장착 여부
+        public int count { get; set; }
 
 
         //선언 방법 예시 : new Itme("검", "날카로운 검이다.", 100, "공격력", 10);
         //재료일 경우 : new Itme("재료", "쓸모없는 재료.", 5);
-        public Item(string _name, string _itemInfo, int _gold = 0, string _ability = "", int _value = 0)
+        public Item(int _itemId, string _name, string _itemInfo, int _gold = 0, string _ability = "", int _value = 0, int _count = 1)
         {
+            itemId = _itemId;
             name = _name;
             itemInfo = _itemInfo;
             gold = _gold;
+            count = _count;
 
             atk = 0;
             def = 0;
@@ -70,6 +74,12 @@ namespace GameLogic
                 if (playerItem.name == _item.name)
                 {
                     result = true;
+                }
+
+                // 회복아이템이라면 검증제외
+                if(_item.itemId == (int)ItemCode.Potion)
+                {
+                    result = false;
                 }
             }
             return result;

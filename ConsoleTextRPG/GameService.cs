@@ -22,6 +22,11 @@ namespace GameService
         DarkGray = 8,
     }
 
+    public enum ItemCode
+    {
+        Potion = 32001
+    }
+
     public class Mathod
     {
         public static Job JobToClass(int _jobIndex)
@@ -164,6 +169,38 @@ namespace GameService
                 Console.WriteLine(text[i]);
             }
         }
+        public static void PotionItemPlus()
+        {
+            Item potionItem = (from item in GameManager.player.item
+                               where item.itemId == (int)ItemCode.Potion
+                               select item).FirstOrDefault();
+
+            if (potionItem == null)
+            {
+                Item addPotionItem = (from item in GameManager.ItemPooling
+                                      where item.itemId == (int)ItemCode.Potion
+                                      select item).First();
+
+                GameManager.player.item.Add(addPotionItem);
+            }
+            else
+            {
+                potionItem.count++;
+            }
+        }
+        public static void PotionItemMinus()
+        {
+            Item potionItem = (from item in GameManager.player.item
+                               where item.itemId == (int)ItemCode.Potion
+                               select item).First();
+
+            potionItem.count--;
+
+            if (potionItem.count == 0)
+            {
+                GameManager.player.item.Remove(potionItem);
+            }
+        }
     }
 
     public struct Vector
@@ -291,11 +328,13 @@ namespace GameService
             for (int i = 1; i < lines.Length; i++)
             {
                 var parts = lines[i].Split(",");
+                int itemId = int.Parse(parts[0]);
                 string name = parts[1];
                 string type = parts[3];
                 int power = int.Parse(parts[4]);
                 string itemInfo = parts[5];
                 int gold = int.Parse(parts[6]);
+                int count = int.Parse(parts[8]);
 
                 string ability = "";
 
@@ -314,11 +353,13 @@ namespace GameService
 
                 var item = new Item
                 (
+                    itemId,
                     name,
                     itemInfo,
                     gold,
                     ability,
-                    power
+                    power,
+                    count
                 );
 
                 GameManager.ItemPooling[i-1] = item;
