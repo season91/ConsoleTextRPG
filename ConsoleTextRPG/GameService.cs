@@ -41,6 +41,28 @@ namespace GameService
             return isJob[_jobIndex];
         }
 
+        public static void MenuFont(string _number, string _text, ColorCode _textColor = ColorCode.None)
+        {
+            //줄바꿈 자동아님
+            ChangeFontColor(ColorCode.Magenta);
+            Console.Write(_number);
+
+            ChangeFontColor(ColorCode.None);
+            Console.Write(". ");
+
+            ChangeFontColor(_textColor);
+            Console.Write(_text);
+            ChangeFontColor(ColorCode.None);
+        }
+
+        public static void FontColorOnce(string _text, ColorCode _color = ColorCode.None)
+        {
+            //줄바꿈 자동아님
+            ChangeFontColor(_color);
+            Console.Write(_text);
+            ChangeFontColor(ColorCode.None);
+        }
+
         public static string ConvertJobLenguage(string _chad, bool _isKorean)
         {
             var selectJobText = LoadAllText("SelectJobText");

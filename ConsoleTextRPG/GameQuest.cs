@@ -188,9 +188,7 @@ namespace GameQuest
                 for (int i = 0; i < questLength; i++)
                 {
                     //넘버링 색
-                    Mathod.ChangeFontColor(ColorCode.Magenta);
-                    Console.Write($"{i + 1}. ");
-                    Mathod.ChangeFontColor(ColorCode.None);
+                    Mathod.FontColorOnce($"{i + 1}. ", ColorCode.Magenta);
 
                     //퀘스트 이름
                     var text = quest[i].info[0];
@@ -204,7 +202,7 @@ namespace GameQuest
                     Mathod.ChangeFontColor(ColorCode.None);
                 }
 
-                Console.WriteLine("\n0. 나가기");
+                Mathod.MenuFont("0", "나가기");
 
                 Console.WriteLine("\n원하시는 퀘스트를 선택해주세요.");
                 Console.Write(">>");
@@ -240,18 +238,14 @@ namespace GameQuest
             while (true)
             {
                 Console.Clear();
-                Mathod.ChangeFontColor(ColorCode.Yellow);
-                Console.WriteLine("Quest!!\n");
-                Mathod.ChangeFontColor(ColorCode.None);
+                Mathod.FontColorOnce("Quest!!\n\n", ColorCode.Yellow);
 
                 //퀘스트 제목
                 var title = questScreen[0];
-                Console.Write(title.Replace("\r", ""));
+                Mathod.FontColorOnce(title.Replace("\r", ""), ColorCode.DarkGray);
 
                 //진행 상황
-                Mathod.ChangeFontColor(ColorCode.Blue);
-                Console.WriteLine($"{CheckState(quest)}\n");
-                Mathod.ChangeFontColor(ColorCode.None);
+                Mathod.FontColorOnce($"{CheckState(quest)}\n", ColorCode.Blue);
 
                 //퀘스트 내용
                 var infoCount = 0;
@@ -265,9 +259,7 @@ namespace GameQuest
                         Console.Write(questText.Replace("\r", ""));
 
                         //처치 카운트
-                        Mathod.ChangeFontColor(ColorCode.Red);
-                        Console.WriteLine($" ({quest.count[infoCount]} / {quest.maxCount[infoCount]})");
-                        Mathod.ChangeFontColor(ColorCode.None);
+                        Mathod.FontColorOnce($" ({quest.count[infoCount]} / {quest.maxCount[infoCount]})", ColorCode.Red);
 
                         //다음 인덱스로
                         infoCount++;
@@ -280,13 +272,16 @@ namespace GameQuest
                 if (quest.acceptance)
                 {
                     //완료 했는가? (완료 X => 출력 안함)
-                    if (isClear) Console.WriteLine("1. 보상받기");
+                    if (isClear)
+                    {
+                        Mathod.MenuFont("1", "보상받기", ColorCode.Green);
+                    }
                 }
 
                 //아닐 경우
-                else Console.WriteLine("1. 수락하기");
+                else Mathod.MenuFont("1", "수락하기\n");
 
-                Console.WriteLine($"{(quest.acceptance ? 0 : 2)}. 돌아가기");
+                Mathod.MenuFont($"{(quest.acceptance ? 0 : 2)}", "돌아가기\n");
 
                 Console.WriteLine("\n원하시는 행동을 입력해주세요.");
                 Console.Write(">>");
@@ -306,9 +301,7 @@ namespace GameQuest
                             {
                                 if (!Reward(quest))
                                 {
-                                    Mathod.ChangeFontColor(ColorCode.Red);
-                                    Console.WriteLine("\n동일한 아이템을 이미 소지 중입니다.");
-                                    Mathod.ChangeFontColor(ColorCode.None);
+                                    Mathod.FontColorOnce("\n동일한 아이템을 이미 소지 중입니다.", ColorCode.Red);
                                     Thread.Sleep(1000);
                                 }
 
@@ -349,7 +342,7 @@ namespace GameQuest
                     else return false;
                 }
 
-                if (_quest.itemName[i] == "골드")
+                else if (_quest.itemName[i] == "골드")
                 {
                     GameManager.player.gold += _quest.rewardCount[i];
                 }

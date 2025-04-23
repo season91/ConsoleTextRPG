@@ -1,4 +1,4 @@
-﻿using BattleSystem;
+using BattleSystem;
 using GameQuest;
 using GameService;
 using Inventory;
@@ -36,13 +36,17 @@ public static class MainScenes
             Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
             Console.WriteLine("이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n");
 
-            Console.WriteLine("1. 상태 보기");
-            Console.WriteLine("2. 인벤토리");
-            Console.WriteLine("3. 상점");
-            Console.WriteLine($"4. 전투 시작 현재 ({Dungeon.Floor}층)");
-            Console.WriteLine("5. 회복 아이템");
-            Console.WriteLine("6. 퀘스트");
-            Console.WriteLine("7. 저장하기");
+            Mathod.MenuFont("1", "상태 보기\n", ColorCode.None);
+            Mathod.MenuFont("2", "인벤토리\n", ColorCode.None);
+            Mathod.MenuFont("3", "상점\n", ColorCode.None);
+            Mathod.MenuFont("4", "전투 시작", ColorCode.Red);
+
+            Mathod.ChangeFontColor(ColorCode.DarkGray);
+            Console.WriteLine($" 현재 ({Dungeon.Floor}층)");
+
+            Mathod.MenuFont("5", "회복 아이템\n", ColorCode.Yellow);
+            Mathod.MenuFont("6", "퀘스트\n", ColorCode.None);
+            Mathod.MenuFont("7", "저장하기\n", ColorCode.Green);
 
             Console.WriteLine("\n원하시는 행동을 입력해주세요.");
             Console.Write(">> ");
