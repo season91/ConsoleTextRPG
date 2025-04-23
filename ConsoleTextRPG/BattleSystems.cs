@@ -101,6 +101,26 @@ namespace BattleSystem
                 if (sel == 1)
                 {
                     GameManager.NextFloor();
+                    if (GameManager.DungeonFloor == 10)
+                    {
+                        Console.WriteLine("던전 클리어!");
+                        Console.WriteLine("축하합니다!");
+                        Console.WriteLine("무한모드로 진입합니다.");
+                        Console.ReadKey();
+                    }
+                    else if (GameManager.DungeonFloor > 10)
+                    {
+                        Console.WriteLine("무한모드입니다.");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.WriteLine($"던전 {GameManager.DungeonFloor}층으로 이동합니다...");
+                        Thread.Sleep(1000);
+                        Console.Clear();
+                        BattleSystems.Start();
+                    }
+
                 }
                 else if (sel == 0)
                 {

@@ -38,25 +38,6 @@ namespace Manager
         public static void NextFloor()
         {
             DungeonFloor++;
-            if (DungeonFloor == 10)
-            {
-                Console.WriteLine("던전 클리어!");
-                Console.WriteLine("축하합니다!");
-                Console.WriteLine("무한모드로 진입합니다.");
-                Console.ReadKey();
-            }
-            else if (DungeonFloor > 10)
-            {
-                Console.WriteLine("무한모드입니다.");
-                Console.ReadKey();
-            }
-            else
-            {
-                Console.WriteLine($"던전 {DungeonFloor}층으로 이동합니다...");
-                Thread.Sleep(1000);
-                Console.Clear();
-                BattleSystems.Start();
-            }
         }
     }
 }
