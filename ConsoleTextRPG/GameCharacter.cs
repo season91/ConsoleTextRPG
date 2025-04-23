@@ -10,8 +10,10 @@ namespace GameCharacter
             chad = "전사";
             atk = 10;
             def = 5;
+            Mp = 30;
             health = 100;
             gold = 1500;
+            exp = 0;
         }
     }
 
@@ -23,8 +25,10 @@ namespace GameCharacter
             chad = "마법사";
             atk = 10;
             def = 5;
+            Mp = 50;
             health = 100;
             gold = 1500;
+            exp = 0;
         }
     }
 }
