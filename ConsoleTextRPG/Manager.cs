@@ -1,4 +1,6 @@
-﻿using GameLogic;
+﻿using BattleSystem;
+using System.Drawing;
+using GameLogic;
 using GameQuest;
 using GameService;
 
@@ -38,5 +40,7 @@ namespace Manager
             potionItem.count = 3;
             player.item.Add(potionItem);
         }
+        
+        public static int DungeonFloor { get; set; } = 1;
     }
 }

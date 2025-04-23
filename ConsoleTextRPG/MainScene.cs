@@ -48,6 +48,7 @@ public static class MainScenes
             Mathod.MenuFont("6", "퀘스트\n", ColorCode.None);
             Mathod.MenuFont("7", "저장하기\n", ColorCode.Green);
 
+
             Console.WriteLine("\n원하시는 행동을 입력해주세요.");
             Console.Write(">> ");
 
