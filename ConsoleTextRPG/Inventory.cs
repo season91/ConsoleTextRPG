@@ -57,8 +57,8 @@ namespace Inventory
         }
         public static void EquippedItemManage()
         {
-            List<Item> playerItem = GameManager.player.item.OfType<Item>().Where(x => x.itemId != (int)ItemCode.Potion).ToList();
-
+            //List<Item> playerItem = GameManager.player.item.OfType<Item>().Where(x => x.itemId != (int)ItemCode.Potion).ToList();
+            var playerItem = GameManager.player.item;
             int input = 0;
             while (true)
             {
@@ -98,51 +98,62 @@ namespace Inventory
             }
         }
 
-        public static void TryEquipItem( int tryEquipIndex)
+        public static void TryEquipItem(int tryEquipIndex)
         {
             var _player = GameManager.player;
-            if (_player.item[tryEquipIndex].atk > 0)
-            {
-                // 장착된 무기가 있는지
-                var equippedAtkItem = (from x in _player.item.Select((item, index) => new { item, index })
-                                       where x.item.equipped && x.item.atk > 0 && x.item.def == 0
-                                       select (x.index, x.item)).FirstOrDefault();
+            var tryEquipItem = _player.item[tryEquipIndex];
 
-                // 기존 장착 해제 후 장착
-                if(equippedAtkItem.item != null)
+            // 장착 시도 아이템이 포션이 아닌 경우만 시도
+            if(tryEquipItem.itemId != (int)ItemCode.Potion)
+            {
+                if (tryEquipItem.atk > 0)
                 {
-                    _player.atk -= _player.item[equippedAtkItem.index].atk;
-                    _player.bonusAtk -= _player.item[equippedAtkItem.index].atk;
+                    // 장착된 무기가 있는지
+                    var equippedAtkItem = (from x in _player.item.Select((item, index) => new { item, index })
+                                           where x.item.equipped && x.item.atk > 0 && x.item.def == 0
+                                           select (x.index, x.item)).FirstOrDefault();
 
-                    _player.item[equippedAtkItem.index].EquippedItem(!_player.item[equippedAtkItem.index].equipped);
+                    // 기존 장착 해제 후 장착
+                    if (equippedAtkItem.item != null)
+                    {
+                        _player.atk -= _player.item[equippedAtkItem.index].atk;
+                        _player.bonusAtk -= _player.item[equippedAtkItem.index].atk;
+
+                        _player.item[equippedAtkItem.index].EquippedItem(!_player.item[equippedAtkItem.index].equipped);
+                    }
+
+                    _player.atk += tryEquipItem.atk;
+                    _player.bonusAtk += tryEquipItem.atk;
+
+                    tryEquipItem.EquippedItem(!tryEquipItem.equipped);
                 }
+                else if (tryEquipItem.def > 0)
+                {
+                    // 장착된 방어구가 있는지
+                    var equippedDefItem = (from x in _player.item.Select((item, index) => new { item, index })
+                                           where x.item.equipped && x.item.def > 0 && x.item.atk == 0
+                                           select (x.index, x.item)).FirstOrDefault();
 
-                _player.atk += _player.item[tryEquipIndex].atk;
-                _player.bonusAtk += _player.item[tryEquipIndex].atk;
+                    // 기존 장착 해제 후 장착
+                    if (equippedDefItem.item != null)
+                    {
+                        _player.def -= _player.item[equippedDefItem.index].def;
+                        _player.bonusDef -= _player.item[equippedDefItem.index].def;
 
-                _player.item[tryEquipIndex].EquippedItem(!_player.item[tryEquipIndex].equipped);
+                        _player.item[equippedDefItem.index].EquippedItem(!_player.item[equippedDefItem.index].equipped);
+                    }
+
+                    _player.def += tryEquipItem.def;
+                    _player.bonusDef += tryEquipItem.def;
+
+                    tryEquipItem.EquippedItem(!tryEquipItem.equipped);
+                }
             }
-            else if (_player.item[tryEquipIndex].def > 0)
+            else
             {
-                // 장착된 방어구가 있는지
-                var equippedDefItem = (from x in _player.item.Select((item, index) => new { item, index })
-                                       where x.item.equipped && x.item.def > 0 && x.item.atk == 0
-                                       select (x.index, x.item)).FirstOrDefault();
-
-                // 기존 장착 해제 후 장착
-                if (equippedDefItem.item != null)
-                { 
-                    _player.def -= _player.item[equippedDefItem.index].def;
-                    _player.bonusDef -= _player.item[equippedDefItem.index].def;
-
-                    _player.item[equippedDefItem.index].EquippedItem(!_player.item[equippedDefItem.index].equipped);
-                }
-
-                _player.def += _player.item[tryEquipIndex].def;
-                _player.bonusDef += _player.item[tryEquipIndex].def;
-
-                _player.item[tryEquipIndex].EquippedItem(!_player.item[tryEquipIndex].equipped);
+                Console.WriteLine("장착 가능한 아이템이 아닙니다.");
             }
+            Thread.Sleep(1000);
         }
     }
 }
