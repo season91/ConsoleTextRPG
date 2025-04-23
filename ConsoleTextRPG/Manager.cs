@@ -35,9 +35,5 @@ namespace Manager
         }
         
         public static int DungeonFloor { get; set; } = 1;
-        public static void NextFloor()
-        {
-            DungeonFloor++;
-        }
     }
 }

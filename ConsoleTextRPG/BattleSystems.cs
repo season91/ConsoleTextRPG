@@ -54,6 +54,10 @@ namespace BattleSystem
             double variation = random.NextDouble() * 0.2 + 0.9;
             int dmg = (int)Math.Round(playerAtk * variation * damageMultiplier);
             monHP = Math.Max(monHP - dmg, 0); // HP가 0보다 작아지지 않도록 조정
+            if (monHP <= 0)
+            {
+                GameManager.quest.CheckCondition(Name);
+            }
             return dmg;
         }
     }
@@ -100,7 +104,7 @@ namespace BattleSystem
                     return;
                 if (sel == 1)
                 {
-                    GameManager.NextFloor();
+                    GameManager.DungeonFloor++;
                     if (GameManager.DungeonFloor == 10)
                     {
                         Console.WriteLine("던전 클리어!");
@@ -124,7 +128,7 @@ namespace BattleSystem
                 }
                 else if (sel == 0)
                 {
-                    GameManager.NextFloor();
+                    GameManager.DungeonFloor++;
                     Console.WriteLine("던전을 나갑니다...");
                     Thread.Sleep(1000);
                     Console.Clear();
