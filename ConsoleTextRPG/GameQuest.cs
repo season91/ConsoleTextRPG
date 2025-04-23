@@ -98,6 +98,7 @@ namespace GameQuest
 
         public void Save(int _index)
         {
+            _index++;
             GameManager.data.boolen.Add($"Quest{_index}accep", acceptance);
             GameManager.data.integer.Add($"Quest{_index}clear", totalClear);
 
@@ -110,15 +111,11 @@ namespace GameQuest
         public void Load(int _index)
         {
             acceptance = GameManager.data.boolen.GetData($"Quest{_index}accep");
+            totalClear = GameManager.data.integer.GetData($"Quest{_index}clear");
 
-            if (acceptance)
+            for (int i = 0; i < count.Length; i++)
             {
-                totalClear = GameManager.data.integer.GetData($"Quest{_index}clear");
-
-                for (int i = 0; i < count.Length; i++)
-                {
-                    count[i] = GameManager.data.integer.GetData($"Quest({_index})count({i})");
-                }
+                count[i] = GameManager.data.integer.GetData($"Quest({_index})count({i})");
             }
         }
     }
@@ -143,7 +140,7 @@ namespace GameQuest
         {
             for (int i = 0; i < data.Length; i++)
             {
-                if (data[i].acceptance) data[i].Save(i);
+                data[i].Save(i);
             }
         }
 
@@ -348,19 +345,8 @@ namespace GameQuest
 
                 if (_quest.itemName[i] == item.name)
                 {
-                    if (!GameManager.player.item.Contains(item))
-                    {
-                        GameManager.player.item.Add(item);
-                    }
-
-                    else
-                    {
-                        Mathod.ChangeFontColor(ColorCode.Red);
-                        Console.WriteLine("이미 소지 중인 아이템입니다.");
-                        Mathod.ChangeFontColor(ColorCode.None);
-                        Thread.Sleep(1000);
-                        return false;
-                    }
+                    if (!GameManager.player.item.Contains(item)) GameManager.player.item.Add(item);
+                    else return false;
                 }
 
                 if (_quest.itemName[i] == "골드")

@@ -130,6 +130,8 @@ namespace GameLogic
         public int gold;
         public int bonusAtk;
         public int bonusDef;
+        public int exp;
+        public int Mp;
 
         public void SetName(string _name) => name = _name;
 
