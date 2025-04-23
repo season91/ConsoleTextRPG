@@ -142,7 +142,7 @@ namespace BattleSystem
                 Console.ReadKey();
             }
         }
-        private static Monster[] SpawnMonsters(int Floor)
+        private static Monster[] SpawnMonsters(int Floor)//Floor에 따라 몬스터 생성
         {
             int monsterCount;
             if (Floor == 5 || Floor == 10)
