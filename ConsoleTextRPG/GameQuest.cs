@@ -47,6 +47,7 @@ namespace GameQuest
             for (int i = 0; i < conditionLength; i++)
             {
                 var countText = conditionText[i].Split(',');
+                var removeText = countText[1].Replace("\r", "");
                 condition[i] = countText[0];
 
                 if (!int.TryParse(countText[1], out maxCount[i]))
@@ -67,6 +68,7 @@ namespace GameQuest
             for (int i = 0; i < itemLength; i++)
             {
                 var countText = itemText[i].Split(',');
+                var removeText = countText[1].Replace("\r", "");
                 itemName[i] = countText[0];
 
                 if (!int.TryParse(countText[1], out rewardCount[i]))
