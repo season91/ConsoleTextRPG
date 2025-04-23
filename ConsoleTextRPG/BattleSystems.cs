@@ -48,11 +48,10 @@ namespace BattleSystem
 
         public int TakeDamage(int playerAtk, Job job)
         {
-            double damageMultiplier = job is Wizard ? 0.1 : 1.0;
             Random random = new Random();
             // 0.9 ~ 1.1 사이의 랜덤 배율 생성
             double variation = random.NextDouble() * 0.2 + 0.9;
-            int dmg = (int)Math.Round(playerAtk * variation * damageMultiplier);
+            int dmg = (int)Math.Round(playerAtk * variation);
             monHP = Math.Max(monHP - dmg, 0); // HP가 0보다 작아지지 않도록 조정
             if (monHP <= 0)
             {
@@ -192,42 +191,57 @@ namespace BattleSystem
                 Console.Clear();
                 if (sel == 1) // 공격 
                 {
-                    if (Attack(player.atk, player, monsters))
-                        return true;
+                    int idx = GameManager.SelectMonster(monsters);
+                    var target = monsters[idx];
+                    int dmg = player.Attack(target);
+
+                    if (GameManager.NextFloor(monsters))
+                        return false;
+                    return true;
                 }
                 else if (sel == 2) // 스킬
                 {
                     while (true)
                     {
                         Console.Clear();
-                        Console.WriteLine($"현재 마나량{player.Mp}");
+                        Console.WriteLine($"현재 마나량: {player.Mp}");
                         Console.WriteLine("사용할 스킬을 선택하세요.");
-                        Console.WriteLine("1. 알파 스트라이크");
-                        Console.WriteLine("2. 더블 스트라이크");// 스킬 구현 후 스킬 리스트 가져와야함
+                        Console.WriteLine($"1. {player.Skill1Name}");
+                        Console.WriteLine($"2. {player.Skill2Name}");
                         Console.WriteLine("0. 취소");
                         Console.Write(">> ");
                         if (!Mathod.CheckInput(out int skill))
                             continue;
+                        Console.Clear();
                         if (skill == 1)
                         {
-                            if (player.Mp < 10)
+                            if (player.Mp < player.Skill1Cost)
                             {
-                                Console.WriteLine("마나가 부족합니다.");
+                                Console.WriteLine("MP가 부족합니다.");
                                 Thread.Sleep(1000);
+                                Console.Clear();
                                 continue;
                             }
-                            Skills.AlphaStrike(player.atk, player, monsters);
+                            int idx = GameManager.SelectMonster(monsters);
+                            var target = monsters[idx];
+                            int dmg = player.Skill1(target);
+
+                            if (GameManager.NextFloor(monsters))
+                                return false;
                             return true;
                         }
                         else if (skill == 2)
                         {
-                            if (player.Mp < 15)
+                            if (player.Mp < player.Skill2Cost)
                             {
-                                Console.WriteLine("마나가 부족합니다.");
+                                Console.WriteLine("MP가 부족합니다.");
                                 Thread.Sleep(1000);
                                 continue;
                             }
-                            Skills.DoubleStrike(player.atk, player, monsters);
+                            player.Skill2(monsters);
+
+                            if (GameManager.NextFloor(monsters))
+                                return false;
                             return true;
                         }
                         else if (skill == 0)
@@ -240,9 +254,10 @@ namespace BattleSystem
                         else
                         {
                             Console.WriteLine("잘못된 입력입니다.");
+                            Thread.Sleep(500);
                         }
+                        continue;
                     }
-                    continue;
                 }
                 else if (sel == 0)
                 {
@@ -323,99 +338,5 @@ namespace BattleSystem
                 Mathod.ChangeFontColor(ColorCode.None);
             }
         }
-        private static bool Attack(int damage, Job player, Monster[] monsters)
-        {
-            int sel;
-            while (true)
-            {
-                Console.WriteLine("공격할 몬스터를 선택하세요.");
-                for (int i = 0; i < monsters.Length; i++)
-                {
-                    var m = monsters[i];
-                    if (m.IsAlive)
-                        Mathod.ChangeFontColor(ColorCode.Red);
-                    else
-                        Mathod.ChangeFontColor(ColorCode.DarkGray);
-
-                    string status = m.IsAlive ? $"{m.monHP}/{m.monMaxHp}" : "사망";
-                    Console.WriteLine($"{i + 1}. {m.Name} ({status})");
-
-                    Mathod.ChangeFontColor(ColorCode.None);
-                }
-                Console.Write(">> ");
-                if (!Mathod.CheckInput(out sel))
-                {
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Thread.Sleep(1000);
-                    Console.Clear();
-                    continue;
-                }
-                if (sel < 1 || sel > monsters.Length || !monsters[sel - 1].IsAlive)
-                {
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Thread.Sleep(1000);
-                    Console.Clear();
-                    continue;
-                }
-                break;
-            }
-            var target = monsters[sel - 1];
-            int dmg = target.TakeDamage(damage, player);
-            Mathod.ChangeFontColor(ColorCode.Green);
-            Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지!\n (남은 HP {target.monHP}/{target.monMaxHp})\n\n");
-            Mathod.ChangeFontColor(ColorCode.None);
-            Thread.Sleep(1000);
-            return true;
-
-        }
-        public class Skills
-        {
-            public static bool AlphaStrike(int damage, Job player, Monster[] monsters)
-            {
-                int Skillcost = 10; //스킬 사용 시 소모되는 MP
-                if (player.Mp < Skillcost)
-                {
-                    Console.WriteLine("MP가 부족합니다.");
-                    Thread.Sleep(1000);
-                    return false;
-                }
-                //공격력 * 2로 공격
-                Attack(player.atk * 2, player, monsters);
-                player.Mp -= Skillcost; //스킬 사용 시 MP 소모
-                return true;
-            }
-            public static bool DoubleStrike(int damage, Job player, Monster[] monsters)
-            {
-                int Skillcost = 15; //스킬 사용 시 소모되는 MP
-                if (player.Mp < Skillcost)
-                {
-                    Console.WriteLine("MP가 부족합니다.");
-                    Thread.Sleep(1000);
-                    return false;
-                }
-                //공격력 * 1.5로 2명의 적을 랜덤으로 공격
-                var Rdtarget = GameManager.rd;
-                int targetDamage = (int)(damage * 1.5);
-
-                for (int i = 0; i < 2; i++)
-                {
-                    int targetindex;
-                    do
-                    {
-                        targetindex = Rdtarget.Next(0, monsters.Length);
-                    }
-                    while (!monsters[targetindex].IsAlive);
-                    var target = monsters[targetindex];
-                    int dmg = target.TakeDamage(targetDamage, player);
-                    Mathod.ChangeFontColor(ColorCode.Red);
-                    Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
-                    Mathod.ChangeFontColor(ColorCode.None);
-                    Thread.Sleep(1000);
-                }
-                player.Mp -= Skillcost; //스킬 사용 시 MP 소모
-                return true;
-            }
-        }
-
     }
 }
