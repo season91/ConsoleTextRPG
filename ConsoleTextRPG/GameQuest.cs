@@ -259,7 +259,7 @@ namespace GameQuest
                         Console.Write(questText.Replace("\r", ""));
 
                         //처치 카운트
-                        Mathod.FontColorOnce($" ({quest.count[infoCount]} / {quest.maxCount[infoCount]})", ColorCode.Red);
+                        Mathod.FontColorOnce($" ({quest.count[infoCount]} / {quest.maxCount[infoCount]})\n", ColorCode.Red);
 
                         //다음 인덱스로
                         infoCount++;
