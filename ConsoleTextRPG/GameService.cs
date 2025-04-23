@@ -180,7 +180,8 @@ namespace GameService
                 Item addPotionItem = (from item in GameManager.ItemPooling
                                       where item.itemId == (int)ItemCode.Potion
                                       select item).First();
-
+                addPotionItem.count = 1;
+                addPotionItem.isGet = true;
                 GameManager.player.item.Add(addPotionItem);
             }
             else
@@ -192,12 +193,16 @@ namespace GameService
         {
             Item potionItem = (from item in GameManager.player.item
                                where item.itemId == (int)ItemCode.Potion
-                               select item).First();
+                               select item).FirstOrDefault();
 
-            potionItem.count--;
-
-            if (potionItem.count == 0)
+            if (potionItem != null)
             {
+                potionItem.count--;
+            }
+            
+            if (potionItem == null || potionItem.count == 0)
+            {
+                potionItem.isGet = false;
                 GameManager.player.item.Remove(potionItem);
             }
         }
@@ -298,6 +303,7 @@ namespace GameService
                 {
                     var loadData = JsonSerializer.Deserialize<GameData>(loadFile);
 
+                    Console.WriteLine(loadData.stringMap.data);
                     integer = loadData.integer;
                     floating = loadData.floating;
                     boolen = loadData.boolen;

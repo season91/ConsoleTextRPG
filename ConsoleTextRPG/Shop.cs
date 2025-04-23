@@ -125,6 +125,7 @@ namespace Shop
                 else if (_player.gold >= price)
                 {
                     _player.gold -= price;
+                    item.isGet = true;
                     _player.item.Add(item);
                     Console.WriteLine($"구매를 완료했습니다! 남은 Gold : {_player.gold} G");
                 }
@@ -210,7 +211,7 @@ namespace Shop
                 {
                     _playerItem.EquippedItem(!_playerItem.equipped);
                 }
-
+                _playerItem.isGet = false;
                 _player.item.Remove(_playerItem);
             } 
             else
