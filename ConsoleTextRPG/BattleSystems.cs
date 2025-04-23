@@ -84,13 +84,13 @@ namespace BattleSystem
             {
                 Console.WriteLine("[전투 결과]\n");
                 Console.WriteLine("전투에서 승리했습니다!");
-                Console.WriteLine($"{GameManager.DungeonFloor}층 던전에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
+                Console.WriteLine($"던전 {GameManager.DungeonFloor}층에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
 
-                Console.WriteLine("[전투 보상]");
+                Mathod.FontColorOnce("[전투 보상]\n", ColorCode.Magenta);
                 //레벨업 시 레벨 증가 출력
                 int xpGain = monsters.Sum(m => m.monLevel);
                 player.exp += xpGain;
-                Console.WriteLine($"획득 경험치: {xpGain}");
+                Console.WriteLine($"\n획득 경험치: {xpGain}");
                 //Console.WriteLine("\n[획득 아이템]");
                 //획득 아이템 출력
                 int goldGain = monsters.Sum(m => m.monGold);
@@ -98,7 +98,7 @@ namespace BattleSystem
                 Console.WriteLine($"획득 골드: {goldGain}");
                 Console.WriteLine($"현재 골드: {player.gold}");
 
-                Console.WriteLine("1. 다음층으로");
+                Console.WriteLine("\n1. 다음층으로");
                 Console.WriteLine("0. 던전 나가기");
                 Console.Write("\n>> ");
                 if (!Mathod.CheckInput(out int sel))
@@ -123,7 +123,7 @@ namespace BattleSystem
                         Console.WriteLine($"던전 {GameManager.DungeonFloor}층으로 이동합니다...");
                         Thread.Sleep(1000);
                         Console.Clear();
-                        BattleSystems.Start();
+                        Start();
                     }
 
                 }
@@ -319,7 +319,7 @@ namespace BattleSystem
                 var m = monsters[i];
                 if (m.IsAlive)
                 {
-                    Console.WriteLine($"{i + 1} ({m.MonsterType})");
+                    Console.WriteLine($"Lv.{m.monLevel} ({m.MonsterType})");
                     Console.WriteLine($"체력: {m.monHP}/{m.monMaxHp}");
                     Console.WriteLine($"공격력: {m.monAtk}\n");
                 }
