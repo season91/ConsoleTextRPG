@@ -4,25 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GameLogic;
+using Manager;
 
 namespace Status
 {
     
         public static class StatusScene
         {
-            public static void ShowStatus(Job player)
+            public static void ShowStatus()
             {
                 while (true)
                 {
                     Console.Clear();
                     Console.WriteLine("[상태 보기]");
                     Console.WriteLine("캐릭터의 정보가 표시됩니다.\n");
-                    Console.WriteLine($"Lv. {player.level}");
-                    Console.WriteLine($"{player.name}({player.chad})");
-                    Console.WriteLine($"공격력 : {player.atk}" + (player.bonusAtk > 0 ? $" (+{player.bonusAtk})" : ""));
-                    Console.WriteLine($"방어력 : {player.def}" + (player.bonusDef > 0 ? $" (+{player.bonusDef})" : ""));
-                    Console.WriteLine($"체  력 : {player.health}");
-                    Console.WriteLine($"Gold : {player.gold} G");
+                    Console.WriteLine($"Lv. {GameManager.player.level}");
+                    Console.WriteLine($"{GameManager.player.name}({GameManager.player.chad})");
+                    Console.WriteLine($"공격력 : {GameManager.player.atk}" + (GameManager.player.bonusAtk > 0 ? $" (+{GameManager.player.bonusAtk})" : ""));
+                    Console.WriteLine($"방어력 : {GameManager.player.def}" + (GameManager.player.bonusDef > 0 ? $" (+{GameManager.player.bonusDef})" : ""));
+                    Console.WriteLine($"체  력 : {GameManager.player.health}");
+                    Console.WriteLine($"Gold : {GameManager.player.gold} G");
                     Console.WriteLine("0. 나가기");
                     Console.WriteLine("\n원하시는 행동을 입력해주세요.");
                     Console.WriteLine(">>");

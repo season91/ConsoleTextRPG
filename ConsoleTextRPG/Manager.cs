@@ -17,17 +17,19 @@ namespace Manager
         {
             data.Load();
 
-            string playerName = data.stringMap.GetData("PlayerName");
-            int jobID = Mathod.JobToIndex(playerName);
+            var chadName = data.stringMap.GetData("Chad");
+            int jobID = Mathod.JobToIndex(chadName);
 
             player = Mathod.JobToClass(jobID);
             player.LoadData();
+            quest.Load(true);
         }
 
         public static void SpawnPlayer(string _playerName, Job _playerJob)
         {
             player = _playerJob;
             player.SetName(_playerName);
+            quest.Load(false);
         }
     }
 }

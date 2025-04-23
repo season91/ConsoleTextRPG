@@ -1,0 +1,42 @@
+﻿using GameService;
+using Manager;
+
+namespace SaveWindow
+{
+    public class SaveWindows
+    {
+        public static void Show()
+        {
+            var input = 0;
+
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("게임을 저장하시겠습니까?\n\n");
+
+                Mathod.ChangeFontColor(ColorCode.Blue);
+                Console.WriteLine("1. 네");
+                Mathod.ChangeFontColor(ColorCode.Red);
+                Console.WriteLine("2. 아니오");
+                Mathod.ChangeFontColor(ColorCode.None);
+
+                if (Mathod.CheckInput(out input))
+                {
+                    if (input == 1)
+                    {
+                        GameManager.player.SaveData();
+                        GameManager.data.Save();
+
+                        Console.Clear();
+                        Mathod.ChangeFontColor(ColorCode.Green);
+                        Console.Write("저장이 완료되었습니다.");
+                        Mathod.ChangeFontColor(ColorCode.None);
+                        Thread.Sleep(1000);
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
+}

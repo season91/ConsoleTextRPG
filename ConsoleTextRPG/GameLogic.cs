@@ -1,15 +1,17 @@
-﻿using Manager;
+using GameService;
+using Manager;
+
 
 namespace GameLogic
 {
     public class Item
     {
-        public string name { get; private init; }
-        public string itemInfo { get; private init; } //해당 아이템 설명 글
-        public int atk { get; private init; }
-        public int def { get; private init; }
-        public int health { get; private init; }
-        public int gold { get; private init; } //해당 아이템 판매 가격 or 구매 가격
+        public string name { get; private set; }
+        public string itemInfo { get; private set; } //해당 아이템 설명 글
+        public int atk { get; private set; }
+        public int def { get; private set; }
+        public int health { get; private set; }
+        public int gold { get; private set; } //해당 아이템 판매 가격 or 구매 가격
         public bool equipped { get; private set; } //해당 아이템 장착 여부
 
 
@@ -40,7 +42,6 @@ namespace GameLogic
                     case "체력":
                         health = _value;
                         break;
-
                     default:
                         Console.Write($"({_ability})라는 Ability는 존재하지 않음");
                         break;
@@ -64,7 +65,7 @@ namespace GameLogic
         {
             bool result = false;
 
-            foreach(Item playerItem in _player.item)
+            foreach (Item playerItem in _player.item)
             {
                 if (playerItem.name == _item.name)
                 {
@@ -80,10 +81,22 @@ namespace GameLogic
             GameManager.data.stringMap.Add($"{name}itemInfo", itemInfo);
             GameManager.data.integer.Add($"{name}atk", atk);
             GameManager.data.integer.Add($"{name}def", def);
-            GameManager.data.integer.Add($"{name}health", health);
+            GameManager.data.integer.Add($"{name}hp", health);
             GameManager.data.integer.Add($"{name}gold", gold);
             GameManager.data.boolen.Add($"{name}equipped", equipped);
         }
+
+        public void LoadData()
+        {
+            name = GameManager.data.stringMap.GetData($"{name}name");
+            itemInfo = GameManager.data.stringMap.GetData($"{name}itemInfo");
+            atk = GameManager.data.integer.GetData($"{name}atk");
+            def = GameManager.data.integer.GetData($"{name}def");
+            health = GameManager.data.integer.GetData($"{name}hp");
+            gold = GameManager.data.integer.GetData($"{name}gold");
+            equipped = GameManager.data.boolen.GetData($"{name}equipped");
+        }
+
     }
 
     public class Job
@@ -107,15 +120,15 @@ namespace GameLogic
         public int gold;
         public int bonusAtk;
         public int bonusDef;
-        public int Mp;
-        public int exp;
 
         public void SetName(string _name) => name = _name;
 
         public void SaveData()
         {
-            GameManager.data.stringMap.Add("PlayerName", name);
+            var tempChad = Mathod.ConvertJobLenguage(chad, false); 
+            GameManager.data.stringMap.Add("Chad", tempChad);
 
+            GameManager.data.stringMap.Add("PlayerName", name);
             GameManager.data.integer.Add($"{name}hp", health);
             GameManager.data.integer.Add($"{name}atk", atk);
             GameManager.data.integer.Add($"{name}def", def);
@@ -123,8 +136,6 @@ namespace GameLogic
             GameManager.data.integer.Add($"{name}level", level);
             GameManager.data.integer.Add($"{name}bonusAtk", bonusAtk);
             GameManager.data.integer.Add($"{name}bonusDef", bonusDef);
-            GameManager.data.integer.Add($"{name}Mp", Mp);
-            GameManager.data.integer.Add($"{name}exp", exp);
 
             // 캐릭터 인벤토리 아이템
             foreach (var playerItem in item)
@@ -135,8 +146,10 @@ namespace GameLogic
 
         public void LoadData()
         {
-            name = GameManager.data.stringMap.GetData("PlayerName");
+            var tempChad = GameManager.data.stringMap.GetData("Chad");
+            chad = Mathod.ConvertJobLenguage(tempChad, true);
 
+            name = GameManager.data.stringMap.GetData("PlayerName");
             health = GameManager.data.integer.GetData($"{name}hp");
             atk = GameManager.data.integer.GetData($"{name}atk");
             def = GameManager.data.integer.GetData($"{name}def");
@@ -144,9 +157,12 @@ namespace GameLogic
             level = GameManager.data.integer.GetData($"{name}level");
             bonusAtk = GameManager.data.integer.GetData($"{name}bonusAtk");
             bonusDef = GameManager.data.integer.GetData($"{name}bonusDef");
-            Mp = GameManager.data.integer.GetData($"{name}Mp");
-            exp = GameManager.data.integer.GetData($"{name}exp");
 
+            // 캐릭터 인벤토리 아이템
+            foreach (var playerItem in item)
+            {
+                playerItem.LoadData();
+            }
         }
     }
 }
