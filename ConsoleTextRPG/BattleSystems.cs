@@ -118,6 +118,10 @@ namespace BattleSystem
                         Console.WriteLine("던전 클리어!");
                         Console.WriteLine("보스를 처치했습니다!");
                         Console.WriteLine("무한모드로 진입합니다.");
+                        Thread.Sleep(500);
+                        Mathod.FontColorOnce("무한모드는 난이도와 보상이 대폭 증가합니다.", ColorCode.Red);
+                        Console.WriteLine("\n\n계속하려면 아무키나 누르세요.");
+
 
                         Console.ReadKey();
                         Start();
@@ -186,7 +190,7 @@ namespace BattleSystem
                     monsters[i].monMaxHp = monsters[i].monMaxHp*(1 + Floor / 10);
                     monsters[i].monHP = monsters[i].monMaxHp;
                     monsters[i].monGold = monsters[i].monGold * (1 + Floor / 10);
-                    monsters[i].monLevel = monsters[i].monLevel + Floor / 10;
+                    monsters[i].monLevel = monsters[i].monLevel + Floor;
                     monsters[i].monAtk = monsters[i].monAtk * (1 + Floor / 20);
                 }
             }
