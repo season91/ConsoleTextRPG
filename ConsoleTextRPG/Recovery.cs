@@ -9,20 +9,31 @@ namespace Recovery
 
         public static void Show()
         {
-            var _player = GameManager.player;
             int input = 0;
-            Item HPotion = (from item in GameManager.ItemPooling
-                            where item.itemId == "32001"
-                            select item).First();
             while (true)
             {
+                Item potion = (from item in GameManager.player.item
+                               where item.itemId == (int)ItemCode.Potion
+                               select item).FirstOrDefault();
+
+                int potionCount = 0;
+                if (potion != null)
+                {
+                    potionCount = potion.count;
+                }
+
                 Console.Clear();
                 Mathod.ChangeFontColor(ColorCode.Yellow);
                 Console.WriteLine("회복");
                 Mathod.ChangeFontColor(ColorCode.None);
-                Console.WriteLine($"포션을 사용하면 체력을 30 회복 할 수 있습니다. (남은 포션 : {HPotion.count} )");
-                Console.WriteLine("\n1. 사용하기");
-                Console.WriteLine("0. 나가기");
+                Console.WriteLine($"포션을 사용하면 체력을 30 회복 할 수 있습니다. (남은 포션 : {potionCount} )");
+                Console.WriteLine($"현재 체력 : {GameManager.player.health}");
+                if (potionCount > 0)
+                {
+                    Console.WriteLine("\n1. 사용하기");
+                }
+                
+                Console.WriteLine("\n0. 나가기");
                 Console.WriteLine("\n원하시는 행동을 입력해주세요.");
                 Console.Write(">>");
 
@@ -48,19 +59,24 @@ namespace Recovery
         // 회복 아이템 사용
         public static void TryUseRecoveryItem()
         {
-            var playerHealth = GameManager.player.health;
+            var player = GameManager.player;
             
-            if(playerHealth < 100)
+            if(player.health < 100)
             {
-                if (playerHealth > 70)
+                if (player.health > 70)
                 {
-                    playerHealth = 100;
+                    player.health = 100;
                 }
                 else
                 {
-                    playerHealth += 30;
+                    player.health += 30;
                 }
-                Console.WriteLine($"체력을 30 회복 했습니다. 현재 체력 {playerHealth}");
+                Item potionItem = (from item in GameManager.player.item
+                                   where item.itemId == (int)ItemCode.Potion
+                                   select item).FirstOrDefault();
+
+                Mathod.PotionItemMinus();
+                Console.WriteLine($"체력을 30 회복 했습니다. 현재 체력 {player.health}");
             } else
             {
                 Console.WriteLine("체력이 이미 100 입니다.");
