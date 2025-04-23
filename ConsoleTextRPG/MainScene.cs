@@ -38,7 +38,7 @@ public static class MainScenes
             Console.WriteLine("1. 상태 보기");
             Console.WriteLine("2. 인벤토리");
             Console.WriteLine("3. 상점");
-            Console.WriteLine($"4. 전투 시작 현재 ({Dungeon.Floor}층)");
+            Console.WriteLine($"4. 전투 시작 현재 ({GameManager.DungeonFloor}층)");
             Console.WriteLine("5. 회복 아이템");
             Console.WriteLine("6. 퀘스트");
             Console.WriteLine("7. 저장하기");
