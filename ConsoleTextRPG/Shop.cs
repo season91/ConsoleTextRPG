@@ -82,7 +82,8 @@ namespace Shop
                 {
                     var item = gameItem[i];
                     var isBuy = item.IsSameItem(_player, item) ? "구매 완료" : $"{item.gold} G";
-                    Console.WriteLine($"- {i + 1}. {item.name} | {item.Ability()} | {item.itemInfo} | {isBuy}");
+                    Console.Write("-");
+                    Mathod.MenuFont($"{i + 1}", $"{item.name} | {item.Ability()} | {item.itemInfo} | {isBuy}\n", ColorCode.None);
                 }
 
                 Console.WriteLine("\n0. 나가기");
@@ -125,6 +126,7 @@ namespace Shop
                 else if (_player.gold >= price)
                 {
                     _player.gold -= price;
+                    item.isGet = true;
                     _player.item.Add(item);
                     Console.WriteLine($"구매를 완료했습니다! 남은 Gold : {_player.gold} G");
                 }
@@ -170,7 +172,8 @@ namespace Shop
                 for (int i = 0; i < _player.item.Count; i++)
                 {
                     var playerItem = _player.item[i];
-                    Console.WriteLine($"- {i + 1}. {playerItem.name} | {playerItem.Ability()} | {playerItem.itemInfo}");
+                    Console.Write("-");
+                    Mathod.MenuFont($"{i + 1}", $"{playerItem.name} | {playerItem.Ability()} | {playerItem.itemInfo})\n", ColorCode.None);
                 }
 
                 Console.WriteLine("\n0. 나가기");
@@ -210,7 +213,7 @@ namespace Shop
                 {
                     _playerItem.EquippedItem(!_playerItem.equipped);
                 }
-
+                _playerItem.isGet = false;
                 _player.item.Remove(_playerItem);
             } 
             else

@@ -36,7 +36,7 @@ namespace Manager
             Item potionItem = (from item in ItemPooling
                             where item.itemId == (int)ItemCode.Potion
                             select item).First();
-
+            potionItem.isGet = true;
             potionItem.count = 3;
             player.item.Add(potionItem);
         }
