@@ -177,7 +177,7 @@ namespace GameService
 
             if (potionItem == null)
             {
-                GameLogic.Item addPotionItem = (from item in GameManager.ItemPooling
+                Item addPotionItem = (from item in GameManager.ItemPooling
                                       where item.itemId == (int)ItemCode.Potion
                                       select item).First();
 

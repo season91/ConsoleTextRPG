@@ -84,8 +84,8 @@ namespace GameQuest
             {
                 if (condition[i] == _objectName)
                 {
-                    if (count[i] < maxCount[i]) count[i]++;
-                    else if (count[i] == maxCount[i]) totalClear++;
+                    count[i]++;
+                    if (count[i] == maxCount[i]) totalClear++;
                 }
             }
         }
@@ -133,7 +133,7 @@ namespace GameQuest
             //event로 해야하지만 일단 그냥..
             for (int i = 0; i < data.Length; i++)
             {
-                if (data[i].acceptance && data[i].totalClear < data[i].maxCount.Length)
+                if (data[i].acceptance)
                 {
                     data[i].CheckCondition(_objectName);
                 }

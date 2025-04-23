@@ -66,7 +66,7 @@ namespace Shop
         {
             var _player = GameManager.player;
             int input = 0;
-            GameLogic.Item[] gameItem = GameManager.ItemPooling;
+            Item[] gameItem = GameManager.ItemPooling;
             while (true)
             {
                 Console.Clear();

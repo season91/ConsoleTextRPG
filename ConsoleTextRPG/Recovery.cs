@@ -6,7 +6,6 @@ namespace Recovery
 {
     public class RecoveryItem
     {
-
         public static void Show()
         {
             int input = 0;
