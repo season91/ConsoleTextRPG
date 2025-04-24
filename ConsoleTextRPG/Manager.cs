@@ -80,38 +80,5 @@ namespace Manager
                 }
             }
         }
-
-        public static bool NextFloor(Monster[] monsters)
-        {
-            if (monsters.Any(m => m.IsAlive))
-                return false;
-
-            Console.Clear();
-            DungeonFloor++;
-
-            Console.WriteLine("모든 몬스터를 처치했습니다!\n");
-            Console.WriteLine("1. 다음층으로 이동");
-            Console.WriteLine("0. 던전 나가기");
-            Console.Write("\n>> ");
-
-            if (Mathod.CheckInput(out int sel))
-            if (sel == 1)
-            {
-                Console.WriteLine($"\n던전 {DungeonFloor}층으로 이동합니다...");
-                Thread.Sleep(1000);
-                Console.Clear();
-                BattleSystems.Start();
-            }
-            else if (sel == 0)
-            {
-                Console.WriteLine("\n던전을 나갑니다...");
-                Thread.Sleep(1000);
-                Console.Clear();
-            }
-            else
-            {  Console.WriteLine("잘못된 입력입니다."); }
-
-                return true;
-        }
     }
 }
