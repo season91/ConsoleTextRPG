@@ -95,6 +95,8 @@ namespace BattleSystem
                 //획득 아이템 출력
                 int goldGain = monsters.Sum(m => m.monGold);
                 player.gold += goldGain;
+                player.Mp += 10;
+                Console.WriteLine("마나가 10만큼 회복됩니다.");
                 Console.WriteLine($"획득 골드: {goldGain}");
                 Console.WriteLine($"현재 골드: {player.gold}");
 
@@ -308,18 +310,27 @@ namespace BattleSystem
                     int dmg = m.monAtk - player.def / 2;
                     if (dmg < 0)
                         dmg = 0; // 방어력으로 인해 데미지가 0 이하가 되지 않도록 조정
-                    Mathod.ChangeFontColor(ColorCode.Red);
-                    Console.WriteLine($"\n{m.MonsterType}의 공격");
-                    Console.WriteLine($"→ {dmg} 데미지!");
-                    player.health -= dmg;//방어력의 절반만큼 데미지 감소
-                    Mathod.ChangeFontColor(ColorCode.Green);
-                    Console.WriteLine($"남은 체력: {player.health}");
-                    Console.WriteLine("");
-                    Thread.Sleep(1000);
-                    Mathod.ChangeFontColor(ColorCode.None);
-                    if (player.health <= 0)
-                        return; // 플레이어가 사망하면 전투 종료
-
+                    if (player.dodgeRate > GameManager.rd.NextDouble())
+                    {
+                        Mathod.ChangeFontColor(ColorCode.Green);
+                        Console.WriteLine($"{m.MonsterType}의 공격을 회피했습니다!");
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+                    else
+                    {
+                        Mathod.ChangeFontColor(ColorCode.Red);
+                        Console.WriteLine($"\n{m.MonsterType}의 공격");
+                        Console.WriteLine($"→ {dmg} 데미지!");
+                        player.health -= dmg;//방어력의 절반만큼 데미지 감소
+                        Mathod.ChangeFontColor(ColorCode.Green);
+                        Console.WriteLine($"남은 체력: {player.health}");
+                        Console.WriteLine("");
+                        Thread.Sleep(1000);
+                        Mathod.ChangeFontColor(ColorCode.None);
+                        if (player.health <= 0)
+                            return; // 플레이어가 사망하면 전투 종료
+                    }
                 }
             }
             Console.WriteLine("적 턴 종료");

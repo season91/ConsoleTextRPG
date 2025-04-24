@@ -19,7 +19,10 @@ namespace GameCharacter
             health = 100;
             gold = 1500;
             exp = 0;
-            
+            critRate = 0.1;
+            critDamage = 1.5;
+            dodgeRate = 0.1;
+
         }
         public override int Skill1Cost => 10;
         public override int Skill2Cost => 15;
@@ -28,11 +31,30 @@ namespace GameCharacter
         public override int Attack(Monster target)
         {
             int dmg = target.TakeDamage(atk, this);
-            Mathod.ChangeFontColor(ColorCode.Red);
-            Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
-            Mathod.ChangeFontColor(ColorCode.None);
-            Thread.Sleep(1000);
+            if (dodgeRate > GameManager.rd.NextDouble())
+            {
+                Mathod.ChangeFontColor(ColorCode.Blue);
+                Console.WriteLine($"→ {target.Name}이 공격을 회피했습니다!");
+                Mathod.ChangeFontColor(ColorCode.None);
+                Thread.Sleep(1000);
+                return 0;
+            }
+            else if (critRate > GameManager.rd.NextDouble())
+            {
+                dmg = (int)(dmg * critDamage);
+                Mathod.ChangeFontColor(ColorCode.Yellow);
+                Console.WriteLine($"→ {target.Name}에게 ({dmg})크리티컬 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
+                Mathod.ChangeFontColor(ColorCode.None);
+                Thread.Sleep(1000);
+            }
+            else
+            {
+                Mathod.ChangeFontColor(ColorCode.Red);
+                Console.WriteLine($"→ {target.Name}에게 {dmg} 데미지! (남은 HP {target.monHP}/{target.monMaxHp})");
+                Mathod.ChangeFontColor(ColorCode.None);
+                Thread.Sleep(1000);
 
+            }
             return dmg;
         }
         public override int Skill1(Monster target)
@@ -80,6 +102,9 @@ namespace GameCharacter
             health = 100;
             gold = 1500;
             exp = 0;
+            critRate = 0.15;
+            critDamage = 1.6;
+            dodgeRate = 0.1;
         }
         public override int Skill1Cost => 10;
         public override int Skill2Cost => 15;

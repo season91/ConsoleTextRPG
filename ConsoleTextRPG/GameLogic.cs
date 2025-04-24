@@ -127,6 +127,9 @@ namespace GameLogic
         public int bonusDef;
         public int exp;
         public int Mp;
+        public double critRate;
+        public double critDamage;
+        public double dodgeRate;
 
         public void SetName(string _name) => name = _name;
 
