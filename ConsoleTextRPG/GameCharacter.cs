@@ -3,7 +3,7 @@ using BattleSystem;
 using GameLogic;
 using GameService;
 using Manager;
-using static System.Net.Mime.MediaTypeNames;
+
 
 namespace GameCharacter
 {
@@ -22,12 +22,12 @@ namespace GameCharacter
             critRate = 0.1;
             critDamage = 1.5;
             dodgeRate = 0.1;
-
+            Skill1Cost = 10;
+            Skill2Cost = 15;
+            Skill1Name = "알파 스트라이크";
+            Skill2Name = "더블 스트라이크";
         }
-        public override int Skill1Cost => 10;
-        public override int Skill2Cost => 15;
-        public override string Skill1Name => "알파 스트라이크";
-        public override string Skill2Name => "더블 스트라이크";
+
         public override int Attack(Monster target)
         {
             int dmg = target.TakeDamage(atk, this);
@@ -105,11 +105,12 @@ namespace GameCharacter
             critRate = 0.15;
             critDamage = 1.6;
             dodgeRate = 0.1;
+            Skill1Cost = 10;
+            Skill2Cost = 15;
+            Skill1Name = "파이어볼";
+            Skill2Name = "블리자드";
         }
-        public override int Skill1Cost => 10;
-        public override int Skill2Cost => 15;
-        public override string Skill1Name => "파이어볼";
-        public override string Skill2Name => "블리자드";
+
         public override int Attack(Monster target)
         {
             int dmg = target.TakeDamage(atk/10, this);
