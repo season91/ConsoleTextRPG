@@ -102,6 +102,17 @@ namespace BattleSystem
             {
                 Console.WriteLine("[전투 결과]\n");
                 Console.WriteLine("전투에서 승리했습니다!");
+                if (player.chad == "광전사")
+                {
+                    player.health += 5 * monsters.Length;
+                    Mathod.FontColorOnce($"체력이 {5 * monsters.Length}만큼 회복됩니다.\n", ColorCode.Red);
+                }
+                else
+                {
+                    player.Mp += 10;
+                    Mathod.FontColorOnce("마나가 10만큼 회복됩니다.\n", ColorCode.Blue);
+                }
+
                 Mathod.FontColorOnce($"현재 체력 {player.health}\n", ColorCode.Green);
                 Console.WriteLine($"던전 {GameManager.player.floor}층에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
 
@@ -114,15 +125,6 @@ namespace BattleSystem
                 //획득 아이템 출력
                 int goldGain = monsters.Sum(m => m.monGold);
                 player.gold += goldGain;
-                if (player.chad == "광전사")
-                { player.health += 5 * monsters.Length;
-                    Mathod.FontColorOnce($"체력이 {5 * monsters.Length}만큼 회복됩니다.", ColorCode.Red);
-                }
-                else
-                {
-                    player.Mp += 10;
-                    Mathod.FontColorOnce("마나가 10만큼 회복됩니다.", ColorCode.Blue);
-                }
                 Console.WriteLine($"획득 골드: {goldGain}");
                 Console.WriteLine($"현재 골드: {player.gold}");
 
