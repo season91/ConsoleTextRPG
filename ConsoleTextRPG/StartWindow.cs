@@ -109,6 +109,8 @@ namespace StartScene
         public static void ShowStartText()
         {
             Console.Clear();
+            Mathod.PrintTextFile("Welcome_Window");
+            Console.WriteLine();
             Console.Write("환영합니다, ");
 
             Mathod.FontColorOnce($"{GameManager.player.name}", ColorCode.Blue);
