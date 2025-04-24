@@ -42,7 +42,7 @@ public static class MainScenes
             Mathod.MenuFont("4", "전투 시작", ColorCode.Red);
 
             Mathod.ChangeFontColor(ColorCode.DarkGray);
-            Console.WriteLine($" 현재 ({GameManager.DungeonFloor}층)");
+            Console.WriteLine($" 현재 ({GameManager.player.floor}층)");
 
             Mathod.MenuFont("5", "회복 아이템\n", ColorCode.Yellow);
             Mathod.MenuFont("6", "퀘스트\n");
