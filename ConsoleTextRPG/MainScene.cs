@@ -78,7 +78,8 @@ public static class MainScenes
 
                     //회복아이템
                     case 5:
-                        RecoveryItem.Show();
+                        GameManager.quest.CheckCondition("고블린");
+                        //RecoveryItem.Show();
                         break;
 
                     //퀘스트

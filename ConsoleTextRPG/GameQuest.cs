@@ -263,6 +263,9 @@ namespace GameQuest
 
                 //퀘스트 내용
                 var infoCount = 0;
+                var clearCount = 0;
+                var maxCount = 0;
+                var textCount = 0;
 
                 for (int i = 1; i < questScreen.Length; i++)
                 {
@@ -273,7 +276,11 @@ namespace GameQuest
                         Console.Write(questText.Replace("\r", ""));
 
                         //처치 카운트
-                        Mathod.FontColorOnce($" ({quest.count[infoCount]} / {quest.maxCount[infoCount]})\n", ColorCode.Red);
+                        clearCount = quest.count[infoCount];
+                        maxCount = quest.maxCount[infoCount];
+                        textCount = clearCount > maxCount ? maxCount : clearCount;
+
+                        Mathod.FontColorOnce($" ({textCount} / {maxCount})\n", ColorCode.Red);
 
                         //다음 인덱스로
                         infoCount++;
