@@ -51,33 +51,33 @@ namespace BattleSystem
 
         public int TakeDamage(int playerAtk, Job job)
         {
-            var rnd = GameManager.rd;            // 0.9 ~ 1.1 사이의 랜덤 배율 생성
-            double variation = rnd.NextDouble() * 0.2 + 0.9;
-            int dmg = (int)Math.Round(playerAtk * variation);
+            var rnd = GameManager.rd;
+            double variation = rnd.NextDouble() * 0.2 + 0.9;  // 0.9 ~ 1.1 사이의 데미지 랜덤 배율 생성
+            int dmg = (int)Math.Round(playerAtk * variation);  // 데미지 변동률 적용
             bool isCritical = rnd.NextDouble() < job.critRate; // 크리티컬 확률 체크
 
-            if (rnd.NextDouble()<job.dodgeRate)
+            if (rnd.NextDouble()<job.dodgeRate) // 회피일 때
             {
                 Mathod.FontColorOnce($"→ {Name}이(가) 공격을 회피했습니다!\n", ColorCode.Cyan);
                 Thread.Sleep(1000);
                 return 0;
             }
-            else if (isCritical)
+            else if (isCritical) // 크리티컬일 경우
             {
                 dmg = (int)(dmg * job.critDamage);
                 Mathod.FontColorOnce($"→ {Name}에게 ({dmg}) 크리티컬 데미지!", ColorCode.Yellow);
             }
-            else
+            else // 일반 데미지
             {
                 Mathod.FontColorOnce($"→ {Name}에게 {dmg} 데미지!" , ColorCode.Red);
             }
-            monHP = Math.Max(monHP - dmg, 0);
+            monHP = Math.Max(monHP - dmg, 0); // 몬스터 체력 감소
             Mathod.FontColorOnce($"남은 체력: {monHP}/{monMaxHp}\n", ColorCode.Red);
             Thread.Sleep(1000);
 
             if (monHP == 0)
-                GameManager.quest.CheckCondition(Name);
-            return dmg;
+                GameManager.quest.CheckCondition(Name); // 퀘스트 조건 체크
+            return dmg; // 데미지 반환
         }
     }
 
@@ -102,6 +102,7 @@ namespace BattleSystem
             {
                 Console.WriteLine("[전투 결과]\n");
                 Console.WriteLine("전투에서 승리했습니다!");
+                Mathod.FontColorOnce($"현재 체력 {player.health}\n", ColorCode.Green);
                 Console.WriteLine($"던전 {GameManager.player.floor}층에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
 
                 Mathod.FontColorOnce("[전투 보상]\n", ColorCode.Magenta);
@@ -114,10 +115,14 @@ namespace BattleSystem
                 int goldGain = monsters.Sum(m => m.monGold);
                 player.gold += goldGain;
                 if (player.chad == "광전사")
-                    player.health += 5 * monsters.Length;
+                { player.health += 5 * monsters.Length;
+                    Mathod.FontColorOnce($"체력이 {5 * monsters.Length}만큼 회복됩니다.", ColorCode.Red);
+                }
                 else
+                {
                     player.Mp += 10;
-                Console.WriteLine("마나가 10만큼 회복됩니다.");
+                    Mathod.FontColorOnce("마나가 10만큼 회복됩니다.", ColorCode.Blue);
+                }
                 Console.WriteLine($"획득 골드: {goldGain}");
                 Console.WriteLine($"현재 골드: {player.gold}");
 
@@ -138,7 +143,7 @@ namespace BattleSystem
                     }
                     else if (GameManager.player.floor == 11)
                     {
-                        Console.WriteLine("던전 클리어!");
+                        Mathod.FontColorOnce("던전 클리어!",ColorCode.Magenta);
                         Console.WriteLine("보스를 처치했습니다!");
                         Console.WriteLine("무한모드로 진입합니다.");
                         Thread.Sleep(500);
@@ -227,7 +232,7 @@ namespace BattleSystem
                 RenderStatus(player, monsters);
                 Console.Write("\n\n1. 공격 ");
                 Console.WriteLine("2. 스킬 ");
-                Console.WriteLine("0. 던전 나가기");
+                Console.WriteLine("0. 던전 나가기 (체력이 현재체력의 1/5만큼 감소합니다.)");
                 Console.WriteLine("\n 원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
                 if (!Mathod.CheckInput(out int sel))
@@ -236,9 +241,9 @@ namespace BattleSystem
                 Console.Clear();
                 if (sel == 1) // 공격 
                 {
-                    int idx = GameManager.SelectMonster(monsters);
-                    var target = monsters[idx];
-                    int dmg = player.Attack(target);
+                    int idx = GameManager.SelectMonster(monsters);// 공격할 몬스터 선택
+                    var target = monsters[idx]; // 선택한 몬스터
+                    int dmg = player.Attack(target); // 몬스터에게 공격
 
                     return true;
                 }
@@ -272,14 +277,14 @@ namespace BattleSystem
                         }
                         else if (skill == 2)
                         {
-                            if (player.Mp < player.Skill2Cost || player.health < player.Skill2HpCost)
+                            if (player.Mp < player.Skill2Cost || player.health < player.Skill2HpCost) 
                             {
-                                Console.WriteLine("MP 또는 체력이 부족합니다.");
+                                Mathod.FontColorOnce("MP 또는 체력이 부족합니다.\n",ColorCode.Red);
                                 Thread.Sleep(1000);
                                 continue;
                             }
-                            player.Skill2(monsters);
-                            return true;
+                            player.Skill2(monsters); // 스킬 사용
+                            return true; // 스킬 사용 후 턴 종료
                         }
                         else if (skill == 0)
                         {
@@ -298,9 +303,10 @@ namespace BattleSystem
                 }
                 else if (sel == 0)
                 {
-                    Console.WriteLine("체력이 1/5 감소합니다");
-                    Console.WriteLine("던전을 나갑니다.");
                     player.health -= player.health / 5;
+                    Mathod.FontColorOnce("체력이 1/5 감소합니다\n", ColorCode.Red);
+                    Mathod.FontColorOnce($"현재 체력 {player.health}\n", ColorCode.Green);
+                    Console.WriteLine("던전을 나갑니다.");
                     Thread.Sleep(1000);
                     return false;
                 }

@@ -19,38 +19,38 @@ namespace GameCharacter
             health = 100;
             gold = 1500;
             exp = 0;
-            critRate = 0.1;
-            critDamage = 1.5;
-            dodgeRate = 0.1;
-            Skill1Cost = 10;
+            critRate = 0.1; // 치명타 확률
+            critDamage = 1.5; // 치명타 배율
+            dodgeRate = 0.1; // 회피율
+            Skill1Cost = 10; // 스킬 MP 소모량
             Skill2Cost = 15;
-            Skill1Name = "알파 스트라이크";
+            Skill1Name = "알파 스트라이크"; // 스킬 이름
             Skill2Name = "더블 스트라이크";
         }
 
         public override int Attack(Monster target)
         {
-            int dmg = target.TakeDamage(atk, this);
+            int dmg = target.TakeDamage(atk, this); // 일반 공격 데미지
             return dmg;
         }
         public override int Skill1(Monster target)
         {
             Mp -= Skill1Cost;
-            int dmg = target.TakeDamage(atk * 2, this);
+            int dmg = target.TakeDamage(atk * 2, this); // 스킬 데미지
 
             return dmg;
         }
         public override void Skill2(Monster[] targets)
         {
-            var Rdtarget = GameManager.rd;
-            int targetDamage = (int)(atk * 1.5);
+            var Rdtarget = GameManager.rd; //랜덤 타겟팅
+            int targetDamage = (int)(atk * 1.5); // 스킬 데미지
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 2; i++) // 2회 공격
             {
-                var targetalive = targets.Where(m => m.IsAlive).ToArray();
+                var targetalive = targets.Where(m => m.IsAlive).ToArray(); // 살아있는 몬스터만 필터링
                 if (targetalive.Length == 0)
                     break;
-                var target = targetalive[Rdtarget.Next(0, targetalive.Length)];
+                var target = targetalive[Rdtarget.Next(0, targetalive.Length)]; // 랜덤 타겟팅
                 int dmg = target.TakeDamage(targetDamage, this);
             }
             Mp -= Skill2Cost; //스킬 사용 시 MP 소모
