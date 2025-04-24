@@ -102,6 +102,7 @@ namespace BattleSystem
             {
                 Console.WriteLine("[전투 결과]\n");
                 Console.WriteLine("전투에서 승리했습니다!");
+                Mathod.FontColorOnce($"현재 체력 {player.health}\n", ColorCode.Green);
                 Console.WriteLine($"던전 {GameManager.player.floor}층에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
 
                 Mathod.FontColorOnce("[전투 보상]\n", ColorCode.Magenta);
@@ -138,7 +139,7 @@ namespace BattleSystem
                     }
                     else if (GameManager.player.floor == 11)
                     {
-                        Console.WriteLine("던전 클리어!");
+                        Mathod.FontColorOnce("던전 클리어!",ColorCode.Magenta);
                         Console.WriteLine("보스를 처치했습니다!");
                         Console.WriteLine("무한모드로 진입합니다.");
                         Thread.Sleep(500);
@@ -227,7 +228,7 @@ namespace BattleSystem
                 RenderStatus(player, monsters);
                 Console.Write("\n\n1. 공격 ");
                 Console.WriteLine("2. 스킬 ");
-                Console.WriteLine("0. 던전 나가기");
+                Console.WriteLine("0. 던전 나가기 (체력이 현재체력의 1/5만큼 감소합니다.)");
                 Console.WriteLine("\n 원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
                 if (!Mathod.CheckInput(out int sel))
@@ -274,7 +275,7 @@ namespace BattleSystem
                         {
                             if (player.Mp < player.Skill2Cost || player.health < player.Skill2HpCost) 
                             {
-                                Console.WriteLine("MP 또는 체력이 부족합니다.");
+                                Mathod.FontColorOnce("MP 또는 체력이 부족합니다.\n",ColorCode.Red);
                                 Thread.Sleep(1000);
                                 continue;
                             }
@@ -298,9 +299,10 @@ namespace BattleSystem
                 }
                 else if (sel == 0)
                 {
-                    Console.WriteLine("체력이 1/5 감소합니다");
-                    Console.WriteLine("던전을 나갑니다.");
                     player.health -= player.health / 5;
+                    Mathod.FontColorOnce("체력이 1/5 감소합니다\n", ColorCode.Red);
+                    Mathod.FontColorOnce($"현재 체력 {player.health}\n", ColorCode.Green);
+                    Console.WriteLine("던전을 나갑니다.");
                     Thread.Sleep(1000);
                     return false;
                 }
