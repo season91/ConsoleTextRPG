@@ -1,4 +1,5 @@
-﻿using GameService;
+﻿using GameLogic;
+using GameService;
 using Manager;
 
 namespace Inventory
@@ -56,7 +57,6 @@ namespace Inventory
         }
         public static void EquippedItemManage()
         {
-            //List<Item> playerItem = GameManager.player.item.OfType<Item>().Where(x => x.itemId != (int)ItemCode.Potion).ToList();
             var playerItem = GameManager.player.item;
             int input = 0;
             while (true)
@@ -71,7 +71,9 @@ namespace Inventory
                 for (int i = 0; i < playerItem.Count; i++)
                 {
                     var item = playerItem[i];
-                    Console.WriteLine($"- {i + 1}. {(item.equipped ? "[E] " : "")}{item.name} | {item.Ability()} | {item.itemInfo}");
+                    var message = (playerItem[i].itemId == (int)ItemCode.Potion) ? " | 장착 가능한 아이템이 아닙니다." : "";
+                    Console.Write("- ");
+                    Mathod.MenuFont($"{i + 1}", $"{(item.equipped ? "[E] " : "")}{item.name} | {item.Ability()} | {item.itemInfo}{message}\n", ColorCode.None);
                 }
 
                 Console.WriteLine("\n0. 나가기");
@@ -112,19 +114,25 @@ namespace Inventory
                                            where x.item.equipped && x.item.atk > 0 && x.item.def == 0
                                            select (x.index, x.item)).FirstOrDefault();
 
-                    // 기존 장착 해제 후 장착
+                    // 기존 장착 해제
                     if (equippedAtkItem.item != null)
                     {
                         _player.atk -= _player.item[equippedAtkItem.index].atk;
                         _player.bonusAtk -= _player.item[equippedAtkItem.index].atk;
 
                         _player.item[equippedAtkItem.index].EquippedItem(!_player.item[equippedAtkItem.index].equipped);
+
+                        // 기존 장착 무기와 동일하지 않는 경우 장착처리
+                        if (equippedAtkItem.item.itemId != tryEquipItem.itemId)
+                        {
+                            EquipItem(tryEquipItem);
+                        }
                     }
-
-                    _player.atk += tryEquipItem.atk;
-                    _player.bonusAtk += tryEquipItem.atk;
-
-                    tryEquipItem.EquippedItem(!tryEquipItem.equipped);
+                    else // 신규 장착
+                    {
+                        EquipItem(tryEquipItem);
+                    }
+                    
                 }
                 else if (tryEquipItem.def > 0)
                 {
@@ -133,26 +141,52 @@ namespace Inventory
                                            where x.item.equipped && x.item.def > 0 && x.item.atk == 0
                                            select (x.index, x.item)).FirstOrDefault();
 
-                    // 기존 장착 해제 후 장착
+                    // 기존 장착 해제
                     if (equippedDefItem.item != null)
                     {
                         _player.def -= _player.item[equippedDefItem.index].def;
                         _player.bonusDef -= _player.item[equippedDefItem.index].def;
 
                         _player.item[equippedDefItem.index].EquippedItem(!_player.item[equippedDefItem.index].equipped);
+
+                        // 기존 장착 방어구와 동일하지 않는 경우 장착처리
+                        if (equippedDefItem.item.itemId != tryEquipItem.itemId)
+                        {
+                            EquipItem(tryEquipItem);
+                        }
                     }
-
-                    _player.def += tryEquipItem.def;
-                    _player.bonusDef += tryEquipItem.def;
-
-                    tryEquipItem.EquippedItem(!tryEquipItem.equipped);
+                    else // 신규 장착
+                    {
+                        EquipItem(tryEquipItem);
+                    }
                 }
             }
             else
             {
                 Console.WriteLine("장착 가능한 아이템이 아닙니다.");
             }
-            Thread.Sleep(1000);
+        }
+
+        public static void EquipItem(Item tryEquipItem)
+        {
+            var _player = GameManager.player;
+
+            // 10000 ~ 11000 방어구
+            if(tryEquipItem.itemId > (int)ItemCode.Weapon && tryEquipItem.itemId < (int)ItemCode.Armor)
+            {
+                _player.atk += tryEquipItem.atk;
+                _player.bonusAtk += tryEquipItem.atk;
+
+                tryEquipItem.EquippedItem(!tryEquipItem.equipped);
+            }
+            // 11000 ~ 32000 무기
+            else if (tryEquipItem.itemId > (int)ItemCode.Armor && tryEquipItem.itemId < (int)ItemCode.Potion)
+            {
+                _player.def += tryEquipItem.def;
+                _player.bonusDef += tryEquipItem.def;
+
+                tryEquipItem.EquippedItem(!tryEquipItem.equipped);
+            }
         }
     }
 }
