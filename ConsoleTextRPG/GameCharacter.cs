@@ -171,8 +171,8 @@ namespace GameCharacter
             critRate = 0.2;
             critDamage = 2;
             dodgeRate = 0.1;
-            Skill1HpCost = 3;
-            Skill2HpCost = 5;
+            Skill1HpCost = 10;
+            Skill2HpCost = 20;
             Skill1Name = "머리쪼개기";
             Skill2Name = "회전베기";
         }
