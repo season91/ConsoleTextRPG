@@ -133,6 +133,8 @@ namespace GameLogic
         public int floor = 1;
         public int Skill1Cost { get; protected set; }
         public int Skill2Cost { get; protected set; }
+        public int Skill1HpCost { get; protected set; }
+        public int Skill2HpCost { get; protected set; }
         public string Skill1Name { get; protected set; }
         public string Skill2Name { get; protected set; }
         public void SetName(string _name) => name = _name;
