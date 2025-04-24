@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using GameCharacter;
 using GameLogic;
 using GameService;
@@ -90,8 +91,8 @@ namespace BattleSystem
                 //레벨업 시 레벨 증가 출력
                 int xpGain = monsters.Sum(m => m.monLevel);
                 player.exp += xpGain;
-                Console.WriteLine($"\n획득 경험치: {xpGain}");
-                //Console.WriteLine("\n[획득 아이템]");
+                LevelUp.LevelUpValidation();
+                Console.WriteLine($"획득 경험치: {xpGain}");
                 //획득 아이템 출력
                 int goldGain = monsters.Sum(m => m.monGold);
                 player.gold += goldGain;
@@ -365,6 +366,40 @@ namespace BattleSystem
                 }
                 Mathod.ChangeFontColor(ColorCode.None);
             }
+        }
+    }
+
+    public class LevelUp
+    {
+        // 레벨업 검증 로직
+        public static void LevelUpValidation()
+        {
+            var player = GameManager.player;
+
+            if(player.exp >= 10 && player.level == 1)
+            {
+                LevelUpStat();
+            } 
+            else if (player.exp > 35 && player.level == 2)
+            {
+                LevelUpStat();
+            } 
+            else if(player.exp >= 65 && player.level == 3)
+            {
+                LevelUpStat();
+            } 
+            else if (player.exp >= 100 && player.level == 4)
+            {
+                LevelUpStat();
+            }
+        }
+        public static void LevelUpStat() 
+        {
+            var player = GameManager.player;
+            player.level++;
+            player.atk++;
+            player.def++;
+            Console.WriteLine($"레벨업! 현재 레벨 {player.level}");
         }
     }
 }
