@@ -36,18 +36,17 @@ public static class MainScenes
             Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
             Console.WriteLine("이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n");
 
-            Mathod.MenuFont("1", "상태 보기\n", ColorCode.None);
-            Mathod.MenuFont("2", "인벤토리\n", ColorCode.None);
-            Mathod.MenuFont("3", "상점\n", ColorCode.None);
+            Mathod.MenuFont("1", "상태 보기\n");
+            Mathod.MenuFont("2", "인벤토리\n");
+            Mathod.MenuFont("3", "상점\n");
             Mathod.MenuFont("4", "전투 시작", ColorCode.Red);
 
             Mathod.ChangeFontColor(ColorCode.DarkGray);
             Console.WriteLine($" 현재 ({GameManager.DungeonFloor}층)");
 
             Mathod.MenuFont("5", "회복 아이템\n", ColorCode.Yellow);
-            Mathod.MenuFont("6", "퀘스트\n", ColorCode.None);
+            Mathod.MenuFont("6", "퀘스트\n");
             Mathod.MenuFont("7", "저장하기\n", ColorCode.Green);
-
 
             Console.WriteLine("\n원하시는 행동을 입력해주세요.");
             Console.Write(">> ");

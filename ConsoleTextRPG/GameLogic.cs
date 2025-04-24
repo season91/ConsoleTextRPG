@@ -102,7 +102,6 @@ namespace GameLogic
                 GameManager.player.item.Add(this);
             }
         }
-
     }
 
     public class Job
