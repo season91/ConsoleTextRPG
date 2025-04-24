@@ -14,6 +14,8 @@ namespace Shop
             while (true)
             {
                 Console.Clear();
+                Mathod.PrintTextFile("ShopImage");
+                Console.WriteLine();
                 Mathod.ChangeFontColor(ColorCode.Yellow);
                 Console.WriteLine("상점");
                 Mathod.ChangeFontColor(ColorCode.None);
@@ -70,6 +72,8 @@ namespace Shop
             while (true)
             {
                 Console.Clear();
+                Mathod.PrintTextFile("ShopImage");
+                Console.WriteLine();
                 Mathod.ChangeFontColor(ColorCode.Yellow);
                 Console.WriteLine("상점 - 아이템 구매");
                 Mathod.ChangeFontColor(ColorCode.None);
@@ -161,6 +165,8 @@ namespace Shop
             while (true)
             {
                 Console.Clear();
+                Mathod.PrintTextFile("ShopImage");
+                Console.WriteLine();
                 Mathod.ChangeFontColor(ColorCode.Yellow);
                 Console.WriteLine("상점 - 아이템 판매");
                 Mathod.ChangeFontColor(ColorCode.None);
