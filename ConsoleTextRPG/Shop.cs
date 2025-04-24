@@ -201,7 +201,7 @@ namespace Shop
         }
 
         // 아이템 판매 시도
-        public static void TryShopSaleItem(GameLogic.Item _playerItem)
+        public static void TryShopSaleItem(Item _playerItem)
         {
             var _player = GameManager.player;
             int price = (int)(_playerItem.gold * 0.85);
