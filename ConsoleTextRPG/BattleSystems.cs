@@ -70,7 +70,7 @@ namespace BattleSystem
         public static void Start()
         {
             var player = GameManager.player;
-            var monsters = SpawnMonsters(GameManager.DungeonFloor);
+            var monsters = SpawnMonsters(GameManager.player.floor);
 
             while (player.health > 0 && monsters.Any(m => m.IsAlive))
             {
@@ -85,7 +85,7 @@ namespace BattleSystem
             {
                 Console.WriteLine("[전투 결과]\n");
                 Console.WriteLine("전투에서 승리했습니다!");
-                Console.WriteLine($"던전 {GameManager.DungeonFloor}층에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
+                Console.WriteLine($"던전 {GameManager.player.floor}층에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
 
                 Mathod.FontColorOnce("[전투 보상]\n", ColorCode.Magenta);
                 //레벨업 시 레벨 증가 출력
@@ -96,6 +96,8 @@ namespace BattleSystem
                 //획득 아이템 출력
                 int goldGain = monsters.Sum(m => m.monGold);
                 player.gold += goldGain;
+                player.Mp += 10;
+                Console.WriteLine("마나가 10만큼 회복됩니다.");
                 Console.WriteLine($"획득 골드: {goldGain}");
                 Console.WriteLine($"현재 골드: {player.gold}");
 
@@ -106,15 +108,15 @@ namespace BattleSystem
                     return;
                 if (sel == 1)
                 {
-                    GameManager.DungeonFloor++;
-                    if (GameManager.DungeonFloor == 10)
+                    GameManager.player.floor++;
+                    if (GameManager.player.floor == 10)
                     {
                         Console.WriteLine("드래곤의 땅으로 진입합니다.");
                         Console.ReadKey();
                         Start();
 
                     }
-                    else if (GameManager.DungeonFloor == 11)
+                    else if (GameManager.player.floor == 11)
                     {
                         Console.WriteLine("던전 클리어!");
                         Console.WriteLine("보스를 처치했습니다!");
@@ -127,17 +129,17 @@ namespace BattleSystem
                         Console.ReadKey();
                         Start();
                     }
-                    else if(GameManager.DungeonFloor > 11)
+                    else if(GameManager.player.floor > 11)
                     {
                         Console.WriteLine("[무한모드]");
-                        Console.WriteLine($"던전 {GameManager.DungeonFloor}층으로 이동합니다...");
+                        Console.WriteLine($"던전 {GameManager.player.floor}층으로 이동합니다...");
                         Thread.Sleep(1000);
                         Console.Clear();
                         Start();
                     }
                     else
                     {
-                        Console.WriteLine($"던전 {GameManager.DungeonFloor}층으로 이동합니다...");
+                        Console.WriteLine($"던전 {GameManager.player.floor}층으로 이동합니다...");
                         Thread.Sleep(1000);
                         Console.Clear();
                         Start();
@@ -146,7 +148,7 @@ namespace BattleSystem
                 }
                 else if (sel == 0)
                 {
-                    GameManager.DungeonFloor++;
+                    GameManager.player.floor++;
                     Console.WriteLine("던전을 나갑니다...");
                     Thread.Sleep(1000);
                     Console.Clear();
@@ -309,18 +311,27 @@ namespace BattleSystem
                     int dmg = m.monAtk - player.def / 2;
                     if (dmg < 0)
                         dmg = 0; // 방어력으로 인해 데미지가 0 이하가 되지 않도록 조정
-                    Mathod.ChangeFontColor(ColorCode.Red);
-                    Console.WriteLine($"\n{m.MonsterType}의 공격");
-                    Console.WriteLine($"→ {dmg} 데미지!");
-                    player.health -= dmg;//방어력의 절반만큼 데미지 감소
-                    Mathod.ChangeFontColor(ColorCode.Green);
-                    Console.WriteLine($"남은 체력: {player.health}");
-                    Console.WriteLine("");
-                    Thread.Sleep(1000);
-                    Mathod.ChangeFontColor(ColorCode.None);
-                    if (player.health <= 0)
-                        return; // 플레이어가 사망하면 전투 종료
-
+                    if (player.dodgeRate > GameManager.rd.NextDouble())
+                    {
+                        Mathod.ChangeFontColor(ColorCode.Green);
+                        Console.WriteLine($"{m.MonsterType}의 공격을 회피했습니다!");
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+                    else
+                    {
+                        Mathod.ChangeFontColor(ColorCode.Red);
+                        Console.WriteLine($"\n{m.MonsterType}의 공격");
+                        Console.WriteLine($"→ {dmg} 데미지!");
+                        player.health -= dmg;//방어력의 절반만큼 데미지 감소
+                        Mathod.ChangeFontColor(ColorCode.Green);
+                        Console.WriteLine($"남은 체력: {player.health}");
+                        Console.WriteLine("");
+                        Thread.Sleep(1000);
+                        Mathod.ChangeFontColor(ColorCode.None);
+                        if (player.health <= 0)
+                            return; // 플레이어가 사망하면 전투 종료
+                    }
                 }
             }
             Console.WriteLine("적 턴 종료");
@@ -330,7 +341,7 @@ namespace BattleSystem
         public static void RenderStatus(Job player, Monster[] monsters)
         {
             Console.Clear();
-            Console.WriteLine($"[던전 {GameManager.DungeonFloor}층]");
+            Console.WriteLine($"[던전 {GameManager.player.floor}층]");
             Mathod.ChangeFontColor(ColorCode.Green);
             Console.WriteLine("플레이어 턴\n");
             Console.WriteLine($"체력: {player.health}");

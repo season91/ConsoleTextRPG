@@ -127,7 +127,14 @@ namespace GameLogic
         public int bonusDef;
         public int exp;
         public int Mp;
-
+        public double critRate;
+        public double critDamage;
+        public double dodgeRate;
+        public int floor = 1;
+        public int Skill1Cost { get; protected set; }
+        public int Skill2Cost { get; protected set; }
+        public string Skill1Name { get; protected set; }
+        public string Skill2Name { get; protected set; }
         public void SetName(string _name) => name = _name;
 
         public void SaveData()
@@ -143,6 +150,9 @@ namespace GameLogic
             GameManager.data.integer.Add($"{name}level", level);
             GameManager.data.integer.Add($"{name}bonusAtk", bonusAtk);
             GameManager.data.integer.Add($"{name}bonusDef", bonusDef);
+            GameManager.data.integer.Add($"{name}mp", Mp);
+            GameManager.data.integer.Add($"{name}exp", exp);
+            GameManager.data.integer.Add($"{name}floor", floor);
 
             // 캐릭터 인벤토리 아이템
             foreach (var playerItem in item)
@@ -164,6 +174,9 @@ namespace GameLogic
             level = GameManager.data.integer.GetData($"{name}level");
             bonusAtk = GameManager.data.integer.GetData($"{name}bonusAtk");
             bonusDef = GameManager.data.integer.GetData($"{name}bonusDef");
+            Mp = GameManager.data.integer.GetData($"{name}mp");
+            exp = GameManager.data.integer.GetData($"{name}exp");
+            floor = GameManager.data.integer.GetData($"{name}floor");
 
             // 캐릭터 인벤토리 아이템
             foreach (var playerItem in GameManager.ItemPooling)
@@ -172,10 +185,7 @@ namespace GameLogic
             }
         }
 
-        public virtual int Skill1Cost => 0;
-        public virtual int Skill2Cost => 0;
-        public virtual string Skill1Name => "스킬1";
-        public virtual string Skill2Name => "스킬2";
+
 
         public virtual int Attack(Monster target)
         {
