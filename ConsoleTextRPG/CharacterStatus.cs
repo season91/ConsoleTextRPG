@@ -17,6 +17,8 @@ namespace Status
                 Console.WriteLine($"공격력 : {GameManager.player.atk}" + (GameManager.player.bonusAtk > 0 ? $" (+{GameManager.player.bonusAtk})" : ""));
                 Console.WriteLine($"방어력 : {GameManager.player.def}" + (GameManager.player.bonusDef > 0 ? $" (+{GameManager.player.bonusDef})" : ""));
                 Console.WriteLine($"체  력 : {GameManager.player.health}");
+                Console.WriteLine($"마  나 : {GameManager.player.Mp}");
+                Console.WriteLine($"경험치 : {GameManager.player.exp}");
                 Console.WriteLine($"Gold : {GameManager.player.gold} G");
                 Console.WriteLine("0. 나가기");
                 Console.WriteLine("\n원하시는 행동을 입력해주세요.");
