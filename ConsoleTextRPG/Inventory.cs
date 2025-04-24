@@ -1,5 +1,4 @@
-﻿using GameLogic;
-using GameService;
+﻿using GameService;
 using Manager;
 
 namespace Inventory

@@ -371,6 +371,7 @@ namespace BattleSystem
 
     public class LevelUp
     {
+        // 레벨업 검증 로직
         public static void LevelUpValidation()
         {
             var player = GameManager.player;
