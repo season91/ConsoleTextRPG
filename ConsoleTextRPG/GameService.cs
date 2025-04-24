@@ -329,7 +329,7 @@ namespace GameService
             }
 
             string[] lines = File.ReadAllLines(file);
-            GameManager.ItemPooling = new Item[lines.Length-1];
+            GameManager.ItemPooling = new GameLogic.Item[lines.Length-1];
 
             for (int i = 1; i < lines.Length; i++)
             {

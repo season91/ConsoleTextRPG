@@ -7,6 +7,7 @@ namespace GameQuest
 
     public class Quest
     {
+        public bool isClear { get; private set; }
         public bool acceptance { get; set; } //수락 여부
         public string[] info { get; init; } //퀘스트 정보
 
@@ -81,10 +82,9 @@ namespace GameQuest
         {
             for (int i = 0; i < condition.Length; i++)
             {
-                if (condition[i].Contains(_objectName))
+                if (condition[i] == _objectName)
                 {
                     count[i]++;
-
                     if (count[i] == maxCount[i]) totalClear++;
                 }
             }
@@ -99,8 +99,9 @@ namespace GameQuest
         public void Save(int _index)
         {
             _index++;
+            GameManager.data.boolen.Add($"Quest{_index}clear", isClear);
             GameManager.data.boolen.Add($"Quest{_index}accep", acceptance);
-            GameManager.data.integer.Add($"Quest{_index}clear", totalClear);
+            GameManager.data.integer.Add($"Quest{_index}total", totalClear);
 
             for (int i = 0; i < count.Length; i++)
             {
@@ -110,14 +111,17 @@ namespace GameQuest
 
         public void Load(int _index)
         {
+            isClear = GameManager.data.boolen.GetData($"Quest{_index}clear");
             acceptance = GameManager.data.boolen.GetData($"Quest{_index}accep");
-            totalClear = GameManager.data.integer.GetData($"Quest{_index}clear");
+            totalClear = GameManager.data.integer.GetData($"Quest{_index}total");
 
             for (int i = 0; i < count.Length; i++)
             {
                 count[i] = GameManager.data.integer.GetData($"Quest({_index})count({i})");
             }
         }
+
+        public void QuestClear() => isClear = true;
     }
 
     public class QuestManager
@@ -129,7 +133,7 @@ namespace GameQuest
             //event로 해야하지만 일단 그냥..
             for (int i = 0; i < data.Length; i++)
             {
-                if (data[i].acceptance && data[i].totalClear < data[i].maxCount.Length)
+                if (data[i].acceptance)
                 {
                     data[i].CheckCondition(_objectName);
                 }
@@ -165,7 +169,8 @@ namespace GameQuest
         {
             if (_quest.acceptance)
             {
-                if (_quest.CheckClear()) return " -완료 가능-";
+                if (_quest.isClear) return "";
+                else if (_quest.CheckClear()) return " -완료 가능-";
                 else return " -진행 중-";
             }
 
@@ -181,9 +186,7 @@ namespace GameQuest
             while (true)
             {
                 Console.Clear();
-                Mathod.ChangeFontColor(ColorCode.Yellow);
-                Console.WriteLine("Quest!!\n");
-                Mathod.ChangeFontColor(ColorCode.None);
+                Mathod.FontColorOnce("Quest!!\n\n", ColorCode.Yellow);
 
                 for (int i = 0; i < questLength; i++)
                 {
@@ -192,17 +195,17 @@ namespace GameQuest
 
                     //퀘스트 이름
                     var text = quest[i].info[0];
+                    Mathod.ChangeFontColor(quest[i].isClear ? ColorCode.DarkGray : ColorCode.None);
                     Console.Write(text.Replace("\r", ""));
+                    Mathod.ChangeFontColor(ColorCode.None);
 
                     //현재 진행 상황
                     var questProgress = CheckState(quest[i]);
 
-                    Mathod.ChangeFontColor(ColorCode.Blue);
-                    Console.WriteLine($"{questProgress}");
-                    Mathod.ChangeFontColor(ColorCode.None);
+                    Mathod.FontColorOnce($"{questProgress}\n", ColorCode.Blue);
                 }
 
-                Mathod.MenuFont("0", "나가기");
+                Mathod.MenuFont("\n0", "나가기\n");
 
                 Console.WriteLine("\n원하시는 퀘스트를 선택해주세요.");
                 Console.Write(">>");
@@ -222,7 +225,18 @@ namespace GameQuest
 
                     else
                     {
-                        ShowInfo(--input);
+                        input--;
+
+                        if (GameManager.quest.data[input].isClear)
+                        {
+                            Mathod.FontColorOnce("\n이미 완료된 퀘스트입니다.", ColorCode.Red);
+                            Thread.Sleep(1000);
+                        }
+
+                        else
+                        {
+                            ShowInfo(input);
+                        }
                     }
                 }
             }
@@ -249,6 +263,9 @@ namespace GameQuest
 
                 //퀘스트 내용
                 var infoCount = 0;
+                var clearCount = 0;
+                var maxCount = 0;
+                var textCount = 0;
 
                 for (int i = 1; i < questScreen.Length; i++)
                 {
@@ -259,7 +276,11 @@ namespace GameQuest
                         Console.Write(questText.Replace("\r", ""));
 
                         //처치 카운트
-                        Mathod.FontColorOnce($" ({quest.count[infoCount]} / {quest.maxCount[infoCount]})", ColorCode.Red);
+                        clearCount = quest.count[infoCount];
+                        maxCount = quest.maxCount[infoCount];
+                        textCount = clearCount > maxCount ? maxCount : clearCount;
+
+                        Mathod.FontColorOnce($" ({textCount} / {maxCount})\n", ColorCode.Red);
 
                         //다음 인덱스로
                         infoCount++;
@@ -279,9 +300,9 @@ namespace GameQuest
                 }
 
                 //아닐 경우
-                else Mathod.MenuFont("1", "수락하기\n");
+                else Mathod.MenuFont("1", "수락하기");
 
-                Mathod.MenuFont($"{(quest.acceptance ? 0 : 2)}", "돌아가기\n");
+                Mathod.MenuFont($"\n{(quest.acceptance ? 0 : 2)}", "돌아가기\n");
 
                 Console.WriteLine("\n원하시는 행동을 입력해주세요.");
                 Console.Write(">>");
@@ -299,7 +320,12 @@ namespace GameQuest
                         {
                             if (isClear)
                             {
-                                if (!Reward(quest))
+                                if (CheckReward(quest))
+                                {
+                                    quest.QuestClear();
+                                }
+
+                                else
                                 {
                                     Mathod.FontColorOnce("\n동일한 아이템을 이미 소지 중입니다.", ColorCode.Red);
                                     Thread.Sleep(1000);
@@ -330,21 +356,36 @@ namespace GameQuest
             }
         }
 
-        private static bool Reward(Quest _quest)
+        private static bool CheckReward(Quest _quest)
         {
+            var player = GameManager.player;
+
             for (int i = 0; i < _quest.itemName.Length; i++)
             {
-                var item = GameManager.ItemPooling[i];
-
-                if (_quest.itemName[i] == item.name)
+                if (_quest.itemName[i].Contains("골드"))
                 {
-                    if (!GameManager.player.item.Contains(item)) GameManager.player.item.Add(item);
-                    else return false;
+                    player.gold += _quest.rewardCount[i];
                 }
 
-                else if (_quest.itemName[i] == "골드")
+                else
                 {
-                    GameManager.player.gold += _quest.rewardCount[i];
+                    for (int I = 0; I < GameManager.ItemPooling.Length; I++)
+                    {
+                        var ItemPooling = GameManager.ItemPooling[I];
+
+                        if (ItemPooling.name == _quest.itemName[i])
+                        {
+                            if (player.item.Contains(ItemPooling))
+                            {
+                                return false;
+                            }
+
+                            else
+                            {
+                                player.item.Add(ItemPooling);
+                            }
+                        }
+                    }
                 }
             }
 

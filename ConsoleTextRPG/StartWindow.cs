@@ -25,7 +25,7 @@ namespace StartScene
 
                 for (int i = 0; i < text.Length; i++)
                 {
-                    Console.WriteLine($"{i + 1}. {text[i]}");
+                    Mathod.MenuFont($"{i + 1}", $"{text[i]}\n");
                 }
 
                 Console.Write("\n>>");
@@ -66,7 +66,7 @@ namespace StartScene
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("원하시는 이름을 입력해주세요:");
+                Console.WriteLine("원하시는 이름을 입력해주세요");
                 Console.Write(">> ");
 
                 nameInput = Console.ReadLine();
@@ -80,7 +80,7 @@ namespace StartScene
 
                 Mathod.MenuFont("\n1", "저장");
                 Mathod.MenuFont("\n2", "취소");
-                Console.Write("\n>>");
+                Console.Write("\n\n>>");
 
                 if (Mathod.CheckInput(out valueInput))
                 {
