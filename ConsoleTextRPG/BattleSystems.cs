@@ -115,10 +115,14 @@ namespace BattleSystem
                 int goldGain = monsters.Sum(m => m.monGold);
                 player.gold += goldGain;
                 if (player.chad == "광전사")
-                    player.health += 5 * monsters.Length;
+                { player.health += 5 * monsters.Length;
+                    Mathod.FontColorOnce($"체력이 {5 * monsters.Length}만큼 회복됩니다.", ColorCode.Red);
+                }
                 else
+                {
                     player.Mp += 10;
-                Console.WriteLine("마나가 10만큼 회복됩니다.");
+                    Mathod.FontColorOnce("마나가 10만큼 회복됩니다.", ColorCode.Blue);
+                }
                 Console.WriteLine($"획득 골드: {goldGain}");
                 Console.WriteLine($"현재 골드: {player.gold}");
 
