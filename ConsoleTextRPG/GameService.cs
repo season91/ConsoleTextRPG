@@ -24,7 +24,9 @@ namespace GameService
 
     public enum ItemCode
     {
-        Potion = 32001
+        Potion = 32001,
+        Weapon = 10000,
+        Armor = 11000,
     }
 
     public class Mathod
