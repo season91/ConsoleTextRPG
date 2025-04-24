@@ -90,6 +90,7 @@ namespace BattleSystem
                 //레벨업 시 레벨 증가 출력
                 int xpGain = monsters.Sum(m => m.monLevel);
                 player.exp += xpGain;
+                LevelUp.LevelUpValidation();
                 Console.WriteLine($"획득 경험치: {xpGain}");
                 //Console.WriteLine("\n[획득 아이템]");
                 //획득 아이템 출력
@@ -338,6 +339,46 @@ namespace BattleSystem
                     Mathod.ChangeFontColor(ColorCode.None);
                 }
                 Mathod.ChangeFontColor(ColorCode.None);
+            }
+        }
+    }
+
+    public class LevelUp
+    {
+        public static void LevelUpValidation()
+        {
+            var player = GameManager.player;
+
+            if(player.exp >= 15)
+            {
+                player.level++;
+                player.atk++;
+                player.def++;
+
+                Console.WriteLine($"레벨업! 현재 레벨 {player.level}");
+            } 
+            else if (player.exp >= 35)
+            {
+                player.level++;
+                player.atk++;
+                player.def++;
+
+                Console.WriteLine($"레벨업! 현재 레벨 {player.level}");
+            } 
+            else if(player.exp >= 75)
+            {
+                player.level++;
+                player.atk++;
+                player.def++;
+
+                Console.WriteLine($"레벨업! 현재 레벨 {player.level}");
+            } 
+            else if (player.exp > 75 && player.exp <= 100)
+            {
+                player.level++;
+                player.atk++;
+                player.def++;
+                Console.WriteLine($"레벨업! 최고 레벨에 도달하였습니다! 현재 레벨 {player.level}");
             }
         }
     }
