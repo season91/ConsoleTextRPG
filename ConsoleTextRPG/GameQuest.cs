@@ -249,8 +249,6 @@ namespace GameQuest
             var questScreen = quest.info;
             var isClear = quest.CheckClear();
 
-            Console.Clear();
-
             while (true)
             {
                 Console.Clear();
