@@ -38,6 +38,8 @@ namespace GameService
             {
                 new Warrior(),
                 new Wizard(),
+                new Archer(),
+                new Berserker(),
             };
 
             return isJob[_jobIndex];

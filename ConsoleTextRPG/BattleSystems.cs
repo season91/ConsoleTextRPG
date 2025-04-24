@@ -51,15 +51,32 @@ namespace BattleSystem
 
         public int TakeDamage(int playerAtk, Job job)
         {
-            Random random = new Random();
-            // 0.9 ~ 1.1 사이의 랜덤 배율 생성
-            double variation = random.NextDouble() * 0.2 + 0.9;
+            var rnd = GameManager.rd;            // 0.9 ~ 1.1 사이의 랜덤 배율 생성
+            double variation = rnd.NextDouble() * 0.2 + 0.9;
             int dmg = (int)Math.Round(playerAtk * variation);
-            monHP = Math.Max(monHP - dmg, 0); // HP가 0보다 작아지지 않도록 조정
-            if (monHP <= 0)
+            bool isCritical = rnd.NextDouble() < job.critRate; // 크리티컬 확률 체크
+
+            if (rnd.NextDouble()<job.dodgeRate)
             {
-                GameManager.quest.CheckCondition(Name);
+                Mathod.FontColorOnce($"→ {Name}이(가) 공격을 회피했습니다!\n", ColorCode.Cyan);
+                Thread.Sleep(1000);
+                return 0;
             }
+            else if (isCritical)
+            {
+                dmg = (int)(dmg * job.critDamage);
+                Mathod.FontColorOnce($"→ {Name}에게 ({dmg}) 크리티컬 데미지!", ColorCode.Yellow);
+            }
+            else
+            {
+                Mathod.FontColorOnce($"→ {Name}에게 {dmg} 데미지!" , ColorCode.Red);
+            }
+            monHP = Math.Max(monHP - dmg, 0);
+            Mathod.FontColorOnce($"남은 체력: {monHP}/{monMaxHp}\n", ColorCode.Red);
+            Thread.Sleep(1000);
+
+            if (monHP == 0)
+                GameManager.quest.CheckCondition(Name);
             return dmg;
         }
     }
@@ -96,7 +113,10 @@ namespace BattleSystem
                 //획득 아이템 출력
                 int goldGain = monsters.Sum(m => m.monGold);
                 player.gold += goldGain;
-                player.Mp += 10;
+                if (player.chad == "광전사")
+                    player.health += 5 * monsters.Length;
+                else
+                    player.Mp += 10;
                 Console.WriteLine("마나가 10만큼 회복됩니다.");
                 Console.WriteLine($"획득 골드: {goldGain}");
                 Console.WriteLine($"현재 골드: {player.gold}");
@@ -238,9 +258,9 @@ namespace BattleSystem
                         Console.Clear();
                         if (skill == 1)
                         {
-                            if (player.Mp < player.Skill1Cost)
+                            if (player.Mp < player.Skill1Cost || player.health < player.Skill1HpCost)
                             {
-                                Console.WriteLine("MP가 부족합니다.");
+                                Console.WriteLine("MP 또는 체력이 부족합니다.");
                                 Thread.Sleep(1000);
                                 Console.Clear();
                                 continue;
@@ -252,9 +272,9 @@ namespace BattleSystem
                         }
                         else if (skill == 2)
                         {
-                            if (player.Mp < player.Skill2Cost)
+                            if (player.Mp < player.Skill2Cost || player.health < player.Skill2HpCost)
                             {
-                                Console.WriteLine("MP가 부족합니다.");
+                                Console.WriteLine("MP 또는 체력이 부족합니다.");
                                 Thread.Sleep(1000);
                                 continue;
                             }
