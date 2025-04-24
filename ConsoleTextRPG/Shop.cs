@@ -111,7 +111,7 @@ namespace Shop
         }
 
         // 아이템 구매 시도
-        public static void TryShopBuyItem(Item item)
+        public static void TryShopBuyItem(GameLogic.Item item)
         {
             int price = item.gold;
             var _player = GameManager.player;
@@ -201,7 +201,7 @@ namespace Shop
         }
 
         // 아이템 판매 시도
-        public static void TryShopSaleItem(Item _playerItem)
+        public static void TryShopSaleItem(GameLogic.Item _playerItem)
         {
             var _player = GameManager.player;
             int price = (int)(_playerItem.gold * 0.85);
