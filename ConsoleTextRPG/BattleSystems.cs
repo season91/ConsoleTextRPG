@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using GameCharacter;
 using GameLogic;
 using GameService;
@@ -92,7 +93,6 @@ namespace BattleSystem
                 player.exp += xpGain;
                 LevelUp.LevelUpValidation();
                 Console.WriteLine($"획득 경험치: {xpGain}");
-                //Console.WriteLine("\n[획득 아이템]");
                 //획득 아이템 출력
                 int goldGain = monsters.Sum(m => m.monGold);
                 player.gold += goldGain;
@@ -364,37 +364,30 @@ namespace BattleSystem
         {
             var player = GameManager.player;
 
-            if(player.exp >= 15)
+            if(player.exp >= 10 && player.level == 1)
             {
-                player.level++;
-                player.atk++;
-                player.def++;
-
-                Console.WriteLine($"레벨업! 현재 레벨 {player.level}");
+                LevelUpStat();
             } 
-            else if (player.exp >= 35)
+            else if (player.exp > 35 && player.level == 2)
             {
-                player.level++;
-                player.atk++;
-                player.def++;
-
-                Console.WriteLine($"레벨업! 현재 레벨 {player.level}");
+                LevelUpStat();
             } 
-            else if(player.exp >= 75)
+            else if(player.exp >= 65 && player.level == 3)
             {
-                player.level++;
-                player.atk++;
-                player.def++;
-
-                Console.WriteLine($"레벨업! 현재 레벨 {player.level}");
+                LevelUpStat();
             } 
-            else if (player.exp > 75 && player.exp <= 100)
+            else if (player.exp >= 100 && player.level == 4)
             {
-                player.level++;
-                player.atk++;
-                player.def++;
-                Console.WriteLine($"레벨업! 최고 레벨에 도달하였습니다! 현재 레벨 {player.level}");
+                LevelUpStat();
             }
+        }
+        public static void LevelUpStat() 
+        {
+            var player = GameManager.player;
+            player.level++;
+            player.atk++;
+            player.def++;
+            Console.WriteLine($"레벨업! 현재 레벨 {player.level}");
         }
     }
 }
