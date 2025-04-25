@@ -48,8 +48,6 @@ public static class MainScenes
             Mathod.MenuFont("6", "퀘스트\n");
             Mathod.MenuFont("7", "저장하기\n\n", ColorCode.Green);
 
-            Mathod.MenuFont("8", "퀘스트 치트키\n", ColorCode.Red);
-
             Console.WriteLine("\n원하시는 행동을 입력해주세요.");
             Console.Write(">> ");
 
@@ -91,11 +89,6 @@ public static class MainScenes
                     case 7:
                         //저장
                         SaveWindows.Show();
-                        break;
-
-                    case 8:
-                        //저장
-                        GameManager.quest.CheckCondition("드래곤");
                         break;
 
                     default:
