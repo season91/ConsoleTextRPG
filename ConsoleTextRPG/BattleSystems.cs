@@ -9,15 +9,15 @@ namespace BattleSystem
 {
     public enum Monsters
     {
-        고블린 = 1101,
-        홉고블린 = 1102,
-        오크 = 1103,
-        하이오크 = 1104,
-        해츨링 = 1105,
-        와이번 = 1106,
-        워울프 = 1107,
-        만티코어 = 1108,
-        드래곤 = 1109,
+        goblin = 1101,
+        hobgoblin = 1102,
+        orc = 1103,
+        highorc = 1104,
+        hatchling = 1105,
+        wyvern = 1106,
+        warwolf = 1107,
+        manticore = 1108,
+        dragon = 1109,
     }
     public class Monster
     {
@@ -36,15 +36,15 @@ namespace BattleSystem
             MonsterType = type;
             (monMaxHp, monAtk, monGold, monLevel) = type switch
             {
-                Monsters.고블린 => (15, 5, 75, 2),
-                Monsters.홉고블린 => (20, 7, 140, 4),
-                Monsters.오크 => (20, 8, 160, 6),
-                Monsters.하이오크 => (25, 10, 250, 8),
-                Monsters.해츨링 => (50, 20, 1000, 30),
-                Monsters.와이번 => (30, 13, 300, 12),
-                Monsters.워울프 => (17, 17, 350, 14),
-                Monsters.만티코어 => (25, 20, 500, 16),
-                Monsters.드래곤 => (100, 40, 5000, 100),
+                Monsters.goblin => (15, 5, 75, 2),
+                Monsters.hobgoblin => (20, 7, 140, 4),
+                Monsters.orc => (20, 8, 160, 6),
+                Monsters.highorc => (25, 10, 250, 8),
+                Monsters.hatchling => (50, 20, 1000, 30),
+                Monsters.wyvern => (30, 13, 300, 12),
+                Monsters.warwolf => (17, 17, 350, 14),
+                Monsters.manticore => (25, 20, 500, 16),
+                Monsters.dragon => (100, 40, 5000, 100),
             };
             monHP = monMaxHp;
         }
@@ -102,6 +102,17 @@ namespace BattleSystem
             {
                 Console.WriteLine("[전투 결과]\n");
                 Console.WriteLine("전투에서 승리했습니다!");
+                if (player.chad == "광전사")
+                {
+                    player.health += 5 * monsters.Length;
+                    Mathod.FontColorOnce($"체력이 {5 * monsters.Length}만큼 회복됩니다.\n", ColorCode.Red);
+                }
+                else
+                {
+                    player.Mp += 10;
+                    Mathod.FontColorOnce("마나가 10만큼 회복됩니다.\n", ColorCode.Blue);
+                }
+
                 Mathod.FontColorOnce($"현재 체력 {player.health}\n", ColorCode.Green);
                 Console.WriteLine($"던전 {GameManager.player.floor}층에서 몬스터 {monsters.Length}마리를 처치했습니다\n");
 
@@ -114,15 +125,6 @@ namespace BattleSystem
                 //획득 아이템 출력
                 int goldGain = monsters.Sum(m => m.monGold);
                 player.gold += goldGain;
-                if (player.chad == "광전사")
-                { player.health += 5 * monsters.Length;
-                    Mathod.FontColorOnce($"체력이 {5 * monsters.Length}만큼 회복됩니다.", ColorCode.Red);
-                }
-                else
-                {
-                    player.Mp += 10;
-                    Mathod.FontColorOnce("마나가 10만큼 회복됩니다.", ColorCode.Blue);
-                }
                 Console.WriteLine($"획득 골드: {goldGain}");
                 Console.WriteLine($"현재 골드: {player.gold}");
 
