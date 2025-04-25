@@ -201,15 +201,15 @@ namespace BattleSystem
 
             Monsters[] types;
             if (Floor >= 1 && Floor <= 4)
-                types = new[] { Monsters.고블린, Monsters.홉고블린, Monsters.오크, Monsters.하이오크 };
+                types = new[] { Monsters.goblin, Monsters.hobgoblin, Monsters.orc, Monsters.highorc };
             else if (Floor == 5)
-                types = new[] { Monsters.해츨링 };
+                types = new[] { Monsters.hatchling };
             else if (Floor >= 6 && Floor <= 9)
-                types = new[] { Monsters.와이번, Monsters.워울프, Monsters.만티코어 };
+                types = new[] { Monsters.wyvern, Monsters.warwolf, Monsters.manticore };
             else if (Floor == 10)
-                types = new[] { Monsters.드래곤 };
+                types = new[] { Monsters.dragon };
             else
-                types = new[] { Monsters.고블린, Monsters.홉고블린, Monsters.오크, Monsters.하이오크, Monsters.해츨링, Monsters.와이번, Monsters.워울프, Monsters.만티코어, Monsters.드래곤 };
+                types = new[] { Monsters.goblin, Monsters.hobgoblin, Monsters.orc, Monsters.highorc, Monsters.hatchling, Monsters.wyvern, Monsters.warwolf, Monsters.manticore, Monsters.dragon };
 
             var monsters = new Monster[monsterCount];
             for (int i = 0; i < monsterCount; i++)
